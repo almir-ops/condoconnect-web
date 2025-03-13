@@ -18,12 +18,22 @@
             {{ capitalizeFirstLetter(col) }}
           </span>
         </th>
+        <th class="py-3 px-4 text-left border-b !text-white">Ações</th>
+
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of paginatedData(); let i = index" [ngClass]="{ 'bg-gray-100': i % 2 === 0, 'bg-white': i % 2 !== 0 }">
         <td *ngFor="let col of columns" class="py-2 px-4 border-b">
         {{ formatStatus(row[col]) }}
+        </td>
+        <td class="py-2 px-4 border-b flex gap-2">
+          <button *ngIf="onEdit" (click)="onEdit?.(row)" class="bg-primary text-sm text-white px-2 py-1 rounded">
+            Editar
+          </button>
+          <button *ngIf="onDelete" (click)="onDelete?.(row)" class="bg-red-700 text-sm text-white px-2 py-1 rounded">
+            Excluir
+          </button>
         </td>
       </tr>
     </tbody>

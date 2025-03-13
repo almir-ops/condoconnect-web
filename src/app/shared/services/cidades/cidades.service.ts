@@ -23,8 +23,8 @@ export class CidadeService {
     return this.http.get<Cidade>(`${this.apiUrl}/${id}`);
   }
 
-  createCidades(category: Cidade): Observable<Cidade> {
-    return this.http.post<Cidade>(this.apiUrl, category);
+  createCidades(cidade: any): Observable<Cidade> {
+    return this.http.post<Cidade>(this.apiUrl, cidade);
   }
 
   updateCidades(id: number, category: Cidade): Observable<Cidade> {

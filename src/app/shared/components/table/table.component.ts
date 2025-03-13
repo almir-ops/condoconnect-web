@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import moment from 'moment';
 
 @Component({
   selector: 'app-table',
@@ -13,6 +14,8 @@ export class TableComponent {
   @Input() data: any[] = [];
   @Input() btnText1!: string;
   @Input() onButtonClick?: () => void;
+  @Input() onEdit?: (row: any) => void;
+  @Input() onDelete?: (row: any) => void;
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -52,7 +55,13 @@ export class TableComponent {
     if (typeof value === 'boolean') {
       return value ? 'Ativo' : 'Inativo';
     }
-    return value; // Retorna o valor original se não for booleano
+
+    // Verifica se o valor é uma data válida antes de tentar formatar
+    if (moment(value, moment.ISO_8601, true).isValid()) {
+      return moment(value).format('DD/MM/YYYY HH:mm:ss'); // Formato desejado
+    }
+
+    return value; // Retorna o valor original caso não seja booleano nem data
   }
 
   capitalizeFirstLetter(text: string): string {
