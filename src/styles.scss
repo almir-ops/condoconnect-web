@@ -2,3 +2,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-primary {
+  @apply bg-primary text-white px-4 py-2 text-sm w-full rounded-lg shadow-md font-semibold hover:bg-primary-dark transition-all;
+}
+.btn-secundary {
+  @apply bg-white text-primary px-4 py-2 text-sm w-full rounded-lg shadow-md font-semibold hover:bg-gray-50 transition-all border-2 border-gray-300;
+}
+
+button.alert-button.alert-button-confirm {
+  color: #055e4c;
+}
+
+/* Estilo para o cabeçalho do alerta */
+.alert-head.sc-ion-alert-ios {
+  background-color: #055e4c !important; /* Cor de fundo do cabeçalho */
+  color: black !important; /* Cor do texto no cabeçalho */
+}
+
+/* Estilo para a mensagem do alerta */
+.alert-message {
+  background-color: white !important;
+  color: black !important; /* Cor do texto da mensagem */
+  padding: 10px 20px 10px 20px !important;
+  font-size: medium !important;
+}
+
+/* Se precisar mudar a cor do botão */
+.alert-button-confirm {
+  background-color: white !important;
+  color: #055e4c !important;
+}

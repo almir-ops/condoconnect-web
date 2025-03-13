@@ -32,7 +32,7 @@ export class LoginComponent {
 
   login() {
     if(this.email && this.password) {
-      this.authService.login({ email: this.email, password: this.password });
+      this.authService.login({ email: this.email, senha: this.password });
 
       if (this.rememberEmail) {
         localStorage.setItem('savedEmail', this.email);

@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { NO_LOADING } from 'src/app/core/interceptors/loading.interceptor';
+import { environment } from '../../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class EstablishmentService {
-  private readonly apiUrl = environment.api_url + 'establishments';
+export class CondominiosService {
+  private readonly apiUrl = environment.apiUrl + 'establishments';
 
   constructor(private http: HttpClient) {}
 
@@ -27,13 +26,13 @@ export class EstablishmentService {
   getAllEstablishmentsByFilters(filter:string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?search=${filter}`);
   }
-
+/*
   getAllEstablishmentsByFiltersNoLoad(filter: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?search=${filter}`, {
       context: new HttpContext().set(NO_LOADING, true), // Desativa o loading
     });
   }
-
+*/
   // Obter um estabelecimento por ID
   getEstablishmentById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);

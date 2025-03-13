@@ -15,8 +15,8 @@ export const adminRoutes: Routes = [
       },
       {
         path: 'cidades',
-        loadComponent: () => import('../admin/usuarios/usuarios.component')
-          .then(m => m.UsuariosComponent)
+        loadComponent: () => import('../admin/cidades/cidades.component')
+          .then(m => m.CidadesComponent)
       },
       {
         path: 'usuarios',

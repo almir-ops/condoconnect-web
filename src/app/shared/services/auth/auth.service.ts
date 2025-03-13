@@ -55,14 +55,20 @@ export class AuthService {
   }
 
   // Login e armazenamento do token
-  login(credentials: { email: string; password: string }) {
+  login(credentials: { email: string; senha: string }) {
+    console.log(credentials);
+
     return this.http.post(`${this.API_URL}auth/login`, credentials).subscribe(
       (response: any) => {
-        this.saveToken(response.token);
-        this.saveUser(response.user)
-        this.router.navigate(['/perfil']);
-        this.tabService.setActiveTab('perfil');
+        console.log(response);
 
+        if(response.user.tipo === 'admin'){
+          this.saveToken(response.token);
+          this.saveUser(response.user)
+          this.router.navigate(['/admin/condominios']);
+        }else{
+          this.alertService.presentAlert('Atenção', 'Usuário não encontrado.');
+        }
       },
       (error) => {
         // Verifica o código de erro HTTP e exibe a mensagem apropriada

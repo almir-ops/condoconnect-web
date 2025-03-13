@@ -1,7 +1,12 @@
-<div class="px-[70px] pt-8  text-gray-700">
-  <div class="">
-    <p>condominios works!</p>
-    <app-table [columns]="columns" [data]="data"></app-table>
+<div class="px-[70px] pt-5  text-gray-700 w-full" >
+  <div class="w-full">
+    <div>
+      <div class="text-xl text-gray-700">Condominios</div>
+      <div>Gerencie os condominios presentes no aplicativo</div>
+    </div>
+    <div class="mt-4">
+      <app-table  class="w-full" [btnText1]="'Adicionar condominio'" [columns]="columns" [data]="data" [onButtonClick]="handleButtonClick"></app-table>
+    </div>
 
   </div>
 </div>

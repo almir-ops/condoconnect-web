@@ -29,6 +29,11 @@ export class SideMenuComponent {
       url:'admin/empresas',
     },
     {
+      title:'Cidades',
+      icon:'building-svgrepo-com',
+      url:'admin/cidades',
+    },
+    {
       title:'Categorias',
       icon:'building-svgrepo-com',
       url:'admin/categorias',
