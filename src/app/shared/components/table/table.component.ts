@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import moment from 'moment';
+//import moment from 'moment';
 
 @Component({
   selector: 'app-table',
@@ -60,12 +60,12 @@ export class TableComponent {
     if (typeof value === 'object' && value !== null) {
       return value.nome || 'N/A'; // Retorna o campo 'nome', ou outro campo desejado
     }
-
+    /*
     // Verifica se o valor é uma data válida antes de tentar formatar
     if (moment(value, moment.ISO_8601, true).isValid()) {
       return moment(value).format('DD/MM/YYYY HH:mm:ss'); // Formato desejado
     }
-
+    */
     return value; // Retorna o valor original caso não seja booleano, objeto ou data
   }
 
