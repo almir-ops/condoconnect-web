@@ -28,10 +28,10 @@
         {{ formatStatus(row[col]) }}
         </td>
         <td class="py-2 px-4 border-b flex gap-2">
-          <button *ngIf="onEdit" (click)="onEdit?.(row)" class="bg-primary text-sm text-white px-2 py-1 rounded">
+          <button *ngIf="onEdit" (click)="onEdit(row)" class="bg-primary text-sm text-white px-2 py-1 rounded">
             Editar
           </button>
-          <button *ngIf="onDelete" (click)="onDelete?.(row)" class="bg-red-700 text-sm text-white px-2 py-1 rounded">
+          <button *ngIf="onDelete" (click)="onDelete(row)" class="bg-red-700 text-sm text-white px-2 py-1 rounded">
             Excluir
           </button>
         </td>
