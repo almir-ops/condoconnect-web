@@ -56,13 +56,19 @@ export class TableComponent {
       return value ? 'Ativo' : 'Inativo';
     }
 
+    // Verifica se o valor é um objeto e contém a chave desejada
+    if (typeof value === 'object' && value !== null) {
+      return value.nome || 'N/A'; // Retorna o campo 'nome', ou outro campo desejado
+    }
+
     // Verifica se o valor é uma data válida antes de tentar formatar
     if (moment(value, moment.ISO_8601, true).isValid()) {
       return moment(value).format('DD/MM/YYYY HH:mm:ss'); // Formato desejado
     }
 
-    return value; // Retorna o valor original caso não seja booleano nem data
+    return value; // Retorna o valor original caso não seja booleano, objeto ou data
   }
+
 
   capitalizeFirstLetter(text: string): string {
     if (!text) return ''; // Caso seja undefined ou vazio, retorna string vazia

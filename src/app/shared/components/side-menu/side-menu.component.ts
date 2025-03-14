@@ -39,6 +39,11 @@ export class SideMenuComponent {
       url:'admin/categorias',
     },
     {
+      title:'SubCategorias',
+      icon:'building-svgrepo-com',
+      url:'admin/subcategorias',
+    },
+    {
       title:'Banners',
       icon:'building-svgrepo-com',
       url:'admin/banners',

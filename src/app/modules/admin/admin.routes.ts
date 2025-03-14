@@ -48,6 +48,11 @@ export const adminRoutes: Routes = [
         loadComponent: () => import('../admin/categorias/categorias.component')
           .then(m => m.CategoriasComponent)
       },
+      {
+        path: 'subcategorias',
+        loadComponent: () => import('../admin/subcategorias/subcategorias.component')
+          .then(m => m.SubcategoriasComponent)
+      },
 
     ]
   },

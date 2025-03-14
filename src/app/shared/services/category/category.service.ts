@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 
 interface Category {
   id?: number;
-  name: string;
+  nome: string;
+  descricao: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private readonly apiUrl = environment.api_url + 'categories';
+  private readonly apiUrl = environment.apiUrl + 'categorias';
   constructor(private http: HttpClient) {}
 
   getAllCategories(): Observable<Category[]> {
