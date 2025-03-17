@@ -1,30 +1,23 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertComponent } from '../alert/alert.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertService {
+  constructor(private dialog: MatDialog) {}
 
-  constructor(private alertController: AlertController) {}
-
-  async presentAlert(header: string, message: string, okCallback?: () => void) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: 'OK',
-          cssClass: 'alert-button-confirm',
-          handler: () => {
-            if (okCallback) {
-              okCallback(); // Executa o método quando o botão é clicado
-            }
-          }
-        }
-      ]
+  presentAlert(header: string, message: string, okCallback?: () => void) {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      width: '350px',
+      data: { header, message },
     });
 
-    await alert.present();
+    dialogRef.afterClosed().subscribe(() => {
+      if (okCallback) {
+        okCallback(); // Executa o callback após fechar
+      }
+    });
   }
 }

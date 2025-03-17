@@ -56,17 +56,17 @@ export class TableComponent {
       return value ? 'Ativo' : 'Inativo';
     }
 
-    // Verifica se o valor é um objeto e contém a chave desejada
+    // Se for um array de objetos, pega o primeiro item e retorna o campo 'nome'
+    if (Array.isArray(value) && value.length > 0) {
+      return value[0]?.nome || 'N/A';
+    }
+
+    // Se for um objeto, retorna o campo 'nome'
     if (typeof value === 'object' && value !== null) {
-      return value.nome || 'N/A'; // Retorna o campo 'nome', ou outro campo desejado
+      return value.nome || 'N/A';
     }
-    /*
-    // Verifica se o valor é uma data válida antes de tentar formatar
-    if (moment(value, moment.ISO_8601, true).isValid()) {
-      return moment(value).format('DD/MM/YYYY HH:mm:ss'); // Formato desejado
-    }
-    */
-    return value; // Retorna o valor original caso não seja booleano, objeto ou data
+
+    return value; // Retorna o valor original caso não seja booleano, array ou objeto
   }
 
 

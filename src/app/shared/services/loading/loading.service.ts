@@ -1,41 +1,36 @@
 import { Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoadingService {
-  private loadingInstance: HTMLIonLoadingElement | null = null;
   private requestCount = 0;
-  private isLoading = false; // Nova flag para impedir chamadas duplicadas
+  private isLoading = false;
 
-  constructor(private loadingCtrl: LoadingController) {}
+  constructor(private dialog: MatDialog) {}
 
-  async showLoading() {
+  showLoading(): void {
     this.requestCount++;
 
-    // Apenas exibe o loading se não estiver visível
     if (!this.isLoading) {
       this.isLoading = true;
-      this.loadingInstance = await this.loadingCtrl.create({
-        message: 'Carregando...',
-        spinner: 'crescent',
+      this.dialog.open(LoadingComponent, {
+        disableClose: true,
+        panelClass: 'loading-dialog',
       });
-
-      await this.loadingInstance.present();
     }
   }
 
-  async hideLoading() {
+  hideLoading(): void {
     if (this.requestCount > 0) {
       this.requestCount--;
     }
 
-    // Apenas remove o loading se todas as requisições forem finalizadas
-    if (this.requestCount === 0 && this.loadingInstance) {
-      await this.loadingInstance.dismiss();
-      this.loadingInstance = null;
-      this.isLoading = false; // Reseta a flag
+    if (this.requestCount === 0 && this.isLoading) {
+      this.dialog.closeAll();
+      this.isLoading = false;
     }
   }
 }

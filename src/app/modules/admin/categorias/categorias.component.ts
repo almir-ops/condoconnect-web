@@ -1,33 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, IonModal } from '@ionic/angular';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { CategoryService } from '../../../shared/services/category/category.service';
+import { CategoriaDialogComponent } from '../../../shared/components/categoria-dialog/categoria-dialog.component';
 
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [TableComponent,IonicModule,FormsModule, CommonModule],
+  imports: [TableComponent, FormsModule, CommonModule],
   templateUrl: './categorias.component.html',
   styleUrls: ['./categorias.component.scss'],
 })
-export class CategoriasComponent  implements OnInit {
-
+export class CategoriasComponent implements OnInit {
   columns = ['nome', 'descricao', 'createdAt'];
   data = [];
-  @ViewChild('modalAdicionaCategorias', { static: false, read: IonModal }) modalAdicionaCategorias!: IonModal;
-  isModalOpen = false;
-  nomeCategorias = '';
-  descricaoCategorias = '';
-  caracteresRestantes: number = 150;
-  editMode: boolean = false;
-  categoriaEditando: any = null;
 
   constructor(
     private categoriaService: CategoryService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -43,76 +37,59 @@ export class CategoriasComponent  implements OnInit {
   }
 
   handleButtonClick = () => {
-    this.setOpen(true);
+    this.abrirModal();
   };
 
-  setOpen(isOpen: boolean) {
-    this.isModalOpen = isOpen;
-  }
-
-  adicionaCategorias() {
-    const Categorias = {
-      id: undefined,
-      nome: this.nomeCategorias,
-      descricao: this.descricaoCategorias
-    };
-
-    if (!Categorias.nome) {
-      this.alertService.presentAlert('Atenção', 'Preencha um nome de Categoria');
-      return;
-    }
-
-    if (Categorias.descricao.length > 150) {
-      this.alertService.presentAlert('Atenção', 'A descrição da categoria deve ter no máximo 150 caracteres.');
-      return;
-    }
-
-    this.categoriaService.createCategory(Categorias).subscribe({
-      next: (value: any) => {
-        this.getCategories();
-        this.setOpen(false);
+  abrirModal(editMode: boolean = false, categoria: any = null) {
+    const dialogRef = this.dialog.open(CategoriaDialogComponent, {
+      width: '400px',
+      data: {
+        editMode,
+        nomeCategorias: categoria ? categoria.nome : '',
+        descricaoCategorias: categoria ? categoria.descricao : '',
       },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.editMode) {
+          this.editarCategoria(categoria.id, result);
+        } else {
+          this.adicionaCategorias(result);
+        }
+      }
     });
   }
 
-  editarCategorias = (categoria:any) => {
-    this.editMode = true;
-    this.categoriaEditando = categoria;
-    this.nomeCategorias = categoria.nome;
-    this.descricaoCategorias = categoria.descricao;
-    this.setOpen(true);
-  }
-
-  editarCategoria() {
-    const Categorias = {
-      id: this.categoriaEditando.id,
-      nome: this.nomeCategorias,
-      descricao: this.descricaoCategorias,
+  adicionaCategorias(dados: any) {
+    const novaCategoria = {
+      id: undefined,
+      nome: dados.nomeCategorias,
+      descricao: dados.descricaoCategorias
     };
 
-    if (!Categorias.nome) {
-      this.alertService.presentAlert('Atenção', 'Preencha um nome de Categoria');
-      return;
-    }
+    this.categoriaService.createCategory(novaCategoria).subscribe({
+      next: () => this.getCategories(),
+    });
+  }
 
-    if (Categorias.descricao.length > 150) {
-      this.alertService.presentAlert('Atenção', 'A descrição da categoria deve ter no máximo 150 caracteres.');
-      return;
-    }
+  editarCategorias = (categoria: any) => {
+    this.abrirModal(true, categoria);
+  };
 
-    this.categoriaService.updateCategory(Categorias.id, Categorias).subscribe({
-      next: (value: any) => {
-        this.getCategories();
-        this.setOpen(false);
-      },
+  editarCategoria(id: number, dados: any) {
+    const categoriaAtualizada = {
+      id,
+      nome: dados.nomeCategorias,
+      descricao: dados.descricaoCategorias
+    };
+
+    this.categoriaService.updateCategory(id, categoriaAtualizada).subscribe({
+      next: () => this.getCategories(),
     });
   }
 
   excluirCategorias(Categorias: any) {
     this.data = this.data.filter(u => u !== Categorias);
-  }
-
-  atualizarContagem() {
-    this.caracteresRestantes = 150 - (this.descricaoCategorias ? this.descricaoCategorias.length : 0);
   }
 }

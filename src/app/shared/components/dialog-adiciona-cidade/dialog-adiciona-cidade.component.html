@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Adicionar Cidade</h2>
+
+<mat-dialog-content class="mat-typography">
+  <p>Digite o nome da cidade corretamente e clique em adicionar</p>
+
+  <mat-form-field class="w-full">
+    <mat-label>Cidade</mat-label>
+    <input matInput [(ngModel)]="nomeCidade">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="fecharDialog()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="adicionarCidade()">Adicionar</button>
+</mat-dialog-actions>

@@ -7,10 +7,10 @@
     <div class="mt-4">
       <app-table
         class="w-full"
-        [btnText1]="'Adicionar categoria'"
+        [btnText1]="'Adicionar subcategoria'"
         [columns]="columns"
         [data]="data"
-        [onButtonClick]="handleButtonClick"
+        [onButtonClick]="abrirModalAdicionar"
         [onEdit]="editarSubCategorias"
         [onDelete]="excluirSubCategorias"
         ></app-table>
@@ -19,67 +19,4 @@
   </div>
 </div>
 
-
-<ion-modal id="example-modal" [isOpen]="isModalOpen">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Adiciona SubCategoria</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="setOpen(false)">Fechar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <div class="text-gray-600">
-        Digite o nome da Categorias corretamente e clique em adicionar
-      </div>
-
-      <div class="relative w-full mt-8 ">
-        <input
-          id="custom-input"
-          type="text"
-          placeholder=" "
-          [(ngModel)]="nomeSubcategoria"
-          class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition"
-        />
-        <label
-          for="custom-input"
-          class="absolute left-4  text-gray-500 text-sm px-1   transform -translate-y-1/2  transition-all peer-placeholder-shown:top-1/2
-             peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
-            peer-focus:text-sm peer-focus:text-primary bg-white"
-            [ngClass]="{'peer-focus:-top-0.5': nomeSubcategoria === '', '-top-0.5'  : nomeSubcategoria !== ''}"> Subcategoria
-        </label>
-      </div>
-
-      <div class="relative w-full my-4">
-        <label
-          for="categories"
-          class="absolute left-4 transform -translate-y-1/2 text-gray-500 text-sm px-1 transition-all
-                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
-                peer-focus:text-sm peer-focus:text-primary bg-white">
-          Categoria (obrigatório)
-        </label>
-        <select
-          id="categories"
-          formArrayName="categories"
-          class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition"
-          (change)="onCategorySelect($event)">
-
-          <!-- Opção padrão para exibir "Selecionar categoria" -->
-          <option value="" disabled selected>Selecionar categoria</option>
-
-          <option *ngFor="let category of categorias" [value]="category.id">
-            {{ category.nome }}
-          </option>
-        </select>
-      </div>
-
-
-      <div class="flex justify-end mt-4">
-        <div class="inline-block bg-primary text-white rounded-md py-2 px-2" (click)="adicionaSubCategorias()">Adicionar</div>
-      </div>
-    </ion-content>
-  </ng-template>
-</ion-modal>
 

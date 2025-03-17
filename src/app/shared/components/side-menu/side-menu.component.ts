@@ -2,12 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-side-menu',
   standalone: true,
-  imports: [CommonModule,IonicModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.scss'
 })
@@ -20,42 +19,42 @@ export class SideMenuComponent {
      }, */
      {
        title:'Condominios',
-       icon:'building-svgrepo-com',
+       icon:'building',
        url:'admin/condominios',
-     },
-     {
-      title:'Empresas',
-      icon:'building-svgrepo-com',
-      url:'admin/empresas',
+      },
+      {
+        title:'Empresas',
+        icon:'building-svgrepo-com',
+        url:'admin/empresas',
     },
     {
       title:'Cidades',
-      icon:'building-svgrepo-com',
+      icon:'place-marker-svgrepo-com',
       url:'admin/cidades',
     },
     {
       title:'Categorias',
-      icon:'building-svgrepo-com',
+      icon:'list-check',
       url:'admin/categorias',
     },
     {
       title:'SubCategorias',
-      icon:'building-svgrepo-com',
+      icon:'list-ul-alt-1-svgrepo-com',
       url:'admin/subcategorias',
     },
     {
       title:'Banners',
-      icon:'building-svgrepo-com',
+      icon:'announcement-01-svgrepo-com',
       url:'admin/banners',
     },
     {
       title:'Planos',
-      icon:'building-svgrepo-com',
+      icon:'stars-svgrepo-com',
       url:'admin/planos',
     },
     {
       title:'Usuarios',
-      icon:'building-svgrepo-com',
+      icon:'users-svgrepo-com',
       url:'admin/usuarios',
     }
    ]

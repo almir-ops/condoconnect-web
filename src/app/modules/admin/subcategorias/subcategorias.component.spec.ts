@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { SubcategoriasComponent } from './subcategorias.component';
 
@@ -10,7 +9,6 @@ describe('SubcategoriasComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SubcategoriasComponent ],
-      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SubcategoriasComponent);

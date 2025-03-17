@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ editMode ? 'Editar Categoria' : 'Adicionar Categoria' }}</h2>
+
+<mat-dialog-content class="mat-typography">
+  <p>Digite o nome da Categoria corretamente e clique em {{ editMode ? 'Atualizar' : 'Adicionar' }}</p>
+
+  <mat-form-field class="w-full">
+    <mat-label>Categorias</mat-label>
+    <input matInput [(ngModel)]="nomeCategorias" />
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Descrição da categoria</mat-label>
+    <textarea matInput rows="4" [(ngModel)]="descricaoCategorias" (input)="atualizarContagem()"></textarea>
+    <mat-hint>{{ caracteresRestantes }}/150 caracteres restantes</mat-hint>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="fechar()">Fechar</button>
+  <button mat-raised-button color="primary" (click)="salvar()">
+    {{ editMode ? 'Atualizar' : 'Adicionar' }}
+  </button>
+</mat-dialog-actions>

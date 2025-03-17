@@ -1,15 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { CidadeService } from '../../../shared/services/cidades/cidades.service';
-import { IonicModule, IonModal } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AlertService } from '../../../shared/components/dialog/alert.service';
+import { DialogAdicionaCidadeComponent } from '../../../shared/components/dialog-adiciona-cidade/dialog-adiciona-cidade.component';
 
 @Component({
   selector: 'app-cidades',
   standalone: true,
-  imports: [TableComponent,IonicModule,FormsModule, CommonModule],
+  imports: [TableComponent, CommonModule],
   templateUrl: './cidades.component.html',
   styleUrl: './cidades.component.scss'
 })
@@ -17,14 +16,10 @@ export class CidadesComponent {
 
   columns = ['nome', 'createdAt'];
   data = [];
-  @ViewChild('modalAdicionaCidade', { static: false, read: IonModal }) modalAdicionaCidade!: IonModal;
-  @ViewChild('modalStatusCliente', { static: false }) modalStatusCliente!: IonModal;
-  isModalOpen = false;
-  nomeCidade = '';
 
   constructor(
     private cidadeService: CidadeService,
-    private alertService: AlertService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -34,40 +29,38 @@ export class CidadesComponent {
   getCidades() {
     this.cidadeService.getAllCidades().subscribe({
       next: (value: any) => {
-        console.log(value);
         this.data = value;
       },
     });
   }
 
   handleButtonClick = () => {
-    this.setOpen(true);
+    const dialogRef = this.dialog.open(DialogAdicionaCidadeComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe((nomeCidade: string) => {
+      if (nomeCidade) {
+        this.adicionaCidade(nomeCidade);
+      }
+    });
   };
 
-  setOpen(isOpen: boolean) {
-    this.isModalOpen = isOpen;
+  adicionaCidade(nomeCidade: string) {
+    if (!nomeCidade.trim()) {
+      return;
+    }
+
+    const cidade = { nome: nomeCidade };
+    this.cidadeService.createCidades(cidade).subscribe({
+      next: () => {
+        this.getCidades();
+      },
+    });
   }
 
-  adicionaCidade(){
-    const cidade = {
-      nome: this.nomeCidade
-    }
-    if(cidade.nome){
-      this.cidadeService.createCidades(cidade).subscribe({
-        next: (value: any) => {
-          console.log(value);
-          this.getCidades();
-          this.setOpen(false);
-        },
-      });
-    }else{
-      this.alertService.presentAlert('Atenção ', 'Preencha um nome de cidade');
-    }
-  }
-
-  editarCidade(usuario: any) {
-    console.log('Editando cidade:', usuario);
-    // Aqui você pode abrir um modal ou navegar para uma página de edição
+  editarCidade(cidade: any) {
+    console.log('Editando cidade:', cidade);
   }
 
   excluirCidade(cidade: any) {
