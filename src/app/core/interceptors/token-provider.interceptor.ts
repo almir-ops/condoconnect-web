@@ -1,4 +1,3 @@
-import { AuthService } from '../../modules/auth/auth.service';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
@@ -8,6 +7,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from '../../shared/services/auth/auth.service';
 
 @Injectable()
 export class TokenProviderInterceptor implements HttpInterceptor {
