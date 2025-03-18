@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { PlanoService } from '../../../shared/services/planos/plano.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SubcategoriaModalComponent } from '../../../shared/components/subcategoria-modal/subcategoria-modal.component';
+import { SubcategoriaModalComponent } from '../../../shared/components/modais/subcategoria-modal/subcategoria-modal.component';
+import { ModalPlanoComponent } from '../../../shared/components/modais/modal-plano/modal-plano.component';
 
 @Component({
   selector: 'app-planos',
@@ -15,9 +16,10 @@ import { SubcategoriaModalComponent } from '../../../shared/components/subcatego
 })
 export class PlanosComponent {
 
-    columns = ['nome', 'valor', 'createdAt'];
+    columns = ['nome', 'valor', 'descricao', 'createdAt'];
     data = [];
     categorias: any[] = [];
+    plano:any;
 
     constructor(
       private planoService: PlanoService,
@@ -36,21 +38,24 @@ export class PlanosComponent {
     });
   }
 
+  handleButtonClick = () => {
+    this.abrirModalAdicionar();
+  };
 
   abrirModalAdicionar() {
-    const dialogRef = this.dialog.open(SubcategoriaModalComponent, {
+    const dialogRef = this.dialog.open(ModalPlanoComponent, {
       width: '400px',
-      data: { categorias: this.categorias },
+      data: { plano: this.plano },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.adicionaSubCategoria(result);
+        this.adicionaPlano(result);
       }
     });
   }
 
-  adicionaSubCategoria(subcategoria: any) {
+  adicionaPlano(subcategoria: any) {
     this.planoService.createPlanos(subcategoria).subscribe({
       next: () => {
         this.getSubcategories();

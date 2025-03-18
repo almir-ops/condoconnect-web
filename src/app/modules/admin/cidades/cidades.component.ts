@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { CidadeService } from '../../../shared/services/cidades/cidades.service';
 import { CommonModule } from '@angular/common';
-import { DialogAdicionaCidadeComponent } from '../../../shared/components/dialog-adiciona-cidade/dialog-adiciona-cidade.component';
+import { DialogAdicionaCidadeComponent } from '../../../shared/components/modais/dialog-adiciona-cidade/dialog-adiciona-cidade.component';
 
 @Component({
   selector: 'app-cidades',

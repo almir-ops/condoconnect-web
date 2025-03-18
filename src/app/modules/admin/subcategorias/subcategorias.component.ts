@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { CategoryService } from '../../../shared/services/category/category.service';
 import { SubCategoriesService } from '../../../shared/services/subcategorias/subcategoria.service';
-import { SubcategoriaModalComponent } from '../../../shared/components/subcategoria-modal/subcategoria-modal.component';
+import { SubcategoriaModalComponent } from '../../../shared/components/modais/subcategoria-modal/subcategoria-modal.component';
 
 @Component({
   selector: 'app-subcategorias',

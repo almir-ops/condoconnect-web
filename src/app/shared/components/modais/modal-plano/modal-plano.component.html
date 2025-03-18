@@ -1,0 +1,64 @@
+<div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar Plano</h2>
+  <p class="text-gray-600 mb-4">
+    Complete o formulario corretamente e clique em adicionar.
+  </p>
+
+  <div class="mb-2">
+    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
+      Nome
+    </label>
+    <input
+      id="nomeSubcategoria"
+      type="text"
+      [(ngModel)]="nome"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      placeholder="Digite o nome do plano"
+    />
+  </div>
+
+  <div class="mb-4">
+    <label for="categorias" class="block text-sm font-medium text-gray-700">
+      Valor
+    </label>
+    <input
+      id="nomeSubcategoria"
+      type="number"
+      [(ngModel)]="valor"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      placeholder="Digite o nome do plano"
+    />
+  </div>
+
+ <div class="mb-4">
+    <label for="categorias" class="block text-sm font-medium text-gray-700">
+      Ciclo de pagamento
+    </label>
+    <select
+      id="categorias"
+      [(ngModel)]="pagamento_ciclo"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+    >
+      <option value="WEEKLY">Semanal</option>
+      <option value="BIWEEKLY">Quinzenal</option>
+      <option value="MONTHLY">Mensal</option>
+      <option value="YEARLY">Anual</option>
+
+    </select>
+  </div>
+
+  <mat-form-field class="w-full">
+    <mat-label>Descrição do plano</mat-label>
+    <textarea matInput rows="4" [(ngModel)]="descricao" (input)="atualizarContagem()"></textarea>
+    <mat-hint>{{ caracteresRestantes }}/150 caracteres restantes</mat-hint>
+  </mat-form-field>
+
+  <div class="flex justify-end space-x-2 mt-4">
+    <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
+      Fechar
+    </button>
+    <button (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md">
+      Adicionar
+    </button>
+  </div>
+</div>

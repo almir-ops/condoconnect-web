@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { CategoryService } from '../../../shared/services/category/category.service';
-import { CategoriaDialogComponent } from '../../../shared/components/categoria-dialog/categoria-dialog.component';
 import { BannersService } from '../../../shared/services/banners/banners.service';
 
 
@@ -17,7 +16,7 @@ import { BannersService } from '../../../shared/services/banners/banners.service
   styleUrl: './banners.component.scss'
 })
 export class BannersComponent {
-columns = ['imagem', 'empresa', 'createdAt'];
+  columns = ['imagem', 'empresa', 'createdAt'];
   data = [];
 
   constructor(
@@ -43,7 +42,7 @@ columns = ['imagem', 'empresa', 'createdAt'];
   };
 
   abrirModal(editMode: boolean = false, categoria: any = null) {
-    const dialogRef = this.dialog.open(CategoriaDialogComponent, {
+    const dialogRef = this.dialog.open(BannersComponent, {
       width: '400px',
       data: {
         editMode,

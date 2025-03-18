@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { SubcategoriaModalComponent } from '../../../shared/components/subcategoria-modal/subcategoria-modal.component';
+import { SubcategoriaModalComponent } from '../../../shared/components/modais/subcategoria-modal/subcategoria-modal.component';
 import { PlanoService } from '../../../shared/services/planos/plano.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { UsersService } from '../../../shared/services/usuarios/users.service';
+import { ModalUsuarioComponent } from '../../../shared/components/modais/modal-usuario/modal-usuario.component';
 
 @Component({
   selector: 'app-usuarios',
@@ -16,7 +17,7 @@ import { UsersService } from '../../../shared/services/usuarios/users.service';
 })
 export class UsuariosComponent {
 
-    columns = ['nome','email', 'tipo', 'createdAt'];
+    columns = ['nome', 'email', 'telefone', 'tipo', 'status', 'createdAt'];
     data = [];
     categorias: any[] = [];
 
@@ -36,26 +37,28 @@ export class UsuariosComponent {
       },
     });
   }
-
+  handleButtonClick = () => {
+    this.abrirModalAdicionar();
+  };
 
   abrirModalAdicionar() {
-    const dialogRef = this.dialog.open(SubcategoriaModalComponent, {
+    const dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '400px',
-      data: { categorias: this.categorias },
+
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.adicionaSubCategoria(result);
+        this.adicionaUsuario(result);
       }
     });
   }
 
-  adicionaSubCategoria(subcategoria: any) {
+  adicionaUsuario(subcategoria: any) {
 
   }
 
-  editarSubCategorias(){}
+  editarUsuario(){}
 
-  excluirSubCategorias(){}
+  desativarUsuario(){}
 }

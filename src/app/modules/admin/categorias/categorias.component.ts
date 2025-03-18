@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { CategoryService } from '../../../shared/services/category/category.service';
-import { CategoriaDialogComponent } from '../../../shared/components/categoria-dialog/categoria-dialog.component';
+import { CategoriaDialogComponent } from '../../../shared/components/modais/categoria-dialog/categoria-dialog.component';
 
 @Component({
   selector: 'app-categorias',

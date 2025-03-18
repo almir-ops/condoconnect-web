@@ -8,12 +8,12 @@
     <div class="mt-4">
       <app-table
         class="w-full"
-        [btnText1]="'Adicionar categoria'"
+        [btnText1]="'Adicionar usuario'"
         [columns]="columns"
         [data]="data"
-        [onButtonClick]="abrirModalAdicionar"
-        [onEdit]="editarSubCategorias"
-        [onDelete]="excluirSubCategorias"
+        [onButtonClick]="handleButtonClick"
+        [onEdit]="editarUsuario"
+        [onDelete]="desativarUsuario"
       ></app-table>
     </div>
   </div>

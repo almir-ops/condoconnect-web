@@ -102,39 +102,9 @@
             ],
             "scripts": []
           }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "condoconnect-web:ionic-cordova-build",
-            "devServerTarget": "condoconnect-web:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "condoconnect-web:ionic-cordova-build:production",
-              "devServerTarget": "condoconnect-web:serve:production"
-            }
-          }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "condoconnect-web:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "condoconnect-web:build:production"
-            }
-          }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false,
-    "schematicCollections": [
-      "@ionic/angular-toolkit"
-    ]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
