@@ -24,15 +24,21 @@ export class ModalPlanoComponent {
 
   hiddenPassword: boolean = false;
 
+  plano:any;
+
   constructor(
-    public dialogRef: MatDialogRef<ModalUsuarioComponent>,
+    public dialogRef: MatDialogRef<ModalPlanoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    console.log('Dados recebidos no modal:', data);
+
     this.data = data || {}; // Garante que data nunca seja null ou undefined
-    this.nome = this.data.nome ?? ''; // Usa ?? para tratar valores null e undefined
-    this.pagamento_ciclo = this.data.pagamento_ciclo ?? 'WEEKLY';
-    this.descricao = this.data.descricao ?? '';
-    this.valor = this.data.valor ?? '';
+    this.plano = this.data.plano || {}; // Garante que plano sempre tenha um objeto válido
+
+    this.nome = this.plano.nome ?? ''; // Usa ?? para tratar valores null e undefined
+    this.pagamento_ciclo = this.plano.pagamento_ciclo ?? 'WEEKLY';
+    this.descricao = this.plano.descricao ?? '';
+    this.valor = this.plano.valor ?? '';
     this.editMode = this.data.editMode ?? false;
   }
 
@@ -45,6 +51,17 @@ export class ModalPlanoComponent {
 
   salvar(): void {
     this.dialogRef.close({
+      nome: this.nome,
+      pagamento_ciclo: this.pagamento_ciclo,
+      descricao: this.descricao,
+      valor: this.valor,
+      editMode: this.editMode
+    });
+  }
+
+  update(): void {
+    this.dialogRef.close({
+      id:this.plano.id,
       nome: this.nome,
       pagamento_ciclo: this.pagamento_ciclo,
       descricao: this.descricao,

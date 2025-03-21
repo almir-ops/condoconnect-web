@@ -73,9 +73,7 @@ export class SideMenuComponent {
 
    ngOnInit(): void {
 
-
    }
-
 
    hiddenMenu() {
      if (this.isOpen) {
@@ -107,5 +105,11 @@ export class SideMenuComponent {
 
    handleInput(event: Event) {
      this.title = (event.target as HTMLInputElement).value;
+   }
+
+   logout(){
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.router.navigate(['/admin/login']);
    }
 }

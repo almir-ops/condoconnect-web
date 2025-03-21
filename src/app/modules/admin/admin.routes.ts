@@ -15,41 +15,49 @@ export const adminRoutes: Routes = [
       },
       {
         path: 'cidades',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/cidades/cidades.component')
           .then(m => m.CidadesComponent)
       },
       {
         path: 'usuarios',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/usuarios/usuarios.component')
           .then(m => m.UsuariosComponent)
       },
       {
         path: 'empresas',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/empresas/empresas.component')
           .then(m => m.EmpresasComponent)
       },
       {
         path: 'condominios',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/condominios/condominios.component')
           .then(m => m.CondominiosComponent)
       },
       {
         path: 'planos',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/planos/planos.component')
           .then(m => m.PlanosComponent)
       },
       {
         path: 'banners',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/banners/banners.component')
           .then(m => m.BannersComponent)
       },
       {
         path: 'categorias',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/categorias/categorias.component')
           .then(m => m.CategoriasComponent)
       },
       {
         path: 'subcategorias',
+        canActivate:[authGuard],
         loadComponent: () => import('../admin/subcategorias/subcategorias.component')
           .then(m => m.SubcategoriasComponent)
       },

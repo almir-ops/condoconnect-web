@@ -21,16 +21,19 @@ export class ModalUsuarioComponent {
   editMode: boolean = false;
 
   hiddenPassword: boolean = false;
+  usuario:any;
 
   constructor(
     public dialogRef: MatDialogRef<ModalUsuarioComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.data = data || {}; // Garante que data nunca seja null ou undefined
-    this.nome = this.data.nome ?? ''; // Usa ?? para tratar valores null e undefined
-    this.tipo = this.data.tipo ?? 'cliente';
-    this.status = this.data.status ?? 'ativo';
-    this.email = this.data.email ?? '';
+    this.usuario = this.data.usuario || {}; // Garante que plano sempre tenha um objeto válido
+
+    this.nome = this.usuario.nome ?? ''; // Usa ?? para tratar valores null e undefined
+    this.tipo = this.usuario.tipo ?? 'cliente';
+    this.status = this.usuario.status ?? 'ativo';
+    this.email = this.usuario.email ?? '';
     this.editMode = this.data.editMode ?? false;
   }
 
@@ -45,6 +48,21 @@ export class ModalUsuarioComponent {
     this.dialogRef.close({
       nome: this.nome,
       tipo: this.tipo,
+      email: this.email,
+      status: this.status,
+      telefone: this.telefone,
+      editMode: this.editMode
+    });
+  }
+
+  update(): void {
+    this.dialogRef.close({
+      id: this.usuario.id,
+      nome: this.nome,
+      tipo: this.tipo,
+      email: this.email,
+      status: this.status,
+      telefone: this.telefone,
       editMode: this.editMode
     });
   }

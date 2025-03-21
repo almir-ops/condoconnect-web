@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { UsersService } from '../../../shared/services/usuarios/users.service';
 import { ModalUsuarioComponent } from '../../../shared/components/modais/modal-usuario/modal-usuario.component';
+import { AuthService } from '../../../shared/services/auth/auth.service';
+import { AlertService } from '../../../shared/components/dialog/alert.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -23,14 +25,16 @@ export class UsuariosComponent {
 
     constructor(
       private usuarioService: UsersService,
-      private dialog: MatDialog
+      private authService: AuthService,
+      private dialog: MatDialog,
+      private alertService: AlertService
     ) {}
 
   ngOnInit() {
-    this.getSubcategories();
+    this.getUsuarios();
   }
 
-  getSubcategories() {
+  getUsuarios() {
     this.usuarioService.getAllUsers().subscribe({
       next: (value: any) => {
         this.data = value;
@@ -49,16 +53,57 @@ export class UsuariosComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.adicionaUsuario(result);
+        console.log(result);
+
+        //this.adicionaUsuario(result);
       }
     });
   }
 
-  adicionaUsuario(subcategoria: any) {
+  adicionaUsuario(usuario: any) {
+    this.usuarioService.register(usuario).subscribe({
+      next: (response: any) => {
+        this.alertService.presentAlert('Muito bem!', 'Usuário registrado com sucesso.');
+      },
+      error: (error:any) => {
+        console.log(error);
 
+
+        // Verifica o código de erro HTTP e exibe a mensagem apropriada
+        if (error.status === 400) {
+          this.alertService.presentAlert('Atenção', error.error.message );
+        } else {
+          this.alertService.presentAlert('Erro de Comunicação', 'Houve um erro de comunicação, tente novamente.');
+        }
+
+        console.error('Erro no registrar', error);
+      }
+    })
   }
 
-  editarUsuario(){}
+  editarUsuario = (usuario: any) => {
+   const dialogRef = this.dialog.open(ModalUsuarioComponent, {
+      width: '400px',
+      data: {
+        usuario: usuario,
+        editMode: true
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log(result);
+        this.usuarioService.updateUserss(result.id, result).subscribe({
+          next: (res:any) => {
+            this.getUsuarios();
+          },
+          error: (err:any) => {
+            console.log(err);
+          }
+        })
+      }
+    });
+  }
 
   desativarUsuario(){}
 }

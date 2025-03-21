@@ -1,7 +1,11 @@
 <div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar Plano</h2>
+  <h2 class="text-xl font-semibold text-gray-800">
+    {{ editMode ? 'Editando Plano' : 'Adicionar Plano' }}
+  </h2>
   <p class="text-gray-600 mb-4">
-    Complete o formulario corretamente e clique em adicionar.
+
+    {{ editMode ? 'Edite o plano como desejar e clique em salvar.' : 'Complete o formulario corretamente e clique em adicionar.' }}
+
   </p>
 
   <div class="mb-2">
@@ -57,8 +61,11 @@
     <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
       Fechar
     </button>
-    <button (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md">
-      Adicionar
+    <button *ngIf="editMode" (click)="update()" class="px-4 py-2 bg-primary text-white rounded-md">
+      {{ editMode ? 'Salvar' : 'Adicionar' }}
+    </button>
+    <button *ngIf="!editMode" (click)="salvar()" class="px-4 py-2 bg-primary text-white rounded-md">
+      {{ editMode ? 'Salvar' : 'Adicionar' }}
     </button>
   </div>
 </div>

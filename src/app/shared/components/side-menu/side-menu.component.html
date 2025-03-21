@@ -49,7 +49,7 @@
                 class="flex items-center text-sm py-4 px-1 h-12 w-full overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-green-600 hover:bg-primary-dark transition duration-300 ease-in-out cursor-pointer"
               >
               <div class="text-xl">
-                <img src="./assets/icons/{{item.icon}}.svg" class="w-7 h-7 mr-3 sm:ml-3 lg:mr-6" />
+                <img src="./assets/icons/{{item.icon}}.svg" class="w-7 h-7 mr-6 " />
               </div>
               <div class="w-full flex flex-row justify-between text-white" *ngIf="isOpen">
                   <div class="">
@@ -70,6 +70,14 @@
           </li>
         </div>
       </ul>
+      <div class="absolute bottom-4 flex" (click)="logout()">
+        <div class="text-xl">
+          <img src="./assets/icons/logout.svg" class="w-7 h-7 ml-5" />
+        </div>
+        <div class="w-full flex items-center justify-between text-white" *ngIf="isOpen">
+          <span class="ml-8">Fazer Logout</span>
+          </div>
+      </div>
     </div>
   </div>
   <div

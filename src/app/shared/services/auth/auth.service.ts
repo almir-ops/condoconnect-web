@@ -85,28 +85,7 @@ export class AuthService {
     );
   }
 
-  register(body:any){
-    return this.http.post(`${this.API_URL}auth/register`, body).subscribe(
-      (response: any) => {
-        this.router.navigate(['/perfil']);
-        this.tabService.setActiveTab('perfil');
-        this.alertService.presentAlert('Muito bem!', 'Usuário registrado com sucesso.');
-      },
-      (error) => {
-        console.log(error);
 
-
-        // Verifica o código de erro HTTP e exibe a mensagem apropriada
-        if (error.status === 400) {
-          this.alertService.presentAlert('Atenção', error.error.message );
-        } else {
-          this.alertService.presentAlert('Erro de Comunicação', 'Houve um erro de comunicação, tente novamente.');
-        }
-
-        console.error('Erro no registrar', error);
-      }
-    );
-  }
 
   update(body:any){
     return this.http.put(`${this.API_URL}auth/update/`+ body.id, body);

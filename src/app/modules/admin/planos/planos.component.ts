@@ -55,15 +55,37 @@ export class PlanosComponent {
     });
   }
 
-  adicionaPlano(subcategoria: any) {
-    this.planoService.createPlanos(subcategoria).subscribe({
+  adicionaPlano(plano: any) {
+    this.planoService.createPlanos(plano).subscribe({
       next: () => {
         this.getSubcategories();
       },
     });
   }
 
-  editarSubCategorias(){}
+  editarPlano = (plano: any) => {
+    const dialogRef = this.dialog.open(ModalPlanoComponent, {
+      width: '400px',
+      data: {
+        plano: plano,
+        editMode: true
+      },
+    });
 
-  excluirSubCategorias(){}
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log(result);
+        this.planoService.updatePlanos(result.id, result).subscribe({
+          next: (res:any) => {
+            this.getSubcategories();
+          },
+          error: (err:any) => {
+            console.log(err);
+          }
+        })
+      }
+    });
+  }
+
+  excluirPlano(){}
 }

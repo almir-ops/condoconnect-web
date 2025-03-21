@@ -18,12 +18,12 @@ export class PlanoService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  createPlanos(category: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, category);
+  createPlanos(plano: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, plano);
   }
 
-  updatePlanos(id: number, category: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, category);
+  updatePlanos(id: number, plano: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, plano);
   }
 
   deletePlanos(id: number): Observable<void> {
