@@ -12,6 +12,14 @@ export const routes: Routes = [
     component:HomeComponent
   },
   {
+    path: 'app',
+    component:HomeComponent
+  },
+  {
+    path: '',
+    component:HomeComponent
+  },
+  {
     path: '',
     redirectTo: '',
     pathMatch: 'full'
