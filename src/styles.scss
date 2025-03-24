@@ -36,3 +36,16 @@ button.alert-button.alert-button-confirm {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-snack-bar-container {
+  &.sucess-snackbar {
+    --mdc-snackbar-container-color: #1CDB92;
+    --mat-mdc-snack-bar-button-color: #fff
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+  &.error-snackbar {
+    --mdc-snackbar-container-color: #db1c1c;
+    --mat-mdc-snack-bar-button-color: #fff
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+}

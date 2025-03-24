@@ -54,8 +54,7 @@ export class UsuariosComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log(result);
-
-        //this.adicionaUsuario(result);
+        this.adicionaUsuario(result);
       }
     });
   }
