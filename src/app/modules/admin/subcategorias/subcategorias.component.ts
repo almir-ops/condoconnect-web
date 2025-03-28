@@ -46,6 +46,10 @@ export class SubcategoriasComponent implements OnInit {
     });
   }
 
+  handleButtonClick = () => {
+    this.abrirModalAdicionar();
+  };
+
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(SubcategoriaModalComponent, {
       width: '400px',

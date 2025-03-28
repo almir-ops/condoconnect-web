@@ -48,7 +48,7 @@ export class ModalCondominioComponent {
   }
 
   fechar(): void {
-    this.dialogRef.close();
+    //this.dialogRef.close();
   }
   viewPassword(): void {
     this.hiddenPassword = !this.hiddenPassword;
@@ -78,25 +78,34 @@ export class ModalCondominioComponent {
   }
 
   buscarEndereco(): void {
-    if (this.cep.length === 8 || this.cep.length === 9) {
-      this.cep = this.cep.replace('-', '');
+    console.log('🔍 Iniciando busca de endereço para CEP:', this.cep);
 
-      this.cepService.buscarCep(this.cep).subscribe({
-        next: (dados: any) => {
-          this.ngZone.run(() => { // Impede que o modal feche automaticamente
-            this.endereco = dados.logradouro;
-            this.bairro = dados.bairro;
-            this.cidade = dados.localidade;
-            this.estado = dados.uf;
-          });
-        },
-        error: (erro: any) => {
-          this.ngZone.run(() => {
-            console.error('Erro ao buscar CEP:', erro);
-            this._snackBar.open('Erro ao buscar o endereço!', '', { duration: 3000, panelClass: ['error-snackbar'] });
-          });
-        }
-      });
+    try {
+      if (this.cep.length === 8 || this.cep.length === 9) {
+        this.cep = this.cep.replace('-', '');
+
+        this.cepService.buscarCep(this.cep).subscribe({
+          next: (dados: any) => {
+            console.log('✅ Endereço encontrado:', dados);
+            this.ngZone.run(() => {
+              this.endereco = dados.logradouro;
+              this.bairro = dados.bairro;
+              this.cidade = dados.localidade;
+              this.estado = dados.uf;
+            });
+          },
+          error: (erro: any) => {
+            console.error('❌ Erro ao buscar CEP:', erro);
+            this.ngZone.run(() => {
+              this._snackBar.open('Erro ao buscar o endereço!', '', { duration: 3000, panelClass: ['error-snackbar'] });
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('⚠️ Erro inesperado no buscarEndereco:', error);
+      this._snackBar.open('Erro inesperado ao buscar endereço!', '', { duration: 3000, panelClass: ['error-snackbar'] });
     }
   }
+
 }

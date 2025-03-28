@@ -8,6 +8,7 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 export class LoadingService {
   private requestCount = 0;
   private isLoading = false;
+  private loadingDialogRef: any = null; // Armazena o modal de loading
 
   constructor(private dialog: MatDialog) {}
 
@@ -16,7 +17,7 @@ export class LoadingService {
 
     if (!this.isLoading) {
       this.isLoading = true;
-      this.dialog.open(LoadingComponent, {
+      this.loadingDialogRef = this.dialog.open(LoadingComponent, {
         disableClose: true,
         panelClass: 'loading-dialog',
       });
@@ -29,8 +30,14 @@ export class LoadingService {
     }
 
     if (this.requestCount === 0 && this.isLoading) {
-      this.dialog.closeAll();
+      if (this.loadingDialogRef) {
+        this.loadingDialogRef.close(); // Fecha apenas o modal de loading
+        this.loadingDialogRef = null;
+      }
       this.isLoading = false;
     }
   }
+
+
+
 }

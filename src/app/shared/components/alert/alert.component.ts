@@ -16,6 +16,6 @@ export class AlertComponent {
   ) {}
 
   fechar() {
-    this.dialogRef.close();
+    //this.dialogRef.close();
   }
 }

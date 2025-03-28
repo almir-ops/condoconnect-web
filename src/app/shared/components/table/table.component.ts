@@ -23,6 +23,9 @@ export class TableComponent {
 
 
   filteredData() {
+    if (!Array.isArray(this.data)) {
+      return [];
+    }
     return this.data.filter(row =>
       Object.values(row).some(value =>
         value?.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
