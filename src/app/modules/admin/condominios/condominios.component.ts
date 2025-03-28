@@ -49,7 +49,8 @@ export class CondominiosComponent implements OnInit {
 
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalCondominioComponent, {
-      width: '400px',
+      width: '500px',
+      height: '90%',
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
