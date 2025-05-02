@@ -8,14 +8,7 @@
   </div>
   <div class="flex-1 mt-16 mb-5 bg-white sm:max-w-[400px] sm:mx-auto rounded-lg shadow-lg px-4 pt-2 pb-8 mx-3 relative ">
 
-      <div class="w-full text-laranjaprincipal text-center mt-6">
-        Defina uma nova senha
-      </div>
-      <div class="w-full text-gray-500 text-center text-xs">
-        Crie uma senha seguindo todos os requesitos abaixo
-      </div>
-
-      <form [formGroup]="form" (submit)="onSubmit()">
+      <form [formGroup]="form" (submit)="resetPassword()">
         <div class="w-full text-laranjaprincipal text-center mt-6">
           Defina uma nova senha
         </div>
@@ -260,7 +253,7 @@
               formControlls['password'].invalid ||
               formControlls['password'].value !==
                 formControlls['confirmPassword'].value,
-            'hover:bg-[#DC4403] bg-laranjaprincipal cursor-pointer':
+            'hover:bg-primary-dark bg-primary cursor-pointer':
               formControlls['password'].value &&
               formControlls['password'].valid &&
               formControlls['confirmPassword'].value &&
@@ -273,9 +266,6 @@
           <div class="font-bold">Salvar</div>
         </button>
       </form>
-
-      <!-- Login Button -->
-      <button (click)="resetPassword()" class="mt-6 btn-primary" expand="block">Entrar</button>
 
 
   </div>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
@@ -10,7 +10,7 @@ import { BaseComponent } from '../../../shared/components/base/base.component';
 @Component({
   selector: 'app-forgot',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule],
   templateUrl: './forgot.component.html',
   styleUrl: './forgot.component.scss'
 })
@@ -44,9 +44,8 @@ export class ForgotComponent extends BaseComponent implements OnInit {
   initForm() {
     this.form = this.fb.group({
       password: ['', Validators.required, this.passwordValidator.bind(this)],
-      email: ['', [Validators.required, Validators.email]],
       confirmPassword: ['', Validators.required],
-      token: ['', Validators.required],
+      token: [this.token, Validators.required],
     });
 
     this.formControlls['password'].valueChanges
@@ -61,9 +60,20 @@ export class ForgotComponent extends BaseComponent implements OnInit {
         this.updateLoginState();
       });
   }
+
   resetPassword() {
-    if(this.email && this.password) {
-      this.authService.update({ email: this.email, senha: this.password, token: this.token });
+    console.log('resetPassword');
+
+    if(this.formControlls['password'].value === this.formControlls['confirmPassword'].value) {
+      this.authService.update({ newPassword: this.password, token: this.token }).subscribe({
+        next:(value:any) => {
+          console.log(value);
+
+        },error:(err:any) => {
+          console.log(err);
+
+        },
+      });
 
       if (this.rememberEmail) {
         localStorage.setItem('savedEmail', this.email);
@@ -72,7 +82,7 @@ export class ForgotComponent extends BaseComponent implements OnInit {
       }
 
     }else{
-      this.alertService.presentAlert('Atenção ', 'Preencha todos os campos.');
+      this.alertService.presentAlert('Atenção ', 'Senhas não coincidem.');
     }
   }
 

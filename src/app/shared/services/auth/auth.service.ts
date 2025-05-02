@@ -88,7 +88,7 @@ export class AuthService {
 
 
   update(body:any){
-    return this.http.put(`${this.API_URL}auth/update/`+ body.id, body);
+    return this.http.put(`${this.API_URL}auth/reset/`, body);
   }
 
   // Logout e remoção do token

@@ -1,0 +1,130 @@
+<div class="bg-primary h-screen flex flex-col" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">
+  <!-- Toolbar
+  <app-toolbar></app-toolbar>
+  -->
+
+   <div class="bg-white my-6 sm:w-[500px] rounded-lg shadow-lg mx-3 sm:mx-auto relative overflow-auto">
+      <div class="h-32 w-full  bg-gray-200 rounded-lg relative z-10 px-4 pt-2"
+      [ngStyle]="{ 'background-image': 'url(' + formCompany.controls['banner'].value + ')', 'background-size': 'cover', 'background-position': 'center' }"
+
+      >
+
+      </div>
+
+      <div class="bg-white rounded-t-xl rounded-b-lg -mt-2 z-20 relative">
+        <div class="flex justify-between px-4">
+          <div
+            class="h-20 w-20 rounded-full border-2 border-white shadow-md -mt-10"
+            [ngStyle]="{ 'background-image': 'url(' + formCompany.controls['avatar'].value + ')', 'background-size': 'cover', 'background-position': 'center' }"
+          >
+          </div>
+
+          <div class="flex -mt-4">
+            <div
+            class="h-9 w-9 rounded-xl bg-primary border-2 text-white border-white shadow-md mr-2 flex items-center cursor-pointer"
+            (click)="toggleFavorito()"
+          >
+          <!--
+            <ion-icon
+              class="text-2xl mx-1"
+              [name]="isFavorito ? 'heart' : 'heart-outline'"
+            ></ion-icon>
+          -->
+            </div>
+            <div
+            (click)="openMap()"
+            class="h-9 w-9 rounded-xl bg-primary border-2 border-white shadow-md mr-2 flex items-center">
+            <img class="h-5 mx-auto" src="./assets/icon/local.svg">
+            </div>
+            <div
+              (click)="compartilharEmpresa()"
+              class="h-9 w-9 rounded-xl bg-primary border-2 border-white shadow-md mr-2 flex items-center">
+              <!--
+                <ion-icon class="text-white mx-auto text-lg -rotate-45 -mt-1 mr-1.5 font-[500]" name="send-outline"></ion-icon>
+
+              -->
+            </div>
+
+          </div>
+        </div>
+        <div class="px-4 py-2">
+          <div class="flex ">
+            <div class="flex flex-col mb-4">
+              <div class="text-gray-700 font-semibold">
+                {{formCompany.controls['nome'].value}}
+              </div>
+              <div class="text-gray-700 text-text-[13px] font-normal">
+                <p>{{ selectedCondominio }}</p>
+              </div>
+              <div class="text-gray-700 text-text-[14px]  font-semibold">
+                {{formCompany.controls['complemento'].value}}
+              </div>
+              <div class="mt-4">
+                <div class="text-primary">
+                  {{formCompany.controls['slogan'].value}}
+                </div>
+                <div class="text-gray-700 text-[14px] mt-4">
+                  {{formCompany.controls['descricao'].value}}
+                </div>
+              </div>
+              <div class=" pt-4">
+                <hr/>
+              </div>
+              <div class="mt-4">
+                <div class="text-primary">
+                  Contato:
+                </div>
+                <div class="text-gray-700 text-[14px] font-semibold mt-1">
+                  <!--
+                    <ion-icon name="mail-outline" class="-mb-0.5"></ion-icon>
+                  -->
+                  {{formCompany.controls['email'].value}}
+                </div>
+                <div class="text-gray-700 text-[14px] mt-4 font-semibold">
+                  <!--
+                    <ion-icon name="call-outline"></ion-icon>
+                  -->
+                  {{formCompany.controls['celular'].value}}
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class=" pt-4">
+            <hr/>
+          </div>
+          <div class="mt-4">
+            <div class="flex">
+              <!-- Facebook -->
+              <div
+                *ngIf="formCompany.controls['facebook_url'].value"
+                class="rounded-2xl h-14 w-14 flex items-center cursor-pointer"
+                (click)="openFacebook()">
+                <img class="h-10 mx-auto" src="./assets/icon/facebook.svg">
+              </div>
+
+              <!-- WhatsApp -->
+              <div
+                *ngIf="formCompany.controls['celular'].value"
+                class="rounded-2xl h-14 w-14 flex items-center cursor-pointer"
+                (click)="openWhatsApp()">
+                <img class="h-10 mx-auto" src="./assets/icon/whatsapp.svg">
+              </div>
+
+              <!-- Instagram -->
+              <div
+                *ngIf="formCompany.controls['instagram_url'].value"
+                class="rounded-2xl h-14 w-14 flex items-center cursor-pointer"
+                (click)="openInstagram()">
+                <img class="h-10 mx-auto" src="./assets/icon/instagram.svg">
+              </div>
+            </div>
+          </div>
+
+          <div class="text-[14px]">
+        </div>
+
+        </div>
+      </div>
+   </div>
+</div>
