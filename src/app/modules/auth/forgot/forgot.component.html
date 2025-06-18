@@ -6,9 +6,9 @@
       <img class="h-8 " src="./assets/images/logo_texto.png">
     </div>
   </div>
-  <div class="flex-1 mt-16 mb-5 bg-white sm:max-w-[400px] sm:mx-auto rounded-lg shadow-lg px-4 pt-2 pb-8 mx-3 relative ">
+  <div class="flex-1 mt-16 mb-5 bg-white sm:max-w-[400px] sm:mx-auto rounded-lg shadow-lg px-4 pt-2 pb-4 mx-3 relative ">
 
-      <form [formGroup]="form" (submit)="resetPassword()">
+      <form *ngIf="!success" [formGroup]="form" (submit)="resetPassword()">
         <div class="w-full text-laranjaprincipal text-center mt-6">
           Defina uma nova senha
         </div>
@@ -267,6 +267,14 @@
         </button>
       </form>
 
+      <div *ngIf="success" >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6 text-primary mx-auto mb-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
 
+        <div class="text-primary font-semibold text-center">
+          Senha atualizada com sucesso!
+        </div>
+      </div>
   </div>
 </div>

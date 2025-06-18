@@ -30,7 +30,7 @@ export class ForgotComponent extends BaseComponent implements OnInit {
   enableLogin = false;
   passwordNull = false;
   styleBorderPassword = '';
-
+  success = false;
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
@@ -68,9 +68,11 @@ export class ForgotComponent extends BaseComponent implements OnInit {
       this.authService.update({ newPassword: this.password, token: this.token }).subscribe({
         next:(value:any) => {
           console.log(value);
+          this.success = true;
 
         },error:(err:any) => {
           console.log(err);
+          this.alertService.presentAlert('Atenção ', 'Erro ao atualizar senha');
 
         },
       });
