@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
@@ -10,12 +15,11 @@ import { BaseComponent } from '../../../shared/components/base/base.component';
 @Component({
   selector: 'app-forgot',
   standalone: true,
-  imports: [CommonModule,FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './forgot.component.html',
-  styleUrl: './forgot.component.scss'
+  styleUrl: './forgot.component.scss',
 })
 export class ForgotComponent extends BaseComponent implements OnInit {
-
   token: string | null = null;
   email: string = '';
   password: string = '';
@@ -33,12 +37,11 @@ export class ForgotComponent extends BaseComponent implements OnInit {
   success = false;
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       this.token = params.get('token');
       console.log('Token recebido:', this.token);
     });
     this.initForm();
-
   }
 
   initForm() {
@@ -63,27 +66,37 @@ export class ForgotComponent extends BaseComponent implements OnInit {
 
   resetPassword() {
     console.log('resetPassword');
+    console.log('Form Values:', this.form.value);
 
-    if(this.formControlls['password'].value === this.formControlls['confirmPassword'].value) {
-      this.authService.update({ newPassword: this.password, token: this.token }).subscribe({
-        next:(value:any) => {
-          console.log(value);
-          this.success = true;
-
-        },error:(err:any) => {
-          console.log(err);
-          this.alertService.presentAlert('Atenção ', 'Erro ao atualizar senha');
-
-        },
-      });
+    if (
+      this.formControlls['password'].value ===
+      this.formControlls['confirmPassword'].value
+    ) {
+      this.authService
+        .update({
+          newPassword: this.formControlls['password'].value,
+          token: this.token,
+        })
+        .subscribe({
+          next: (value: any) => {
+            console.log(value);
+            this.success = true;
+          },
+          error: (err: any) => {
+            console.log(err);
+            this.alertService.presentAlert(
+              'Atenção ',
+              'Erro ao atualizar senha'
+            );
+          },
+        });
 
       if (this.rememberEmail) {
         localStorage.setItem('savedEmail', this.email);
       } else {
         localStorage.removeItem('savedEmail');
       }
-
-    }else{
+    } else {
       this.alertService.presentAlert('Atenção ', 'Senhas não coincidem.');
     }
   }
@@ -92,7 +105,7 @@ export class ForgotComponent extends BaseComponent implements OnInit {
     this.hiddenPassword = !this.hiddenPassword;
   }
 
-  navegate(rota:any){
+  navegate(rota: any) {
     this.router.navigate([rota]);
   }
 
