@@ -11,38 +11,39 @@ import { NotFoundComponent } from './modules/not-found/not-found.component';
 export const routes: Routes = [
   {
     path: 'admin',
-    children: adminRoutes
+    children: adminRoutes,
   },
   {
     path: '',
-    component:HomeComponent
+    children: adminRoutes,
+    //component:HomeComponent
   },
   {
     path: 'reset-password',
-    component:ForgotComponent
+    component: ForgotComponent,
   },
   {
     path: 'empresa/:id/cartao-digital',
-    component:CartaoComponent
+    component: CartaoComponent,
   },
   {
     path: 'condominio/:id',
-    component:CondominiosComponent
+    component: CondominiosComponent,
   },
   {
     path: 'app',
-    component:HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'termos-de-uso',
-    component:TermosDeUsoComponent
+    component: TermosDeUsoComponent,
   },
   {
     path: 'politicas-privacidade',
-    component:PoliticasPrivacidadeComponent
+    component: PoliticasPrivacidadeComponent,
   },
   {
     path: '**',
-    component:NotFoundComponent
-  }
+    component: NotFoundComponent,
+  },
 ];

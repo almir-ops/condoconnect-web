@@ -18,7 +18,6 @@ export class AuthService {
     private router: Router,
     private tabService: TabService,
     private alertService: AlertService
-
   ) {}
 
   // Armazena o token de forma segura
@@ -26,7 +25,7 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token); // Para maior segurança, use plugins como Secure Storage.
   }
 
-  saveUser(user: any){
+  saveUser(user: any) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
@@ -62,22 +61,28 @@ export class AuthService {
       (response: any) => {
         console.log(response);
 
-        if(response.user.tipo === 'admin'){
+        if (response.user.tipo === 'admin') {
           this.saveToken(response.token);
-          this.saveUser(response.user)
+          this.saveUser(response.user);
           this.router.navigate(['/admin/condominios']);
-        }else{
+        } else {
           this.alertService.presentAlert('Atenção', 'Usuário não encontrado.');
         }
       },
       (error) => {
         // Verifica o código de erro HTTP e exibe a mensagem apropriada
         if (error.status === 401) {
-          this.alertService.presentAlert('Atenção', 'Usuário ou senha inválidos.');
+          this.alertService.presentAlert(
+            'Atenção',
+            'Usuário ou senha inválidos.'
+          );
         } else if (error.status === 404) {
           this.alertService.presentAlert('Atenção', 'Usuário não encontrado.');
         } else {
-          this.alertService.presentAlert('Erro de Comunicação', 'Houve um erro de comunicação, tente novamente.');
+          this.alertService.presentAlert(
+            'Erro de Comunicação',
+            'Houve um erro de comunicação, tente novamente.'
+          );
         }
 
         console.error('Erro no login', error);
@@ -85,10 +90,8 @@ export class AuthService {
     );
   }
 
-
-
-  update(body:any){
-    return this.http.put(`${this.API_URL}auth/reset/`, body);
+  update(body: any) {
+    return this.http.post(`${this.API_URL}auth/reset/`, body);
   }
 
   // Logout e remoção do token
