@@ -2,70 +2,87 @@
   <h2 class="text-xl font-semibold text-gray-800">
     {{ editMode ? 'Editando Plano' : 'Adicionar Plano' }}
   </h2>
+
   <p class="text-gray-600 mb-4">
-
-    {{ editMode ? 'Edite o plano como desejar e clique em salvar.' : 'Complete o formulario corretamente e clique em adicionar.' }}
-
+    {{ editMode ? 'Edite o plano como desejar e clique em salvar.' : 'Complete o formulario corretamente e clique em
+    adicionar.' }}
   </p>
 
+  <!-- Nome -->
   <div class="mb-2">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
+    <label for="nomePlano" class="block text-sm font-medium text-gray-700">
       Nome
     </label>
-    <input
-      id="nomeSubcategoria"
-      type="text"
-      [(ngModel)]="nome"
+    <input id="nomePlano" type="text" [(ngModel)]="nome"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o nome do plano"
-    />
+      placeholder="Digite o nome do plano" />
   </div>
 
+  <!-- Valor -->
   <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
+    <label for="valorPlano" class="block text-sm font-medium text-gray-700">
       Valor
     </label>
-    <input
-      id="nomeSubcategoria"
-      type="number"
-      [(ngModel)]="valor"
+    <input id="valorPlano" type="number" [(ngModel)]="valor"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o nome do plano"
-    />
+      placeholder="Ex.: 99.90" />
   </div>
 
- <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
+  <!-- Ciclo -->
+  <div class="mb-4">
+    <label for="cicloPlano" class="block text-sm font-medium text-gray-700">
       Ciclo de pagamento
     </label>
-    <select
-      id="categorias"
-      [(ngModel)]="pagamento_ciclo"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-    >
+    <select id="cicloPlano" [(ngModel)]="pagamento_ciclo"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
       <option value="WEEKLY">Semanal</option>
       <option value="BIWEEKLY">Quinzenal</option>
       <option value="MONTHLY">Mensal</option>
       <option value="YEARLY">Anual</option>
-
     </select>
   </div>
 
-  <mat-form-field class="w-full">
-    <mat-label>Descrição do plano</mat-label>
-    <textarea matInput rows="4" [(ngModel)]="descricao" (input)="atualizarContagem()"></textarea>
-    <mat-hint>{{ caracteresRestantes }}/150 caracteres restantes</mat-hint>
-  </mat-form-field>
+  <!-- Toggle Trial -->
+  <div class="mb-3 mt-2 flex items-center gap-2">
+    <input id="trialEnabled" type="checkbox" [(ngModel)]="trial_enabled"
+      class="w-4 h-4 border-gray-300 rounded cursor-pointer" />
+    <label for="trialEnabled" class="text-sm text-gray-700 cursor-pointer">
+      Habilitar período de teste (trial)
+    </label>
+  </div>
 
+  <!-- Dias de Trial -->
+  <div class="mb-4" *ngIf="trial_enabled">
+    <label for="diasTrial" class="block text-sm font-medium text-gray-700">
+      Dias de trial
+    </label>
+    <input id="diasTrial" type="number" min="1" [(ngModel)]="trial_days"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      placeholder="Ex.: 14" />
+    <div class="text-xs text-gray-500 mt-1">Informe a duração do período de teste.</div>
+  </div>
+
+  <!-- Descrição -->
+  <div class="w-full">
+    <label for="descPlano" class="block text-sm font-medium text-gray-700">Descrição do plano</label>
+    <textarea id="descPlano" rows="4" [(ngModel)]="descricao" (input)="atualizarContagem()"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      placeholder="Descrição curta do plano (até 150 caracteres)"></textarea>
+    <div class="text-xs text-gray-500 mt-1">
+      {{ caracteresRestantes }}/150 caracteres restantes
+    </div>
+  </div>
+
+  <!-- Ações -->
   <div class="flex justify-end space-x-2 mt-4">
     <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
       Fechar
     </button>
     <button *ngIf="editMode" (click)="update()" class="px-4 py-2 bg-primary text-white rounded-md">
-      {{ editMode ? 'Salvar' : 'Adicionar' }}
+      Salvar
     </button>
     <button *ngIf="!editMode" (click)="salvar()" class="px-4 py-2 bg-primary text-white rounded-md">
-      {{ editMode ? 'Salvar' : 'Adicionar' }}
+      Adicionar
     </button>
   </div>
 </div>

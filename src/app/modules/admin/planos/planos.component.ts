@@ -1,10 +1,10 @@
+// planos.component.ts
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { PlanoService } from '../../../shared/services/planos/plano.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SubcategoriaModalComponent } from '../../../shared/components/modais/subcategoria-modal/subcategoria-modal.component';
 import { ModalPlanoComponent } from '../../../shared/components/modais/modal-plano/modal-plano.component';
 
 @Component({
@@ -12,28 +12,28 @@ import { ModalPlanoComponent } from '../../../shared/components/modais/modal-pla
   standalone: true,
   imports: [TableComponent, FormsModule, CommonModule],
   templateUrl: './planos.component.html',
-  styleUrl: './planos.component.scss'
+  styleUrl: './planos.component.scss',
 })
 export class PlanosComponent {
+  // 👇 acrescente uma coluna "trial"
+  columns = ['nome', 'valor', 'descricao', 'trial', 'createdAt'];
+  data: any[] = [];
+  plano: any;
 
-    columns = ['nome', 'valor', 'descricao', 'createdAt'];
-    data = [];
-    categorias: any[] = [];
-    plano:any;
-
-    constructor(
-      private planoService: PlanoService,
-      private dialog: MatDialog
-    ) {}
+  constructor(private planoService: PlanoService, private dialog: MatDialog) {}
 
   ngOnInit() {
-    this.getSubcategories();
+    this.getPlanos();
   }
 
-  getSubcategories() {
+  getPlanos() {
     this.planoService.getAllPlanos().subscribe({
-      next: (value: any) => {
-        this.data = value;
+      next: (planos: any[]) => {
+        // mapeia campo "trial" derivado de trial_enabled + trial_days
+        this.data = (planos || []).map((p) => ({
+          ...p,
+          trial: p.trial_enabled ? `Sim (${p.trial_days} dias)` : 'Não',
+        }));
       },
     });
   }
@@ -44,8 +44,8 @@ export class PlanosComponent {
 
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalPlanoComponent, {
-      width: '400px',
-      data: { plano: this.plano },
+      width: '420px',
+      data: { plano: null, editMode: false },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -56,36 +56,45 @@ export class PlanosComponent {
   }
 
   adicionaPlano(plano: any) {
-    this.planoService.createPlanos(plano).subscribe({
-      next: () => {
-        this.getSubcategories();
-      },
+    // normaliza tipos
+    const payload = {
+      ...plano,
+      valor: Number(plano.valor),
+      trial_enabled: Boolean(plano.trial_enabled),
+      trial_days: Number(plano.trial_days) || 0,
+      pagamento_ciclo: String(plano.pagamento_ciclo || 'MONTHLY').toUpperCase(),
+    };
+
+    this.planoService.createPlanos(payload).subscribe({
+      next: () => this.getPlanos(),
     });
   }
 
   editarPlano = (plano: any) => {
     const dialogRef = this.dialog.open(ModalPlanoComponent, {
-      width: '400px',
-      data: {
-        plano: plano,
-        editMode: true
-      },
+      width: '420px',
+      data: { plano, editMode: true },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(result);
-        this.planoService.updatePlanos(result.id, result).subscribe({
-          next: (res:any) => {
-            this.getSubcategories();
-          },
-          error: (err:any) => {
-            console.log(err);
-          }
-        })
+        const payload = {
+          ...result,
+          valor: Number(result.valor),
+          trial_enabled: Boolean(result.trial_enabled),
+          trial_days: Number(result.trial_days) || 0,
+          pagamento_ciclo: String(
+            result.pagamento_ciclo || 'MONTHLY'
+          ).toUpperCase(),
+        };
+
+        this.planoService.updatePlanos(payload.id, payload).subscribe({
+          next: () => this.getPlanos(),
+          error: (err: any) => console.log(err),
+        });
       }
     });
-  }
+  };
 
-  excluirPlano(){}
+  excluirPlano() {}
 }
