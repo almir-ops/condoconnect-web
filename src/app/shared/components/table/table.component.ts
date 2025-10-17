@@ -16,18 +16,18 @@ export class TableComponent {
   @Input() onButtonClick?: () => void;
   @Input() onEdit?: (row: any) => void;
   @Input() onDelete?: (row: any) => void;
+  @Input() onCustomAction?: (row: any) => void;
 
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
 
-
   filteredData() {
     if (!Array.isArray(this.data)) {
       return [];
     }
-    return this.data.filter(row =>
-      Object.values(row).some(value =>
+    return this.data.filter((row) =>
+      Object.values(row).some((value) =>
         value?.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
       )
     );
@@ -72,10 +72,8 @@ export class TableComponent {
     return value; // Retorna o valor original caso não seja booleano, array ou objeto
   }
 
-
   capitalizeFirstLetter(text: string): string {
     if (!text) return ''; // Caso seja undefined ou vazio, retorna string vazia
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
-
 }

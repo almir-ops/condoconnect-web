@@ -1,0 +1,77 @@
+<div class="p-4  pl-10">
+  <div class="mx-4">
+    <div class="text-lg font-semibold mb-1">
+      {{ data?.mode === 'edit' ? 'Editar assinatura' : 'Criar assinatura' }}
+    </div>
+    <div class="text-sm text-gray-500 mb-4" *ngIf="data?.mode === 'edit'">
+      #{{ model.id }} — Empresa: {{ model.empresa_id }} / Plano:
+      {{ model.plano_id }}
+    </div>
+
+    <form class="space-y-3 mx-4" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm text-gray-600">Empresa ID</label>
+          <input class="border rounded w-full p-2" [(ngModel)]="model.empresa_id" name="empresa_id"
+            [readonly]="data?.mode === 'edit'" />
+        </div>
+        <div>
+          <label class="text-sm text-gray-600">Plano ID</label>
+          <input class="border rounded w-full p-2" [(ngModel)]="model.plano_id" name="plano_id"
+            [readonly]="data?.mode === 'edit'" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm text-gray-600">Início</label>
+          <input type="date" class="border rounded w-full p-2" [(ngModel)]="model.start_date" name="start_date" />
+        </div>
+        <div>
+          <label class="text-sm text-gray-600">Fim</label>
+          <input type="date" class="border rounded w-full p-2" [(ngModel)]="model.end_date" name="end_date" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm text-gray-600">Ativa?</label>
+          <select class="border rounded w-full p-2" [(ngModel)]="model.is_active" name="is_active">
+            <option [ngValue]="true">Sim</option>
+            <option [ngValue]="false">Não</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-gray-600">Trial?</label>
+          <select class="border rounded w-full p-2" [(ngModel)]="model.is_trial" name="is_trial"
+            [disabled]="data?.mode === 'create'">
+            <option [ngValue]="true">Sim</option>
+            <option [ngValue]="false">Não</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Asaas inscrição ID</label>
+        <input class="border rounded w-full p-2" [(ngModel)]="model.asaas_inscricao_id" name="asaas_inscricao_id" />
+        <div class="text-xs text-gray-500 mt-1">
+          Obs.: editar aqui não atualiza no Asaas (apenas local).
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="reconciliar" [(ngModel)]="reconciliar" name="reconciliar" />
+        <label for="reconciliar" class="text-sm text-gray-700">Reconciliar empresa após salvar</label>
+      </div>
+
+      <div class="pt-3 flex justify-end gap-2 mb-4">
+        <button type="button" class="px-3 py-2 bg-gray-200 rounded" (click)="close()">
+          Cancelar
+        </button>
+        <button type="submit" class="px-3 py-2 bg-primary text-white rounded">
+          {{ data?.mode === 'edit' ? 'Salvar' : 'Criar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

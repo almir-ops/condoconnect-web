@@ -49,3 +49,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --mdc-snackbar-supporting-text-color: #fff;
   }
 }
+
+/* Remove qualquer padding do container do Material e aplica no conteúdo */
+.cc-dialog .mat-mdc-dialog-container { padding: 0 !important; }
+.cc-dialog .mdc-dialog__content { padding: 1.5rem !important; } /* 24px */

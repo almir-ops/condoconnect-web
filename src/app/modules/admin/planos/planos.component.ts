@@ -1,4 +1,4 @@
-// planos.component.ts
+// pages/planos/planos.component.ts
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,6 @@ import { ModalPlanoComponent } from '../../../shared/components/modais/modal-pla
   styleUrl: './planos.component.scss',
 })
 export class PlanosComponent {
-  // 👇 acrescente uma coluna "trial"
   columns = ['nome', 'valor', 'descricao', 'trial', 'createdAt'];
   data: any[] = [];
   plano: any;
@@ -29,7 +28,6 @@ export class PlanosComponent {
   getPlanos() {
     this.planoService.getAllPlanos().subscribe({
       next: (planos: any[]) => {
-        // mapeia campo "trial" derivado de trial_enabled + trial_days
         this.data = (planos || []).map((p) => ({
           ...p,
           trial: p.trial_enabled ? `Sim (${p.trial_days} dias)` : 'Não',
@@ -38,9 +36,7 @@ export class PlanosComponent {
     });
   }
 
-  handleButtonClick = () => {
-    this.abrirModalAdicionar();
-  };
+  handleButtonClick = () => this.abrirModalAdicionar();
 
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalPlanoComponent, {
@@ -49,14 +45,11 @@ export class PlanosComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.adicionaPlano(result);
-      }
+      if (result) this.adicionaPlano(result);
     });
   }
 
   adicionaPlano(plano: any) {
-    // normaliza tipos
     const payload = {
       ...plano,
       valor: Number(plano.valor),
@@ -77,24 +70,37 @@ export class PlanosComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const payload = {
-          ...result,
-          valor: Number(result.valor),
-          trial_enabled: Boolean(result.trial_enabled),
-          trial_days: Number(result.trial_days) || 0,
-          pagamento_ciclo: String(
-            result.pagamento_ciclo || 'MONTHLY'
-          ).toUpperCase(),
-        };
+      if (!result) return;
 
-        this.planoService.updatePlanos(payload.id, payload).subscribe({
-          next: () => this.getPlanos(),
-          error: (err: any) => console.log(err),
-        });
-      }
+      const payload = {
+        ...result,
+        valor: Number(result.valor),
+        trial_enabled: Boolean(result.trial_enabled),
+        trial_days: Number(result.trial_days) || 0,
+        pagamento_ciclo: String(
+          result.pagamento_ciclo || 'MONTHLY'
+        ).toUpperCase(),
+      };
+
+      this.planoService.updatePlanos(payload.id, payload).subscribe({
+        next: () => this.getPlanos(),
+        error: (err: any) => console.error(err),
+      });
     });
   };
 
-  excluirPlano() {}
+  excluirPlano = (row: any) => {
+    const id = row?.id ?? row; // caso a table passe o objeto inteiro
+    if (!id) return;
+
+    const ok = confirm('Tem certeza que deseja excluir este plano?');
+    if (!ok) return;
+
+    // Se seu serviço se chama `deletePlano(id)` (singular), use a linha abaixo.
+    // Caso o serviço seja `deletePlanos(id)` (plural), troque o nome do método.
+    this.planoService.deletePlanos(id).subscribe({
+      next: () => this.getPlanos(),
+      error: (err) => console.error('Erro ao excluir plano:', err),
+    });
+  };
 }

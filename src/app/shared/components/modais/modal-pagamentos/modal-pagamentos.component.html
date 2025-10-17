@@ -1,0 +1,39 @@
+<div class="p-4">
+  <div class="text-lg font-semibold mb-1">
+    Pagamentos da assinatura #{{ data?.subId }}
+  </div>
+  <div class="text-sm mb-4 text-gray-500">
+    {{ data?.empresa }} — {{ data?.plano }}
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-200 rounded">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="text-left p-2">ID</th>
+          <th class="text-left p-2">Vencimento</th>
+          <th class="text-left p-2">Valor</th>
+          <th class="text-left p-2">Status</th>
+          <th class="text-left p-2">Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of rows; let i = index" [ngClass]="{ 'bg-gray-50': i % 2 === 0 }">
+          <td class="p-2">{{ p.id }}</td>
+          <td class="p-2">{{ p.dueDate }}</td>
+          <td class="p-2">R$ {{ p.value | number : '1.2-2' }}</td>
+          <td class="p-2">{{ p.status }}</td>
+          <td class="p-2">
+            <a *ngIf="p.paymentLink" class="text-primary underline" [href]="p.paymentLink" target="_blank">abrir</a>
+            <span *ngIf="!p.paymentLink">—</span>
+          </td>
+        </tr>
+        <tr *ngIf="!rows?.length">
+          <td class="p-4 text-center text-gray-500" colspan="5">
+            Nenhuma cobrança encontrada.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
