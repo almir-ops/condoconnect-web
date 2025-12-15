@@ -1,0 +1,345 @@
+<div
+  class="min-h-screen w-full bg-gradient-to-b from-emerald-900 via-emerald-800 to-emerald-950 flex items-center justify-center px-4 py-6">
+  <div
+    class="w-full max-w-5xl bg-white/95 rounded-2xl shadow-2xl overflow-hidden flex flex-col gap-4 md:gap-6 p-4 md:p-6">
+    <!-- HEADER + USER INFO -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold text-emerald-900">
+          Central de Assinaturas
+        </h1>
+        <p class="text-sm md:text-base text-emerald-700 mt-1">
+          Gerencie seus planos, pagamentos e período de teste em um só lugar.
+        </p>
+      </div>
+
+      <!-- CARD DO USUÁRIO -->
+      <div
+        class="flex items-center gap-3 bg-emerald-50/90 border border-emerald-100 rounded-xl px-3 py-2 md:px-4 md:py-3">
+        <div
+          class="h-10 w-10 md:h-11 md:w-11 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold uppercase">
+          {{ (user?.nome || 'U') | slice : 0 : 2 }}
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm font-semibold text-emerald-900">
+            {{ user?.nome || 'Usuário' }}
+          </span>
+          <span class="text-xs text-emerald-700 truncate max-w-[180px]">
+            {{ user?.email || 'Email não informado' }}
+          </span>
+          <span *ngIf="userId" class="text-[11px] text-emerald-500 mt-0.5 font-medium">
+            ID: #{{ userId }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÃO ASSINAR PLANO -->
+    <div class="flex justify-between items-center gap-3 flex-wrap">
+      <div class="text-sm text-emerald-800">
+        <span class="font-semibold">Planos disponíveis:</span>
+        <span class="ml-1">{{ planos?.length || 0 }}</span>
+      </div>
+
+      <button
+        class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm md:text-base font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
+        (click)="abrirModalAssinar()">
+        <span class="material-icons text-base md:text-lg"> add </span>
+        Assinar plano
+      </button>
+    </div>
+
+    <!-- LISTA DE ASSINATURAS -->
+    <div class="bg-white rounded-xl border border-emerald-100 shadow-sm p-3 md:p-4">
+      <div class="flex items-center justify-between mb-3 md:mb-4">
+        <div>
+          <h2 class="text-lg md:text-xl font-semibold text-emerald-900">
+            Minhas assinaturas
+          </h2>
+          <p class="text-xs md:text-sm text-emerald-700">
+            Clique em uma assinatura para ver os pagamentos ou cancelar.
+          </p>
+        </div>
+      </div>
+
+      <!-- Lista -->
+      <div class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+        @for (assinatura of assinaturas; track assinatura; let i = $index) {
+        <div (click)="onAssinaturaClick(assinatura)"
+          class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-3 mb-1 p-3 rounded-lg shadow-sm border border-gray-100 hover:border-emerald-300 hover:shadow-md cursor-pointer transition-all bg-white">
+          <div>
+            <h3 class="text-emerald-900 font-semibold">
+              {{ assinatura.plano.nome }} -
+              {{ getCicloTexto(assinatura.plano.pagamento_ciclo) }}
+            </h3>
+
+            <p class="text-xs md:text-sm text-gray-600">
+              {{ assinatura.empresa.nome }}
+            </p>
+
+            <!-- Plano FREE -->
+            <p *ngIf="assinatura.status === 'FREE'" class="text-[11px] mt-1 text-gray-500">
+              Válido até
+              {{ getFreeEndDate(assinatura) | date: 'dd/MM/yyyy' }}
+            </p>
+
+            <!-- TRIAL -->
+            <ng-container *ngIf="assinatura.status === 'TRIAL'">
+              <p class="text-[11px] text-gray-500 mt-1">
+                Primeiro pagamento a partir de
+                {{ assinatura.end_date | date: 'dd/MM/yyyy' }}
+              </p>
+            </ng-container>
+          </div>
+
+          <!-- Badges -->
+          <div class="flex flex-col items-end gap-1">
+            <!-- TRIAL -->
+            <div *ngIf="assinatura.status === 'TRIAL'"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-yellow-400 text-emerald-900 text-[11px] font-semibold">
+              Período de teste
+            </div>
+
+            <!-- Status pagamento normal -->
+            <div *ngIf="
+                assinatura.status !== 'TRIAL' &&
+                assinatura.status !== 'INACTIVE' &&
+                assinatura.status !== 'DESCONHECIDO'
+              " class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold text-white"
+              [ngClass]="{
+                'bg-emerald-600': assinatura.isPaid,
+                'bg-red-600': !assinatura.isPaid
+              }">
+              {{ assinatura.isPaid ? 'Pagamento em dia' : 'Pagamento pendente' }}
+            </div>
+
+            <!-- Cancelado -->
+            <div *ngIf="
+                assinatura.status === 'INACTIVE' ||
+                assinatura.status === 'DESCONHECIDO'
+              "
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-red-600 text-white text-[11px] font-semibold">
+              Cancelado
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Sem assinaturas -->
+      <div *ngIf="!assinaturas?.length" class="pt-4 pb-1">
+        <div
+          class="w-full border border-dashed border-emerald-200 rounded-xl px-4 py-6 text-center text-sm text-emerald-700 bg-emerald-50/70">
+          Nenhum plano ativo encontrado para este usuário.
+          <br />
+          Clique em
+          <span class="font-semibold">"Assinar plano"</span> para contratar um.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== -->
+<!-- DIALOG ASSINAR -->
+<!-- =============== -->
+
+<ng-template #dialogAssinar>
+  <div class="flex-1 bg-white sm:max-w-[420px] sm:mx-auto rounded-2xl px-4 py-6 relative">
+    <div class="text-emerald-900 font-semibold text-lg mb-1">
+      Tipos de assinaturas
+    </div>
+    <div class="text-gray-700 text-sm mb-3">
+      Escolha um plano abaixo para prosseguir.
+    </div>
+
+    <app-swiper swiperContainerId="why-us-swiper" *ngIf="!planoSelecionado">
+      <swiper-container #swiper class="bg-white py-3 rounded-md swiper" [slidesPerView]="1.2">
+        @for (slide of planos; track slide; let i = $index) {
+        <swiper-slide>
+          <div
+            class="card mx-1 h-[290px] w-[210px] bg-gradient-to-t from-emerald-900 to-emerald-700 shadow-md rounded-xl p-3 text-white relative flex flex-col justify-between">
+            <div>
+              <div class="text-center font-semibold text-base">
+                {{ slide.nome }}
+              </div>
+
+              <div class="text-center font-bold text-2xl mt-2">
+                {{ slide.valor | currency: 'BRL':'symbol':'1.2-2' }}
+              </div>
+
+              <div class="text-center text-sm opacity-90">
+                {{ getCicloTexto(slide.pagamento_ciclo) }}
+              </div>
+
+              <div *ngIf="slide.trial_enabled" class="text-center text-[11px] mt-1 opacity-90">
+                Teste grátis de {{ slide.trial_days }} dias
+              </div>
+
+              <div class="text-xs mt-3 px-2 text-justify whitespace-pre-line leading-snug">
+                {{ slide.descricao }}
+              </div>
+            </div>
+
+            <button (click)="assina(slide)"
+              class="inline-block px-2 py-1 rounded-md shadow-md mt-3 bg-gradient-to-r from-amber-300 to-orange-500 text-emerald-900 text-center text-sm font-semibold tracking-wide">
+              Assinar
+            </button>
+          </div>
+        </swiper-slide>
+        }
+      </swiper-container>
+    </app-swiper>
+
+    <div *ngIf="planoSelecionado" class="mt-3">
+      <div
+        class="flex justify-between w-full bg-gradient-to-t from-emerald-900 to-emerald-700 text-white p-3 rounded-xl shadow-md my-2 relative">
+        <div *ngIf="planoSelecionado?.trial_enabled"
+          class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-yellow-400 text-emerald-900 font-semibold shadow">
+          Teste: {{ planoSelecionado?.trial_days }} dias
+        </div>
+
+        <div class="flex flex-col gap-0.5 pr-8">
+          <div class="font-semibold">
+            {{ planoSelecionado?.nome }}
+          </div>
+          <div class="text-sm opacity-95">
+            {{ planoSelecionado?.valor | currency: 'BRL':'symbol':'1.2-2' }} -
+            {{ getCicloTexto(planoSelecionado?.pagamento_ciclo) }}
+          </div>
+          <div *ngIf="planoSelecionado?.trial_enabled" class="text-[11px] mt-1 opacity-90">
+            Teste grátis de {{ planoSelecionado?.trial_days }} dias
+          </div>
+        </div>
+
+        <button class="w-[24px] h-[24px] text-xl flex items-center justify-center" (click)="planoSelecionado = null">
+          ✕
+        </button>
+      </div>
+
+      <div class="text-xs mt-2 px-1 text-gray-700 whitespace-pre-line" *ngIf="planoSelecionado?.descricao">
+        {{ planoSelecionado?.descricao }}
+      </div>
+
+      <!-- CPF/CNPJ (se não promocional) -->
+      <div class="relative w-full mt-4" *ngIf="planoSelecionado && !isPlanoPromocional(planoSelecionado)">
+        <input id="custom-input" type="text" placeholder=" " [(ngModel)]="cpfCNPJ"
+          class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition" />
+        <label for="custom-input" class="absolute left-4 text-gray-500 text-sm px-1 transform -translate-y-1/2 transition-all
+                 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+                 peer-focus:text-sm peer-focus:text-emerald-700 bg-white" [ngClass]="{
+            'peer-focus:-top-0.5': cpfCNPJ === '',
+            '-top-0.5': cpfCNPJ !== ''
+          }">
+          CPF/CNPJ
+        </label>
+      </div>
+
+      <!-- Empresa -->
+      <div *ngIf="empresas?.length" class="relative w-full my-4">
+        <label for="categories" class="absolute left-4 transform -translate-y-1/2 text-gray-500 text-sm px-1 bg-white">
+          Empresa (obrigatório)
+        </label>
+        <select id="categories"
+          class="w-full h-10 mt-3 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition"
+          (change)="onEmpresaSelect($event)">
+          <option value="" disabled selected>Selecionar empresa</option>
+          <option *ngFor="let empresa of empresas" [value]="empresa.id">
+            {{ empresa.nome }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-end mt-3">
+      <button class="text-emerald-700 text-sm font-medium" (click)="fecharModalAssinar()">
+        Fechar
+      </button>
+      <button *ngIf="planoSelecionado"
+        class="bg-emerald-600 hover:bg-emerald-700 rounded-lg px-3 py-1.5 text-white text-sm font-semibold shadow-md"
+        (click)="enviaSolicitacaoCondo()">
+        Confirmar assinatura
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- DIALOG PAGAMENTOS -->
+<ng-template #dialogAssinaturaOpcoes>
+  <div class="flex-1 bg-white sm:max-w-[420px] sm:mx-auto rounded-2xl px-4 py-6 relative">
+    <div class="text-emerald-900 font-semibold text-lg">
+      Pagamentos da assinatura
+    </div>
+    <div class="text-gray-700 text-sm mb-3">
+      Veja os boletos, status e datas de vencimento.
+    </div>
+
+    <div class="overflow-y-auto max-h-[360px] pr-1">
+      @for (pagamento of pagamentos; track pagamento; let i = $index) {
+      <div class="flex justify-between items-center mb-3 p-3 rounded-lg shadow-sm border border-gray-100 bg-white">
+        <div>
+          <h3 class="font-semibold text-emerald-900 text-sm">
+            {{ pagamento.value | currency: 'BRL':'symbol':'1.2-2' }} -
+            <span [ngClass]="{
+                'text-yellow-500': pagamento.status === 'PENDING',
+                'text-green-600':
+                  pagamento.status === 'CONFIRMED' ||
+                  pagamento.status === 'RECEIVED',
+                'text-orange-500': pagamento.status === 'OVERDUE',
+                'text-red-500': pagamento.status === 'CANCELED'
+              }">
+              {{ getStatus(pagamento.status) }}
+            </span>
+          </h3>
+          <p class="text-xs text-gray-600 mt-1">
+            Vencimento: {{ pagamento.dueDate | date: 'dd/MM/yyyy' }}
+          </p>
+        </div>
+
+        <button *ngIf="
+            pagamento.status === 'PENDING' ||
+            pagamento.status === 'OVERDUE'
+          "
+          class="flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md shadow-md text-xs font-semibold"
+          (click)="fazerPagamento(pagamento)">
+          💸
+          <span class="ml-1">Pagar</span>
+        </button>
+      </div>
+      }
+    </div>
+
+    <div class="flex justify-between items-end mt-4">
+      <button class="text-red-700 text-sm font-medium" (click)="abrirModalCancelaAssinatura()">
+        Cancelar assinatura
+      </button>
+      <button
+        class="bg-emerald-600 hover:bg-emerald-700 rounded-lg px-3 py-1.5 text-white text-sm font-semibold shadow-md"
+        (click)="fecharModalAssinaturaOpcoes()">
+        Fechar
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- DIALOG CONFIRMAR CANCELAMENTO -->
+<ng-template #dialogCancelaAssinatura>
+  <div class="p-4">
+    <div class="text-xl text-emerald-900 mb-2 font-semibold">Atenção</div>
+
+    <div class="text-gray-700 mb-4 text-sm">
+      Deseja realmente cancelar a assinatura?
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <button class="py-1 px-3 bg-gray-300 hover:bg-gray-400 rounded-md text-sm"
+        (click)="fecharModalCancelaAssinatura()">
+        Fechar
+      </button>
+      <button class="py-1 px-3 bg-red-600 hover:bg-red-700 rounded-md text-white text-sm font-semibold"
+        (click)="cancelarAssinatura()">
+        Cancelar assinatura
+      </button>
+    </div>
+  </div>
+</ng-template>

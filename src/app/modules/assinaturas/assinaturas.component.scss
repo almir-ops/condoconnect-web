@@ -1,0 +1,68 @@
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 223, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 223, 0, 0.7), 0 0 30px rgba(255, 223, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 223, 0, 0.5);
+  }
+}
+
+.block {
+  background: white;
+  border-radius: 10px;
+  position: relative;
+  animation: glowing 3s infinite alternate ease-in-out;
+}
+
+.block-content {
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  z-index: 1;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.drop {
+  top: 0.5rem;
+  left: 0rem;
+  right: 0rem;
+  bottom: -0.5rem;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+
+.grad-d {
+  color: rgba(0, 0, 0, 0.6);
+  text-shadow: 0px 1px 2px #FFFFFF;
+  background: #d66f21;
+  background: linear-gradient(130deg, #f7f339 0%, #d66f21 100%);
+}
+
+.custom-modal-assina {
+  --max-width: 97%;
+  --border-radius: 10px;
+  --background: white;
+  --height: auto; /* Ajusta a altura ao conteúdo */
+  --min-height: auto; /* Remove altura mínima */
+}
+
+.custom-modal-opcoes {
+  --max-width: 97%;
+  --border-radius: 10px;
+  --background: white;
+  --height: auto; /* Ajusta a altura ao conteúdo */
+  --min-height: auto; /* Remove altura mínima */
+}
+
+.custom-modal-excluir {
+  --max-width: 97%;
+  --border-radius: 10px;
+  --background: white;
+  --height: auto; /* Ajusta a altura ao conteúdo */
+  --min-height: auto; /* Remove altura mínima */
+}

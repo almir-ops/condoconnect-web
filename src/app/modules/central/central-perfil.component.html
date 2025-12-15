@@ -1,0 +1,53 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+    <div>
+      <div class="text-2xl font-semibold text-gray-800">Perfil</div>
+      <div class="text-sm text-gray-500">Seus dados de acesso e informações básicas.</div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <!-- card principal -->
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="flex items-center gap-4">
+        <div class="h-12 w-12 rounded-2xl bg-secondary text-white flex items-center justify-center font-bold">
+          {{ initials }}
+        </div>
+
+        <div class="min-w-0">
+          <div class="font-semibold text-gray-800 truncate">{{ user?.nome || 'Usuário' }}</div>
+          <div class="text-sm text-gray-500 truncate">{{ user?.email }}</div>
+        </div>
+
+        <div class="ml-auto">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+            {{ user?.tipo || 'perfil' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="rounded-xl border border-gray-200 p-4">
+          <div class="text-xs text-gray-500">ID</div>
+          <div class="font-semibold text-gray-800">{{ user?.id }}</div>
+        </div>
+
+        <div class="rounded-xl border border-gray-200 p-4">
+          <div class="text-xs text-gray-500">Telefone</div>
+          <div class="font-semibold text-gray-800">{{ user?.telefone || '—' }}</div>
+        </div>
+
+        <div class="rounded-xl border border-gray-200 p-4">
+          <div class="text-xs text-gray-500">Documento</div>
+          <div class="font-semibold text-gray-800">{{ user?.cpf || user?.cnpj || '—' }}</div>
+        </div>
+
+        <div class="rounded-xl border border-gray-200 p-4">
+          <div class="text-xs text-gray-500">Status</div>
+          <div class="font-semibold text-success">{{ user?.ativo ? 'Ativo' : 'Ativo' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

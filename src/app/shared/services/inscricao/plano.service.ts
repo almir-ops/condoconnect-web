@@ -10,6 +10,11 @@ export class InscricaoService {
 
   constructor(private http: HttpClient) {}
 
+  listarAssinaturas(query: string = ''): Observable<any[]> {
+    // ex: listarAssinaturas('?usuario_id=...') ou ('?empresa_id=...')
+    return this.http.get<any[]>(`${this.baseUrl}${query}`);
+  }
+
   // GET /inscricoes  (lista assinaturas com include empresa/plano e status agregado)
   listar(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl);
@@ -50,5 +55,24 @@ export class InscricaoService {
     body: { dias?: number; canal?: string } = {}
   ): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/${id}/avisar`, body);
+  }
+
+  assinarPlano(req: any): Observable<any> {
+    // req: { empresa_id, usuario_id, plano_id, cpf?, use_trial? }
+    return this.http.post<any>(this.baseUrl, req);
+  }
+
+  checkPromoUsada(empresaId: number) {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/subscriptions?empresa_id=${empresaId}&onlyFree=true`
+    );
+  }
+
+  listarPagamentosPorAssinatura(idInscricao: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/pagamentos/${idInscricao}`);
+  }
+
+  cancelarAssinatura(idInscricao: number): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/${idInscricao}/cancelar`, {});
   }
 }

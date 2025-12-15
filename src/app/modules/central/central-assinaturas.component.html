@@ -1,0 +1,222 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+    <div>
+      <div class="text-2xl font-semibold text-gray-800">Assinaturas</div>
+      <div class="text-sm text-gray-500">Gerencie pagamentos e status das assinaturas.</div>
+    </div>
+
+    <button type="button" (click)="openCreateModal()" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 h-11 font-semibold text-white
+             bg-primary hover:bg-primary-dark transition shadow-[0_14px_28px_rgba(5,94,76,0.22)]">
+      <mat-icon>add</mat-icon>
+      Assinar plano
+    </button>
+  </div>
+
+  <!-- empty -->
+  <div *ngIf="!loading && !assinaturas.length" class="bg-white rounded-2xl border border-gray-200 p-6 text-gray-600">
+    Nenhuma assinatura encontrada.
+  </div>
+
+  <!-- list -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4" *ngIf="!loading && assinaturas.length">
+    <div class="p-5 bg-white rounded-2xl border border-gray-200 hover:shadow-md transition"
+      *ngFor="let a of assinaturas">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="font-semibold text-gray-800 truncate">
+            {{ a?.plano?.nome }} • {{ getCicloTexto(a?.plano?.pagamento_ciclo) }}
+          </div>
+          <div class="text-sm text-gray-500 truncate">{{ a?.empresa?.nome }}</div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="badgeClass(a)">
+          {{ badgeText(a) }}
+        </span>
+      </div>
+
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <div class="rounded-xl border border-gray-200 p-3">
+          <div class="text-xs text-gray-500">Valor</div>
+          <div class="font-semibold text-gray-800">
+            {{ (a?.plano?.valor || 0) | currency:'BRL':'symbol':'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-gray-200 p-3">
+          <div class="text-xs text-gray-500">Status</div>
+          <div class="font-semibold text-gray-800">{{ a?.status }}</div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row gap-2">
+        <button mat-raised-button class="w-full sm:w-auto rounded-xl" color="primary" (click)="openPagamentos(a)"
+          [disabled]="a?.status === 'INACTIVE'">
+          <mat-icon class="mr-2">receipt_long</mat-icon>
+          Pagamentos
+        </button>
+
+        <button mat-stroked-button class="w-full sm:w-auto rounded-xl" (click)="cancelar(a)"
+          [disabled]="a?.status === 'INACTIVE'">
+          <mat-icon class="mr-2">cancel</mat-icon>
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+     MODAL: CRIAR ASSINATURA
+     ========================= -->
+<div *ngIf="createOpen" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center">
+  <!-- backdrop -->
+  <div class="absolute inset-0 bg-black/35" (click)="closeCreateModal()"></div>
+
+  <!-- modal -->
+  <div class="relative w-full sm:max-w-[560px] bg-white rounded-t-2xl sm:rounded-2xl shadow-[0_24px_70px_rgba(0,0,0,0.20)]
+           border border-gray-200 overflow-hidden">
+    <div class="h-2 bg-gradient-to-r from-primary via-secondary to-accent"></div>
+
+    <div class="p-5 sm:p-6">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-lg font-extrabold text-gray-800">Assinar plano</div>
+          <div class="text-sm text-gray-500">Escolha um plano e finalize a assinatura.</div>
+        </div>
+
+        <button type="button" (click)="closeCreateModal()"
+          class="h-10 w-10 rounded-xl bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center"
+          aria-label="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Carrossel de planos -->
+      <div class="mt-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm font-semibold text-gray-700">Planos</div>
+
+          <div class="flex gap-2">
+            <button type="button" (click)="scrollPlans(-1)"
+              class="h-9 w-9 rounded-xl bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center"
+              aria-label="Anterior">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <button type="button" (click)="scrollPlans(1)"
+              class="h-9 w-9 rounded-xl bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center"
+              aria-label="Próximo">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div #planScroller class="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scroll-smooth snap-x snap-mandatory">
+          <button type="button" *ngFor="let p of planos" (click)="selectPlano(p)"
+            class="snap-start shrink-0 w-[220px] rounded-2xl border transition text-left overflow-hidden" [ngClass]="planoSelecionado?.id === p?.id
+              ? 'border-primary shadow-[0_18px_35px_rgba(5,94,76,0.18)]'
+              : 'border-gray-200 hover:shadow-md'">
+
+            <div class="p-4 text-white bg-gradient-to-b from-primary-dark to-secondary">
+              <div class="flex items-start justify-between gap-2">
+                <div class="font-extrabold leading-5">
+                  {{ p?.nome }}
+                </div>
+
+                <span *ngIf="isPlanoPromocional(p)"
+                  class="px-2 py-1 rounded-full text-[10px] font-bold bg-accent text-primary">
+                  TESTE {{ p?.trial_days }}d
+                </span>
+              </div>
+
+              <div class="mt-3 text-2xl font-extrabold">
+                {{ (p?.valor || 0) | currency:'BRL':'symbol':'1.2-2' }}
+              </div>
+
+              <div class="text-xs opacity-95 mt-1">
+                {{ getCicloTexto(p?.pagamento_ciclo) }}
+              </div>
+            </div>
+
+            <div class="p-4 bg-white">
+              <div class="text-xs text-gray-600 line-clamp-3 whitespace-pre-line">
+                {{ p?.descricao || 'Plano sem descrição.' }}
+              </div>
+
+              <div class="mt-4">
+                <div class="w-full h-10 rounded-xl font-extrabold flex items-center justify-center text-sm transition
+                         text-white bg-primary hover:bg-primary-dark">
+                  Selecionar
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Plano selecionado -->
+      <div *ngIf="planoSelecionado" class="mt-5 rounded-2xl border border-gray-200 p-4 bg-gray-50">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="font-extrabold text-gray-800">
+              {{ planoSelecionado?.nome }} • {{ getCicloTexto(planoSelecionado?.pagamento_ciclo) }}
+            </div>
+            <div class="text-sm text-gray-600 mt-1">
+              {{ (planoSelecionado?.valor || 0) | currency:'BRL':'symbol':'1.2-2' }}
+              <span *ngIf="isPlanoPromocional(planoSelecionado)" class="ml-2 text-xs font-bold text-amber-700">
+                (Período de teste: {{ planoSelecionado?.trial_days }} dias)
+              </span>
+            </div>
+          </div>
+
+          <button type="button" (click)="planoSelecionado = null"
+            class="h-9 px-3 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 transition text-sm font-bold text-gray-700">
+            Trocar
+          </button>
+        </div>
+
+        <!-- ✅ CPF/CNPJ (somente se NÃO for trial/promo) -->
+        <div class="relative w-full mt-4" *ngIf="!isPlanoPromocional(planoSelecionado)">
+          <input id="cpfcnpj" type="text" placeholder=" " [(ngModel)]="cpfCNPJ" class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800
+                   focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition" />
+          <label for="cpfcnpj" class="absolute left-4 text-gray-500 text-sm px-1 transform -translate-y-1/2 transition-all
+                   peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+                   peer-focus:text-sm peer-focus:text-primary bg-white"
+            [ngClass]="{ '-top-0.5': !!cpfCNPJ, 'peer-focus:-top-0.5': !cpfCNPJ }">
+            CPF/CNPJ
+          </label>
+        </div>
+
+        <!-- Empresa -->
+        <div class="relative w-full mt-4">
+          <label for="empresa" class="absolute left-4 transform -translate-y-1/2 text-gray-500 text-sm px-1 transition-all
+                   peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+                   peer-focus:text-sm peer-focus:text-primary bg-white">
+            Empresa (obrigatório)
+          </label>
+
+          <select id="empresa" class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800
+                   focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition"
+            [(ngModel)]="empresaSelecionadaId" (change)="syncEmpresaSelecionada()">
+            <option value="" disabled>Selecionar empresa</option>
+            <option *ngFor="let e of empresas" [value]="e?.id">{{ e?.nome }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- actions -->
+      <div class="mt-6 flex flex-col sm:flex-row gap-2 sm:justify-end">
+        <button type="button" (click)="closeCreateModal()"
+          class="w-full sm:w-auto h-11 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-bold text-gray-700">
+          Fechar
+        </button>
+
+        <button type="button" (click)="criarAssinatura()"
+          [disabled]="!planoSelecionado || !empresaSelecionadaId || creating" class="w-full sm:w-auto h-11 px-5 rounded-xl font-extrabold text-white transition
+                 bg-primary hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed">
+          <span *ngIf="!creating">Assinar</span>
+          <span *ngIf="creating">Assinando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

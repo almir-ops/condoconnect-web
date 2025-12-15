@@ -1,0 +1,60 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+    <div>
+      <div class="text-2xl font-semibold text-gray-800">Empresas</div>
+      <div class="text-sm text-gray-500">Veja suas empresas vinculadas.</div>
+    </div>
+
+    <div class="w-full md:w-80">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Buscar empresa</mat-label>
+        <input matInput [(ngModel)]="q" (ngModelChange)="applyFilter()" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="bg-white rounded-2xl border border-gray-200 p-6 flex items-center gap-3">
+    <mat-progress-spinner diameter="22" mode="indeterminate"></mat-progress-spinner>
+    <span class="text-gray-600">Carregando empresas...</span>
+  </div>
+
+  <div *ngIf="!loading && !filtered.length" class="bg-white rounded-2xl border border-gray-200 p-6 text-gray-600">
+    Nenhuma empresa encontrada.
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" *ngIf="!loading && filtered.length">
+    <div class="bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md transition">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="font-semibold text-gray-800 truncate">{{ item.nome }}</div>
+          <div class="text-xs text-gray-500 mt-1">ID: {{ item.id }}</div>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+          Empresa
+        </span>
+      </div>
+
+      <div class="mt-4 space-y-2">
+        <div class="text-sm text-gray-600">
+          <span class="text-gray-500">Documento:</span>
+          <span class="font-semibold text-gray-800">{{ item.cnpj || item.cpf || '—' }}</span>
+        </div>
+
+        <div class="text-sm text-gray-600">
+          <span class="text-gray-500">E-mail:</span>
+          <span class="font-semibold text-gray-800 break-all">{{ item.email || item.email_contato || '—' }}</span>
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-2">
+        <a class="flex-1 inline-flex items-center justify-center h-11 rounded-xl bg-secondary text-white font-semibold hover:bg-secondary-dark transition"
+          [routerLink]="['/central/assinaturas']">
+          <mat-icon class="mr-2">credit_card</mat-icon>
+          Ver assinaturas
+        </a>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let item of filtered"></ng-container>
+  </div>
+</div>

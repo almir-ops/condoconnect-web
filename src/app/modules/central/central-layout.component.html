@@ -1,0 +1,81 @@
+<mat-sidenav-container class="h-screen bg-gray-50">
+  <mat-sidenav #snav [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)"
+    class="w-56 border-r border-gray-200 bg-white">
+    <div class="p-5">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+          CC
+        </div>
+        <div>
+          <div class="font-semibold text-gray-800">CondoConnect</div>
+          <div class="text-xs text-gray-500">Central do Cliente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-3">
+      <a matRipple routerLink="/central/assinaturas" routerLinkActive="activeLink" class="navItem">
+        <mat-icon class="text-primary">credit_card</mat-icon>
+        <span>Assinaturas</span>
+      </a>
+
+      <!--
+        <a matRipple routerLink="/central/empresas" routerLinkActive="activeLink" class="navItem">
+          <mat-icon class="text-primary">apartment</mat-icon>
+          <span>Empresas</span>
+        </a>
+      -->
+
+      <a matRipple routerLink="/central/perfil" routerLinkActive="activeLink" class="navItem">
+        <mat-icon class="text-primary">person</mat-icon>
+        <span>Perfil</span>
+      </a>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <!-- topbar -->
+    <div class="sticky top-0 z-10">
+      <div class="px-4 md:px-6 py-3 bg-white border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <button mat-icon-button (click)="snav.toggle()" *ngIf="(isHandset$ | async)">
+            <mat-icon>menu</mat-icon>
+          </button>
+
+          <div class="flex flex-col">
+            <div class="font-semibold text-gray-800 leading-5">Central</div>
+            <div class="text-xs text-gray-500 leading-4">
+              Perfil • Assinaturas
+            </div>
+          </div>
+
+          <div class="flex-1"></div>
+
+          <button mat-button [matMenuTriggerFor]="menu" class="rounded-xl">
+            <mat-icon class="mr-2 text-primary">account_circle</mat-icon>
+            <span class="hidden sm:inline">{{ user?.nome || user?.email || 'Conta' }}</span>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/central/perfil">
+              <mat-icon>person</mat-icon>
+              <span>Meu perfil</span>
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Sair</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <!-- faixa/gradient -->
+      <div class="h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
+    </div>
+
+    <div class="p-4 md:p-6">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

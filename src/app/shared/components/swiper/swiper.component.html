@@ -1,0 +1,9 @@
+<div [id]="swiperContainerId" class="px-2 px-md-5 position-relative">
+  <ng-content></ng-content>
+  <div class="swiper-button-next-unique">
+    <i class="bi bi-arrow-right" (click)="changeSlide(1)"></i>
+  </div>
+  <div class="swiper-button-prev-unique">
+    <i class="bi bi-arrow-left" (click)="changeSlide(-1)"></i>
+  </div>
+</div>

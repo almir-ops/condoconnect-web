@@ -1,0 +1,80 @@
+<div class="bg-primary h-screen" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">
+  <!-- Toolbar -->
+  <div class="flex justify-center items-center h-[20%]">
+    <div class="flex flex-col h-[20%]">
+      <img class="h-16 w-16 mx-auto" src="../assets/images/logo_sem_texto.png">
+      <img class="h-8 " src="./assets/images/logo_texto.png">
+    </div>
+  </div>
+
+  <div class="w-full max-w-md relative z-10 mx-auto">
+    <!-- Card -->
+    <div class="rounded-2xl bg-white backdrop-blur border border-gray-200/80
+             shadow-[0_18px_55px_rgba(0,0,0,0.10)] overflow-hidden">
+      <!-- Top bar -->
+      <div class="h-2 bg-gradient-to-r from-primary via-secondary to-accent"></div>
+
+      <div class="p-6 sm:p-8">
+        <!-- Brand -->
+        <div class="flex items-center gap-3 mb-7">
+
+        </div>
+        <div class="min-w-0">
+          <div class="text-sm text-gray-500 mt-1">
+            Acesse sua conta
+          </div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+          <!-- Email Input -->
+          <div class="relative w-full mt-4">
+            <input id="custom-input" type="text" placeholder=" " formControlName="email" (keyup.enter)="onSubmit()"
+              class="peer w-full h-10 px-4 text-sm rounded-lg bg-white/95 border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition" />
+            <label for="custom-input" class="absolute left-4 text-gray-500 text-sm px-1 transform -translate-y-1/2 transition-all peer-placeholder-shown:top-1/2
+            peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+            peer-focus:text-sm peer-focus:text-primary bg-white/95"
+              [ngClass]="{'peer-focus:-top-0.5': form.controls.email.value === '', '-top-0.5': form.controls.email.value !== ''}">
+              Email
+            </label>
+          </div>
+          <!-- Password Input -->
+          <div class="relative w-full mt-4">
+            <input id="senha-input" [type]="hiddenPassword ? 'password' : 'text'" formControlName="senha"
+              placeholder=" " (keyup.enter)="onSubmit()"
+              class="peer w-full h-10 px-4 pr-12 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition" />
+
+            <label for="senha-input" class="absolute left-4 transform -translate-y-1/2 text-gray-500 text-sm px-1 transition-all
+      peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+      peer-focus:text-sm peer-focus:text-primary bg-white" [ngClass]="{
+      'peer-focus:-top-0.5': form.controls.senha.value === '',
+      '-top-0.5': form.controls.senha.value !== ''
+    }">
+              Senha
+            </label>
+
+            <button type="button" (click)="viewPassword()" class="absolute top-[12px] right-3 cursor-pointer -mt-0.5"
+              aria-label="Mostrar/ocultar senha">
+              <img *ngIf="hiddenPassword" src="./assets/icon/eye-slash.svg" class="h-5" />
+              <img *ngIf="!hiddenPassword" src="./assets/icon/eye.svg" class="h-5" />
+            </button>
+          </div>
+
+          <!-- Button (premium) -->
+          <button type="submit" [disabled]="form.invalid || loading" class="w-full h-12 mt-4 rounded-xl font-[900] text-[15px] text-white transition
+                   bg-primary hover:bg-primary-dark
+                   disabled:opacity-60 disabled:cursor-not-allowed
+                   shadow-[0_14px_28px_rgba(5,94,76,0.28)]">
+            <span *ngIf="!loading">Entrar</span>
+            <span *ngIf="loading">Entrando...</span>
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer (bem discreto) -->
+    <div class="text-center text-[11px] text-gray-400 mt-4">
+      © CondoConnect
+    </div>
+  </div>
+</div>
