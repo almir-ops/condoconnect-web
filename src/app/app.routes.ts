@@ -17,6 +17,8 @@ import { CentralAssinaturasComponent } from './modules/central/central-assinatur
 
 export const routes: Routes = [
   // ✅ NOVO PORTAL
+  { path: '', component: HomeComponent },
+
   { path: 'central/login', component: CentralLoginComponent },
   {
     path: 'central',
@@ -33,7 +35,6 @@ export const routes: Routes = [
   // ... mantém tudo como está
   { path: 'assinaturas', component: AssinaturasComponent },
   { path: 'admin', children: adminRoutes },
-  { path: '', children: adminRoutes },
   { path: 'reset-password', component: ForgotComponent },
   { path: 'empresa/:id/cartao-digital', component: CartaoComponent },
   { path: 'condominio/:id', component: CondominiosComponent },

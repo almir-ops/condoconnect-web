@@ -1,38 +1,4 @@
-<div class="h-screen flex flex-col items-center justify-center" style="background: radial-gradient(circle, #055e4c, #007673, #056926)">
-  <img src="assets/images/logo_branco.png" alt="Logo" class="mb-4 h-72">
-
-  <p class="text-white text-2xl font-semibold text-center mb-4 animate-fadeIn">
-    Em breve!
-  </p>
-
-  <!--
-    <div class="flex w-[90%] mx-auto h-[300px]">
-      <div class="bg-red-600 w-[60%]">
-
-      </div>
-      <div class="bg-yellow-600 w-[40%]">
-
-      </div>
-    </div>
-
-  -->
+<div class="h-screen w-full">
+  <iframe class="w-full h-full border-0" [src]="url" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    allow="fullscreen; clipboard-read; clipboard-write"></iframe>
 </div>
-
-<style>
-  /* Definindo a animação fadeIn */
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Aplicando a animação ao texto */
-  .animate-fadeIn {
-    animation: fadeIn 2s ease-out;
-  }
-</style>
