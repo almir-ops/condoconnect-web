@@ -4,16 +4,16 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CompaniesService {
   private readonly apiUrl = environment.apiUrl + 'empresas'; // Substitua pela URL correta do seu endpoint
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Método para buscar todas as empresas
   getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.apiUrl + '/todas');
   }
 
   // Método para buscar uma empresa por ID
@@ -23,7 +23,9 @@ export class CompaniesService {
 
   // Método para buscar uma empresa por ID
   getCategoriesByCondo(idCondo: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/categories-by-establishment?establishment_id=${idCondo}`);
+    return this.http.get<any>(
+      `${this.apiUrl}/categories-by-establishment?establishment_id=${idCondo}`,
+    );
   }
 
   // Método para buscar uma empresa por ID

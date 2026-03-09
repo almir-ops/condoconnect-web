@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-//import moment from 'moment';
 
 @Component({
   selector: 'app-table',
@@ -17,6 +16,7 @@ export class TableComponent {
   @Input() onEdit?: (row: any) => void;
   @Input() onDelete?: (row: any) => void;
   @Input() onCustomAction?: (row: any) => void;
+  @Input() onToggleStatus?: (row: any) => void;
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -26,10 +26,11 @@ export class TableComponent {
     if (!Array.isArray(this.data)) {
       return [];
     }
+
     return this.data.filter((row) =>
       Object.values(row).some((value) =>
-        value?.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-      )
+        value?.toString().toLowerCase().includes(this.searchTerm.toLowerCase()),
+      ),
     );
   }
 
@@ -39,7 +40,7 @@ export class TableComponent {
   }
 
   totalPages() {
-    return Math.ceil(this.filteredData().length / this.pageSize);
+    return Math.ceil(this.filteredData().length / this.pageSize) || 1;
   }
 
   nextPage() {
@@ -59,21 +60,29 @@ export class TableComponent {
       return value ? 'Ativo' : 'Inativo';
     }
 
-    // Se for um array de objetos, pega o primeiro item e retorna o campo 'nome'
     if (Array.isArray(value) && value.length > 0) {
       return value[0]?.nome || 'N/A';
     }
 
-    // Se for um objeto, retorna o campo 'nome'
     if (typeof value === 'object' && value !== null) {
       return value.nome || 'N/A';
     }
 
-    return value; // Retorna o valor original caso não seja booleano, array ou objeto
+    return value ?? '';
   }
 
   capitalizeFirstLetter(text: string): string {
-    if (!text) return ''; // Caso seja undefined ou vazio, retorna string vazia
+    if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  getToggleLabel(row: any): string {
+    return row?.ativo ? 'Desativar' : 'Ativar';
+  }
+
+  getToggleClass(row: any): string {
+    return row?.ativo
+      ? 'bg-orange-600 text-sm text-white px-2 py-1 rounded'
+      : 'bg-green-600 text-sm text-white px-2 py-1 rounded';
   }
 }

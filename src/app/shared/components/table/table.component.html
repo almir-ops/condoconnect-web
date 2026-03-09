@@ -1,30 +1,33 @@
 <div class="mb-4 flex justify-between items-center">
   <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." class="border p-2 w-[40%] rounded-md" />
+
   <div *ngIf="btnText1" (click)="onButtonClick && onButtonClick()"
     class="bg-primary text-white h-10 px-2 flex items-center rounded-md shadow-md cursor-pointer">
-    {{btnText1}}
+    {{ btnText1 }}
   </div>
 </div>
+
 <div class="overflow-x-auto w-full">
   <table class="!w-full border border-gray-300 bg-white rounded-lg shadow-md">
     <thead>
-      <tr class="bg-primary ">
-        <th *ngFor="let col of columns" class="py-3 px-4 text-left border-b ">
+      <tr class="bg-primary">
+        <th *ngFor="let col of columns" class="py-3 px-4 text-left border-b">
           <span class="!text-white">
             {{ capitalizeFirstLetter(col) }}
           </span>
         </th>
         <th class="py-3 px-4 text-left border-b !text-white">Ações</th>
-
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let row of paginatedData(); let i = index"
         [ngClass]="{ 'bg-gray-100': i % 2 === 0, 'bg-white': i % 2 !== 0 }">
         <td *ngFor="let col of columns" class="py-2 px-4 border-b">
           {{ formatStatus(row[col]) }}
         </td>
-        <td class="py-2 px-4 border-b flex gap-2">
+
+        <td class="py-2 px-4 border-b flex gap-2 flex-wrap">
           <button *ngIf="onCustomAction" (click)="onCustomAction(row)"
             class="bg-gray-700 text-sm text-white px-2 py-1 rounded">
             Pagamentos
@@ -33,18 +36,28 @@
           <button *ngIf="onEdit" (click)="onEdit(row)" class="bg-primary text-sm text-white px-2 py-1 rounded">
             Editar
           </button>
+
+          <button *ngIf="onToggleStatus" (click)="onToggleStatus(row)" [class]="getToggleClass(row)">
+            {{ getToggleLabel(row) }}
+          </button>
+
           <button *ngIf="onDelete" (click)="onDelete(row)" class="bg-red-700 text-sm text-white px-2 py-1 rounded">
             Excluir
           </button>
         </td>
-
       </tr>
     </tbody>
   </table>
 </div>
+
 <div class="flex justify-between items-center mt-4">
-  <button (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-300 rounded-md">Anterior</button>
+  <button (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-300 rounded-md">
+    Anterior
+  </button>
+
   <span>Página {{ currentPage }} de {{ totalPages() }}</span>
-  <button (click)="nextPage()" [disabled]="currentPage >= totalPages()"
-    class="px-4 py-2 bg-gray-300 rounded-md">Próximo</button>
+
+  <button (click)="nextPage()" [disabled]="currentPage >= totalPages()" class="px-4 py-2 bg-gray-300 rounded-md">
+    Próximo
+  </button>
 </div>

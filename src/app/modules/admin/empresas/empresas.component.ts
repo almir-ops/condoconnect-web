@@ -7,34 +7,50 @@ import { TableComponent } from '../../../shared/components/table/table.component
   standalone: true,
   imports: [TableComponent],
   templateUrl: './empresas.component.html',
-  styleUrl: './empresas.component.scss'
+  styleUrl: './empresas.component.scss',
 })
 export class EmpresasComponent {
-
-  columns = ['nome', 'telefone','condominios', 'email', 'usuario', 'ativo' ];
+  columns = ['nome', 'telefone', 'condominios', 'email', 'usuario', 'ativo'];
   data = [];
 
-  constructor(
-    private empresaService:CompaniesService
-  ){
-
-  }
+  constructor(private empresaService: CompaniesService) {}
 
   ngOnInit(): void {
-    this.getCondominios()
+    this.getCondominios();
   }
 
-  getCondominios(){
+  getCondominios() {
     this.empresaService.getAll().subscribe({
-      next:(value:any)=> {
+      next: (value: any) => {
         console.log(value);
-        this.data = value
+        this.data = value;
       },
-    })
+    });
   }
 
   handleButtonClick() {
     console.log('Botão clicado! Executando ação externa...');
     // Aqui pode chamar qualquer lógica necessária
+  }
+
+  toggleEmpresaStatus(item: any) {
+    const payload = {
+      ...item,
+      ativo: !item.ativo,
+    };
+
+    this.empresaService.update(item.id, payload).subscribe({
+      next: (resp) => {
+        item.ativo = payload.ativo;
+      },
+      error: (err) => {
+        console.error('Erro ao alterar status da empresa:', err);
+        alert('Erro ao alterar status da empresa.');
+      },
+    });
+  }
+
+  getStatusLabel(ativo: boolean): string {
+    return ativo ? 'Ativa' : 'Inativa';
   }
 }
