@@ -65,7 +65,7 @@ export class CentralAssinaturasComponent {
     private planosService: PlanoService,
     private companyService: CompaniesService,
     private auth: CentralAuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     this.user = this.auth.getUser();
     this.load();
@@ -133,15 +133,15 @@ export class CentralAssinaturasComponent {
 
   selectPlano(p: any) {
     this.planoSelecionado = p;
-    // ao trocar plano, limpa CPF/CNPJ se virou trial
-    if (this.isPlanoPromocional(this.planoSelecionado)) {
+
+    if (this.isTrialDisponivel(this.planoSelecionado)) {
       this.cpfCNPJ = '';
     }
   }
 
   syncEmpresaSelecionada() {
     this.empresaSelecionada = this.empresas.find(
-      (e: any) => String(e?.id) === String(this.empresaSelecionadaId)
+      (e: any) => String(e?.id) === String(this.empresaSelecionadaId),
     );
   }
 
@@ -214,38 +214,6 @@ export class CentralAssinaturasComponent {
     return dt.toISOString().slice(0, 10);
   }
 
-  private getActiveTrial(): any | null {
-    const hoje = this.todayISO();
-    return (
-      (this.assinaturas || []).find((a: any) => {
-        const isTrial = a?.status === 'TRIAL' || a?.is_trial === true;
-        const endISO = this.toISODate(a?.end_date);
-        return isTrial && endISO && endISO >= hoje;
-      }) || null
-    );
-  }
-
-  private hasEverUsedTrial(): boolean {
-    return (this.assinaturas || []).some((a: any) => {
-      // indícios possíveis (depende do retorno do backend)
-      return (
-        a?.status === 'TRIAL' ||
-        a?.is_trial === true ||
-        !!a?.trial_converted_at ||
-        a?.empresa?.trial_used === true
-      );
-    });
-  }
-
-  /* =====================
-     CRIAR ASSINATURA
-     ===================== */
-
-  // ✅ corrigido: respeita trial_enabled + trial_days
-  isPlanoPromocional(plano: any): boolean {
-    return plano?.trial_enabled === true && Number(plano?.trial_days ?? 0) > 0;
-  }
-
   async criarAssinatura() {
     if (!this.planoSelecionado) return;
 
@@ -254,32 +222,10 @@ export class CentralAssinaturasComponent {
       return;
     }
 
-    const isPromo = this.isPlanoPromocional(this.planoSelecionado);
+    const planoTemTrial = this.isPlanoPromocional(this.planoSelecionado);
+    const useTrial = this.getUseTrial(this.planoSelecionado);
 
-    // ✅ regra do usuário: não pode pegar trial se já tem/teve
-    if (isPromo) {
-      const active = this.getActiveTrial();
-      if (active) {
-        const ate = this.toISODate(active.end_date);
-        alert(
-          `Você já possui um período de teste ativo (até ${ate
-            .split('-')
-            .reverse()
-            .join('/')}).`
-        );
-        return;
-      }
-
-      if (this.hasEverUsedTrial()) {
-        alert(
-          'Você já utilizou o período de teste anteriormente e não pode ativar outro.'
-        );
-        return;
-      }
-    }
-
-    // se NÃO for promo/trial -> valida CPF/CNPJ
-    if (!isPromo && !this.isValidCPFOrCNPJ(this.cpfCNPJ)) {
+    if (!useTrial && !this.isValidCPFOrCNPJ(this.cpfCNPJ)) {
       alert('Informe um CPF ou CNPJ válido para assinar.');
       return;
     }
@@ -288,11 +234,11 @@ export class CentralAssinaturasComponent {
       this.creating = true;
 
       const req: any = {
-        cpf: isPromo ? undefined : this.cpfCNPJ,
+        cpf: useTrial ? undefined : this.cpfCNPJ,
         plano_id: this.planoSelecionado.id,
         usuario_id: this.user?.id,
         empresa_id: this.empresaSelecionadaId,
-        use_trial: isPromo,
+        use_trial: useTrial,
       };
 
       this.inscricao.assinarPlano(req).subscribe({
@@ -301,14 +247,14 @@ export class CentralAssinaturasComponent {
           this.closeCreateModal();
           this.getAssinaturas();
 
-          if (!isPromo && value?.paymentLink) {
+          if (!useTrial && value?.paymentLink) {
             const w = window.open('', '_blank');
             if (w) w.location.href = value.paymentLink;
           }
 
-          const msg = isPromo
-            ? `Assinatura em período de teste criada com sucesso.`
-            : `Assinatura criada com sucesso. Efetue o pagamento para ativação.`;
+          const msg = useTrial
+            ? 'Assinatura em período de teste criada com sucesso.'
+            : 'Assinatura criada com sucesso. Efetue o pagamento para ativação.';
 
           alert(msg);
         },
@@ -319,14 +265,53 @@ export class CentralAssinaturasComponent {
       });
     };
 
-    // mantém regra por empresa também (UX)
-    if (isPromo) {
+    // Só valida promo já usada por empresa se ainda houver chance de usar trial
+    if (planoTemTrial && useTrial) {
       this.inscricao.checkPromoUsada(this.empresaSelecionadaId).subscribe({
         next: (list: any[]) => {
           if (Array.isArray(list) && list.length > 0) {
-            alert('Esta empresa já utilizou um plano em período de teste.');
+            // empresa já usou trial => segue assinatura normal
+            if (!this.isValidCPFOrCNPJ(this.cpfCNPJ)) {
+              alert(
+                'Esta empresa já utilizou o período de teste. Informe um CPF ou CNPJ válido para seguir com a assinatura normal.',
+              );
+              return;
+            }
+
+            this.creating = true;
+
+            const req: any = {
+              cpf: this.cpfCNPJ,
+              plano_id: this.planoSelecionado.id,
+              usuario_id: this.user?.id,
+              empresa_id: this.empresaSelecionadaId,
+              use_trial: false,
+            };
+
+            this.inscricao.assinarPlano(req).subscribe({
+              next: (value: any) => {
+                this.creating = false;
+                this.closeCreateModal();
+                this.getAssinaturas();
+
+                if (value?.paymentLink) {
+                  const w = window.open('', '_blank');
+                  if (w) w.location.href = value.paymentLink;
+                }
+
+                alert(
+                  'Esta empresa já utilizou o período de teste. A assinatura foi criada no modo normal.',
+                );
+              },
+              error: (err: any) => {
+                this.creating = false;
+                alert(err?.error?.error || 'Ocorreu um erro na assinatura.');
+              },
+            });
+
             return;
           }
+
           seguir();
         },
         error: () => alert('Não foi possível validar o uso do plano de teste.'),
@@ -398,5 +383,51 @@ export class CentralAssinaturasComponent {
 
     result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
     return result === Number(digits[1]);
+  }
+
+  private getActiveTrial(): any | null {
+    const hoje = this.todayISO();
+    return (
+      (this.assinaturas || []).find((a: any) => {
+        const isTrial = a?.status === 'TRIAL' || a?.is_trial === true;
+        const endISO = this.toISODate(a?.end_date);
+        return isTrial && endISO && endISO >= hoje;
+      }) || null
+    );
+  }
+
+  private hasEverUsedTrial(): boolean {
+    return (this.assinaturas || []).some((a: any) => {
+      return (
+        a?.status === 'TRIAL' ||
+        a?.is_trial === true ||
+        !!a?.trial_converted_at ||
+        a?.empresa?.trial_used === true
+      );
+    });
+  }
+
+  isPlanoPromocional(plano: any): boolean {
+    return plano?.trial_enabled === true && Number(plano?.trial_days ?? 0) > 0;
+  }
+
+  isTrialDisponivel(plano: any): boolean {
+    if (!this.isPlanoPromocional(plano)) return false;
+
+    const active = this.getActiveTrial();
+    if (active) return false;
+
+    if (this.hasEverUsedTrial()) return false;
+
+    return true;
+  }
+
+  deveExibirCpfCnpj(): boolean {
+    if (!this.planoSelecionado) return false;
+    return !this.isTrialDisponivel(this.planoSelecionado);
+  }
+
+  getUseTrial(plano: any): boolean {
+    return this.isTrialDisponivel(plano);
   }
 }
