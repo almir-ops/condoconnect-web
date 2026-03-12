@@ -430,4 +430,55 @@ export class CentralAssinaturasComponent {
   getUseTrial(plano: any): boolean {
     return this.isTrialDisponivel(plano);
   }
+
+  getStatusTexto(status: string): string {
+    const s = String(status || '').toUpperCase();
+
+    switch (s) {
+      case 'TRIAL':
+        return 'Período de teste';
+
+      case 'FREE':
+        return 'Grátis';
+
+      case 'INACTIVE':
+        return 'Inativa';
+
+      case 'ACTIVE':
+        return 'Ativa';
+
+      case 'PENDING_PAYMENT':
+        return 'Pagamento pendente';
+
+      case 'PENDING':
+        return 'Pendente';
+
+      case 'OVERDUE':
+        return 'Vencida';
+
+      case 'RECEIVED':
+        return 'Recebido';
+
+      case 'CONFIRMED':
+        return 'Confirmado';
+
+      case 'RECEIVED_IN_CASH':
+        return 'Recebido em dinheiro';
+
+      case 'REFUNDED':
+        return 'Reembolsado';
+
+      case 'CANCELED':
+        return 'Cancelada';
+
+      case 'CANCELLED':
+        return 'Cancelada';
+
+      case 'DESCONHECIDO':
+        return 'Desconhecido';
+
+      default:
+        return status || 'Desconhecido';
+    }
+  }
 }
