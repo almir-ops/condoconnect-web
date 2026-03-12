@@ -22,7 +22,7 @@ enum PagamentoCiclo {
   BIMESTRAL = 'BIMONTHLY',
   TRIMESTRAL = 'QUARTERLY',
   SEMESTRAL = 'SEMIANNUALLY',
-  ANUAL = 'ANNUALLY',
+  ANUAL = 'YEARLY',
 }
 
 @Component({
