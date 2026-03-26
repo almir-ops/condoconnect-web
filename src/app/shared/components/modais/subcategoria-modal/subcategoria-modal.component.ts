@@ -1,46 +1,64 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-subcategoria-modal',
   standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './subcategoria-modal.component.html',
   styleUrls: ['./subcategoria-modal.component.scss'],
-  imports: [CommonModule, FormsModule],
 })
-export class SubcategoriaModalComponent {
-  nomeSubcategoria: string = '';
-  categoriaSelecionada: any;
+export class SubcategoriaModalComponent implements OnInit {
+  nomeSubcategoria = '';
+  categoriaSelecionada: any = null;
   categorias: any[] = [];
+  isEdit = false;
 
   constructor(
     private dialogRef: MatDialogRef<SubcategoriaModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.categorias = data.categorias;
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
+
+  ngOnInit(): void {
+    this.categorias = this.data?.categorias || [];
+    this.isEdit = !!this.data?.subcategoria;
+
+    if (this.isEdit && this.data?.subcategoria) {
+      this.nomeSubcategoria = this.data.subcategoria.nome || '';
+
+      const categoriaId =
+        this.data.subcategoria.categoriaId ??
+        this.data.subcategoria.categoria?.id;
+
+      this.categoriaSelecionada =
+        this.categorias.find((cat) => cat.id === categoriaId) || null;
+    }
   }
 
-  fechar() {
+  fechar(): void {
     this.dialogRef.close();
   }
 
-  adicionar() {
-    if (!this.nomeSubcategoria) {
-      alert('Preencha um nome para a subcategoria.');
-      return;
-    }
-    if (!this.categoriaSelecionada) {
-      alert('Selecione uma categoria.');
+  adicionar(): void {
+    if (!this.nomeSubcategoria?.trim() || !this.categoriaSelecionada) {
       return;
     }
 
-    const subcategoria = {
-      nome: this.nomeSubcategoria,
-      categoria_id: this.categoriaSelecionada.id,
+    const payload = {
+      nome: this.nomeSubcategoria.trim(),
+      categoriaId: this.categoriaSelecionada.id,
     };
 
-    this.dialogRef.close(subcategoria);
+    if (this.isEdit) {
+      this.dialogRef.close({
+        ...payload,
+        id: this.data.subcategoria.id,
+      });
+      return;
+    }
+
+    this.dialogRef.close(payload);
   }
 }

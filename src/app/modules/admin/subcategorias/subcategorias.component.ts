@@ -16,13 +16,13 @@ import { SubcategoriaModalComponent } from '../../../shared/components/modais/su
 })
 export class SubcategoriasComponent implements OnInit {
   columns = ['nome', 'categoria', 'createdAt'];
-  data = [];
+  data: any[] = [];
   categorias: any[] = [];
 
   constructor(
     private subCategoriaService: SubCategoriesService,
     private categoriaService: CategoryService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -35,6 +35,9 @@ export class SubcategoriasComponent implements OnInit {
       next: (value: any) => {
         this.data = value;
       },
+      error: (err) => {
+        console.error('Erro ao buscar subcategorias:', err);
+      },
     });
   }
 
@@ -42,6 +45,9 @@ export class SubcategoriasComponent implements OnInit {
     this.categoriaService.getAllCategories().subscribe({
       next: (value: any) => {
         this.categorias = value;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar categorias:', err);
       },
     });
   }
@@ -68,10 +74,58 @@ export class SubcategoriasComponent implements OnInit {
       next: () => {
         this.getSubcategories();
       },
+      error: (err) => {
+        console.error('Erro ao adicionar subcategoria:', err);
+      },
     });
   }
 
-  editarSubCategorias(){}
+  editarSubCategorias = (row: any) => {
+    const dialogRef = this.dialog.open(SubcategoriaModalComponent, {
+      width: '400px',
+      data: {
+        categorias: this.categorias,
+        subcategoria: row,
+      },
+    });
 
-  excluirSubCategorias(){}
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.atualizarSubCategoria(result.id, result);
+      }
+    });
+  };
+
+  atualizarSubCategoria(id: number, payload: any) {
+    const body = {
+      nome: payload.nome,
+      categoriaId: payload.categoriaId,
+    };
+
+    this.subCategoriaService.updateSubCategories(id, body).subscribe({
+      next: () => {
+        this.getSubcategories();
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar subcategoria:', err);
+      },
+    });
+  }
+
+  excluirSubCategorias = (row: any) => {
+    const confirmar = window.confirm(
+      `Deseja realmente excluir a subcategoria "${row.nome}"?`,
+    );
+
+    if (!confirmar) return;
+
+    this.subCategoriaService.deleteSubCategories(row.id).subscribe({
+      next: () => {
+        this.getSubcategories();
+      },
+      error: (err) => {
+        console.error('Erro ao excluir subcategoria:', err);
+      },
+    });
+  };
 }

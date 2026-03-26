@@ -1,32 +1,32 @@
 <div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar SubCategoria</h2>
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">
+    {{ isEdit ? 'Editar SubCategoria' : 'Adicionar SubCategoria' }}
+  </h2>
+
   <p class="text-gray-600 mb-4">
-    Digite o nome da subcategoria corretamente e clique em adicionar.
+    {{
+    isEdit
+    ? 'Altere os dados da subcategoria e clique em salvar.'
+    : 'Digite o nome da subcategoria corretamente e clique em adicionar.'
+    }}
   </p>
 
   <div class="mb-4">
     <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
       Subcategoria
     </label>
-    <input
-      id="nomeSubcategoria"
-      type="text"
-      [(ngModel)]="nomeSubcategoria"
+    <input id="nomeSubcategoria" type="text" [(ngModel)]="nomeSubcategoria"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o nome"
-    />
+      placeholder="Digite o nome" />
   </div>
 
   <div class="mb-4">
     <label for="categorias" class="block text-sm font-medium text-gray-700">
       Categoria (obrigatório)
     </label>
-    <select
-      id="categorias"
-      [(ngModel)]="categoriaSelecionada"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-    >
-      <option value="" disabled selected>Selecionar categoria</option>
+    <select id="categorias" [(ngModel)]="categoriaSelecionada"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      <option [ngValue]="null" disabled>Selecionar categoria</option>
       <option *ngFor="let category of categorias" [ngValue]="category">
         {{ category.nome }}
       </option>
@@ -37,8 +37,9 @@
     <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
       Fechar
     </button>
+
     <button (click)="adicionar()" class="px-4 py-2 bg-blue-500 text-white rounded-md">
-      Adicionar
+      {{ isEdit ? 'Salvar' : 'Adicionar' }}
     </button>
   </div>
 </div>
