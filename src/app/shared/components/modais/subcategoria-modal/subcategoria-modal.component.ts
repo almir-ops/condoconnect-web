@@ -29,11 +29,12 @@ export class SubcategoriaModalComponent implements OnInit {
       this.nomeSubcategoria = this.data.subcategoria.nome || '';
 
       const categoriaId =
-        this.data.subcategoria.categoriaId ??
+        this.data.subcategoria.categoria_id ??
         this.data.subcategoria.categoria?.id;
 
       this.categoriaSelecionada =
-        this.categorias.find((cat) => cat.id === categoriaId) || null;
+        this.categorias.find((cat) => String(cat.id) === String(categoriaId)) ||
+        null;
     }
   }
 
@@ -47,17 +48,10 @@ export class SubcategoriaModalComponent implements OnInit {
     }
 
     const payload = {
+      id: this.isEdit ? String(this.data.subcategoria.id) : undefined,
       nome: this.nomeSubcategoria.trim(),
-      categoriaId: this.categoriaSelecionada.id,
+      categoria_id: String(this.categoriaSelecionada.id),
     };
-
-    if (this.isEdit) {
-      this.dialogRef.close({
-        ...payload,
-        id: this.data.subcategoria.id,
-      });
-      return;
-    }
 
     this.dialogRef.close(payload);
   }

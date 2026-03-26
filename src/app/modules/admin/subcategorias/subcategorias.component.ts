@@ -26,8 +26,8 @@ export class SubcategoriasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getSubcategories();
     this.getCategories();
+    this.getSubcategories();
   }
 
   getSubcategories() {
@@ -96,13 +96,13 @@ export class SubcategoriasComponent implements OnInit {
     });
   };
 
-  atualizarSubCategoria(id: number, payload: any) {
+  atualizarSubCategoria(id: string | number, payload: any) {
     const body = {
       nome: payload.nome,
-      categoriaId: payload.categoriaId,
+      categoria_id: payload.categoria_id,
     };
 
-    this.subCategoriaService.updateSubCategories(id, body).subscribe({
+    this.subCategoriaService.updateSubCategories(Number(id), body).subscribe({
       next: () => {
         this.getSubcategories();
       },
