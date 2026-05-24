@@ -1,10 +1,9 @@
-<div class="bg-primary h-screen flex flex-col" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">
-  <!-- Toolbar
+<div class="bg-primary flex flex-col overflow-y-auto" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">  <!-- Toolbar
   <app-toolbar></app-toolbar>
   -->
 
-   <div class="bg-white my-6 sm:w-[500px] rounded-lg shadow-lg mx-3 sm:mx-auto relative overflow-auto">
-      <div class="h-32 w-full  bg-gray-200 rounded-lg relative z-10 px-4 pt-2"
+<div class="bg-white my-6 sm:w-[500px] rounded-lg shadow-lg mx-3 sm:mx-auto relative overflow-auto">
+        <div class="h-32 w-full  bg-gray-200 rounded-lg relative z-10 px-4 pt-2"
       [ngStyle]="{ 'background-image': 'url(' + formCompany.controls['banner'].value + ')', 'background-size': 'cover', 'background-position': 'center' }"
 
       >
@@ -20,17 +19,7 @@
           </div>
 
           <div class="flex -mt-4">
-            <div
-            class="h-9 w-9 rounded-xl bg-primary border-2 text-white border-white shadow-md mr-2 flex items-center cursor-pointer"
-            (click)="toggleFavorito()"
-          >
-          <!--
-            <ion-icon
-              class="text-2xl mx-1"
-              [name]="isFavorito ? 'heart' : 'heart-outline'"
-            ></ion-icon>
-          -->
-            </div>
+
             <div
             (click)="openMap()"
             class="h-9 w-9 rounded-xl bg-primary border-2 border-white shadow-md mr-2 flex items-center">
@@ -43,6 +32,10 @@
                 <ion-icon class="text-white mx-auto text-lg -rotate-45 -mt-1 mr-1.5 font-[500]" name="send-outline"></ion-icon>
 
               -->
+                <svg class="text-white mx-auto text-lg -rotate-45 -mt-1 mr-1 font-[500] size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+</svg>
+
             </div>
 
           </div>
@@ -126,5 +119,24 @@
 
         </div>
       </div>
+
+
    </div>
+   <!-- Banner anúncio abaixo do card principal -->
+<div
+  *ngIf="formCompany.controls['banner_anuncio'].value"
+  class="bg-white mt-6 mb-20 sm:w-[500px] rounded-lg shadow-lg mx-3 sm:mx-auto relative"
+>
+  <div class="p-3">
+    <div class="relative rounded-xl overflow-hidden bg-gray-100">
+      <img
+        [src]="formCompany.controls['banner_anuncio'].value"
+        alt="Banner do anúncio"
+        class="block w-full h-auto object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+</div>
 </div>

@@ -1,4 +1,520 @@
-<div class="h-screen w-full">
-  <iframe class="w-full h-full border-0" [src]="url" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-    allow="fullscreen; clipboard-read; clipboard-write"></iframe>
+<div class="min-h-screen bg-white text-[#071f1b] font-sans">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#004737]/95 backdrop-blur shadow-sm">
+    <div class="max-w-7xl mx-auto px-5 md:px-10 h-20 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="#inicio" class="flex items-center gap-3">
+        <div class="w-12 h-12 border border-white/30 rounded flex items-center justify-center text-white text-xs">
+          LOGO
+        </div>
+      </a>
+
+      <!-- Menu desktop -->
+      <nav class="hidden md:flex items-center gap-9 text-white text-sm">
+        <a href="#inicio" class="hover:text-[#e7c446] transition">Início</a>
+        <a href="#beneficios" class="hover:text-[#e7c446] transition">Benefícios</a>
+        <a href="#facilidades" class="hover:text-[#e7c446] transition">Facilidades</a>
+        <a href="#aplicativo" class="hover:text-[#e7c446] transition">O aplicativo</a>
+        <a href="#avaliacoes" class="hover:text-[#e7c446] transition">Avaliações</a>
+        <a href="#contato" class="hover:text-[#e7c446] transition">Contato</a>
+      </nav>
+
+      <!-- Menu mobile -->
+      <button
+        type="button"
+        class="md:hidden text-white"
+        (click)="menuOpen = !menuOpen">
+        <span class="block w-7 h-[2px] bg-white mb-2"></span>
+        <span class="block w-7 h-[2px] bg-white mb-2"></span>
+        <span class="block w-7 h-[2px] bg-white"></span>
+      </button>
+    </div>
+
+    @if (menuOpen) {
+      <div class="md:hidden bg-[#004737] px-6 pb-5 text-white flex flex-col gap-4 text-sm">
+        <a href="#inicio" (click)="menuOpen = false">Início</a>
+        <a href="#beneficios" (click)="menuOpen = false">Benefícios</a>
+        <a href="#facilidades" (click)="menuOpen = false">Facilidades</a>
+        <a href="#aplicativo" (click)="menuOpen = false">O aplicativo</a>
+        <a href="#avaliacoes" (click)="menuOpen = false">Avaliações</a>
+        <a href="#contato" (click)="menuOpen = false">Contato</a>
+      </div>
+    }
+  </header>
+
+  <!-- HERO -->
+  <section
+    id="inicio"
+    class="pt-28 min-h-screen bg-gradient-to-r from-[#004737] via-[#0d6658] to-[#8fb3b0] flex items-center overflow-hidden">
+
+    <div class="max-w-7xl mx-auto px-6 md:px-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <!-- Texto -->
+      <div class="text-white max-w-xl">
+        <p class="text-xl md:text-2xl leading-relaxed mb-8">
+          Descubra empresas e serviços dentro <br class="hidden md:block">
+          de prédios comerciais e condomínios.
+        </p>
+
+        <h1 class="text-5xl md:text-7xl leading-tight tracking-[0.18em] uppercase mb-8">
+          Busque <br>
+          Compartilhe <br>
+          Conecte!
+        </h1>
+
+        <p class="text-xl md:text-2xl mb-7">
+          Experimente. Faça download já.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href="#" class="block">
+            <div class="w-40 h-12 bg-black rounded-md border border-white/20 flex items-center justify-center text-white text-xs">
+              App Store
+            </div>
+          </a>
+
+          <a href="#" class="block">
+            <div class="w-40 h-12 bg-black rounded-md border border-white/20 flex items-center justify-center text-white text-xs">
+              Google Play
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Imagem principal -->
+      <div class="relative flex justify-center lg:justify-end">
+
+        <!-- Tablet -->
+        <div class="hidden md:flex w-[430px] h-[570px] rounded-[34px] border-[14px] border-black bg-[#005241] shadow-2xl items-center justify-center text-white">
+          <div class="text-center px-8">
+            <p class="text-4xl font-semibold mb-8">CondoConnect</p>
+            <div class="w-40 h-40 border-2 border-white/70 rounded-xl mx-auto flex items-center justify-center mb-6">
+              IMAGEM
+            </div>
+            <p class="text-lg leading-relaxed">
+              Seu condomínio na palma da mão
+            </p>
+          </div>
+        </div>
+
+        <!-- Celular -->
+        <div class="absolute md:left-8 lg:left-0 bottom-[-35px] w-[230px] h-[430px] rounded-[30px] border-[10px] border-black bg-[#005241] shadow-2xl flex items-center justify-center text-white">
+          <div class="text-center px-5">
+            <p class="text-2xl font-semibold mb-6">CondoConnect</p>
+            <div class="w-28 h-28 border-2 border-white/70 rounded-xl mx-auto flex items-center justify-center mb-5 text-xs">
+              IMAGEM
+            </div>
+            <p class="text-base leading-relaxed">
+              Seu condomínio <br>
+              na palma da mão
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS / SOBRE -->
+  <section id="beneficios" class="bg-white py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <h2 class="text-5xl md:text-6xl leading-tight mb-8">
+          Reinventando a <br>
+          conexão
+        </h2>
+      </div>
+
+      <div class="max-w-xl">
+        <h3 class="text-2xl md:text-3xl leading-relaxed mb-7">
+          Conecte o seu condomínio empresarial <br>
+          com eficiência e praticidade
+        </h3>
+
+        <p class="text-lg leading-9 text-gray-700 mb-8">
+          Nosso aplicativo foi desenvolvido especialmente para condomínios empresariais,
+          facilitando a comunicação e a integração entre lojas, escritórios e visitantes.
+          Com uma plataforma intuitiva e funcional, promovemos uma experiência moderna,
+          segura e ágil para todos os usuários — fortalecendo conexões, otimizando processos
+          e valorizando o seu espaço corporativo.
+        </p>
+
+        <a
+          href="#"
+          class="inline-flex border border-[#071f1b] px-10 py-4 text-sm hover:bg-[#004737] hover:text-white transition">
+          Baixar aplicativo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILIDADES -->
+  <section
+    id="facilidades"
+    class="bg-gradient-to-r from-[#004737] via-[#4f8982] to-[#004737] text-white py-24 md:py-32">
+
+    <div class="max-w-7xl mx-auto px-6 md:px-10">
+
+      <div class="mb-24">
+        <h2 class="text-5xl md:text-6xl mb-5">Facilidades</h2>
+        <p class="text-lg">
+          Tudo que você precisa, de forma rápida, inteligente e sem complicações.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+
+        <div class="max-w-xs">
+          <div class="w-10 h-10 mb-8 border border-white/50 rounded flex items-center justify-center">
+            <span class="text-xl">□</span>
+          </div>
+          <h3 class="text-2xl mb-8 leading-snug">
+            Informações <br>
+            Detalhadas
+          </h3>
+          <p class="text-lg leading-8">
+            Exibição de contatos, localização no condomínio e descrição de serviços
+            oferecidos pelas empresas.
+          </p>
+        </div>
+
+        <div class="max-w-xs">
+          <div class="w-10 h-10 mb-8 border border-white/50 rounded-full flex items-center justify-center">
+            <span class="text-xl">⌕</span>
+          </div>
+          <h3 class="text-2xl mb-8 leading-snug">
+            Busca <br>
+            Inteligente
+          </h3>
+          <p class="text-lg leading-8">
+            Uma barra de busca que permite localizar rapidamente serviços, lojas
+            e escritórios dentro do condomínio, filtrando por tipo de negócio.
+          </p>
+        </div>
+
+        <div class="max-w-xs">
+          <div class="w-10 h-10 mb-8 flex items-center justify-center">
+            <span class="text-3xl">⚿</span>
+          </div>
+          <h3 class="text-2xl mb-8 leading-snug">
+            Acesso <br>
+            Simplificado
+          </h3>
+          <p class="text-lg leading-8">
+            Por meio de um QR Code disponível no condomínio, visitantes podem acessar
+            o app e iniciar a busca sem necessidade de cadastro.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA ANUNCIANTE -->
+  <section id="aplicativo" class="bg-white py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <h2 class="text-5xl md:text-6xl mb-16">
+          Como o App funciona
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
+
+          <div>
+            <h3 class="text-2xl mb-8">Para o Anunciante</h3>
+
+            <h4 class="text-2xl leading-snug mb-5">
+              01 - Download <br>
+              Rápido e Acessível
+            </h4>
+
+            <p class="text-lg leading-8 text-gray-700">
+              O anunciante acessa o aplicativo por meio de um QR Code, link direto
+              ou pelas principais lojas de aplicativos.
+            </p>
+          </div>
+
+          <div class="md:pt-44">
+            <h4 class="text-2xl leading-snug mb-5">
+              02 - Cadastro <br>
+              Simplificado
+            </h4>
+
+            <p class="text-lg leading-8 text-gray-700">
+              Após o download, basta preencher os campos determinados no app com os
+              dados da sua loja ou serviço.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Card imagem anunciante -->
+      <div class="flex justify-center lg:justify-end">
+        <div class="w-full max-w-[520px] rounded-[34px] border-[12px] border-black bg-[#005241] text-white shadow-2xl p-8">
+          <div class="text-center">
+            <h3 class="text-2xl font-semibold mb-4">
+              Como funciona para o anunciante
+            </h3>
+            <p class="mb-8">
+              Via QR Code, link ou loja de app
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-8 items-center text-center">
+            <div>
+              <div class="w-28 h-28 border-2 border-white/70 rounded-xl mx-auto mb-4 flex items-center justify-center text-xs">
+                LOGO
+              </div>
+              <p>CondoConnect</p>
+            </div>
+
+            <div>
+              <div class="w-24 h-24 rounded-2xl bg-[#d9b33f] mx-auto mb-4 flex items-center justify-center text-[#004737] text-4xl">
+                ↓
+              </div>
+              <p class="font-semibold">Download</p>
+              <p class="text-sm">Fácil acesso ao app</p>
+            </div>
+
+            <div>
+              <div class="w-24 h-24 rounded-full bg-[#d9b33f] mx-auto mb-4 flex items-center justify-center text-[#004737] text-4xl">
+                $
+              </div>
+              <p class="font-semibold">Visibilidade</p>
+              <p class="text-sm">Disponível para busca</p>
+            </div>
+
+            <div>
+              <div class="w-24 h-24 rounded-2xl border-4 border-[#d9b33f] mx-auto mb-4 flex items-center justify-center text-[#d9b33f] text-3xl">
+                ▤
+              </div>
+              <p class="font-semibold">Cadastro</p>
+              <p class="text-sm">Preenche os campos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VISIBILIDADE -->
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <div class="w-full max-w-[520px] rounded-[28px] border-[10px] border-black bg-[#005241] text-white p-10">
+        <div class="grid grid-cols-2 gap-10 text-center">
+          <div>
+            <div class="w-24 h-24 rounded-full bg-[#d9b33f] mx-auto mb-5 flex items-center justify-center text-[#004737] text-5xl">
+              $
+            </div>
+            <h3 class="text-3xl font-semibold mb-3">Visibilidade</h3>
+            <p class="text-lg">Imediatamente disponível para busca e compartilhamento</p>
+          </div>
+
+          <div>
+            <div class="w-24 h-24 rounded-2xl border-4 border-[#d9b33f] mx-auto mb-5 flex items-center justify-center text-[#d9b33f] text-4xl">
+              ▤
+            </div>
+            <h3 class="text-3xl font-semibold mb-3">Cadastro</h3>
+            <p class="text-lg">Preenche os campos determinados</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-md lg:ml-auto">
+        <h3 class="text-2xl md:text-3xl leading-snug mb-8">
+          03 - Visibilidade <br>
+          Imediata
+        </h3>
+
+        <p class="text-lg leading-8 text-gray-700">
+          Assim que o cadastro é concluído, seu negócio já está disponível para busca
+          e compartilhamento por todos os usuários do condomínio — incluindo visitantes,
+          outras empresas e colaboradores.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA VISITANTE -->
+  <section class="bg-[#e8d27e] py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+
+      <div>
+        <h2 class="text-5xl md:text-6xl mb-16">
+          Como o App funciona
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
+          <div>
+            <h3 class="text-2xl mb-8">Para o Visitante</h3>
+
+            <h4 class="text-2xl leading-snug mb-5">
+              01 - Design <br>
+              moderno e intuitivo
+            </h4>
+
+            <p class="text-lg leading-8">
+              Uma interface visualmente agradável, pensada para facilitar a navegação
+              desde o primeiro acesso.
+            </p>
+          </div>
+
+          <div class="md:pt-44">
+            <h4 class="text-2xl leading-snug mb-5">
+              02 - Compatível <br>
+              com iOS e Android
+            </h4>
+
+            <p class="text-lg leading-8">
+              Disponível nas principais plataformas, garantindo acesso universal
+              para todos os usuários.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card visitante -->
+      <div class="flex justify-center lg:justify-end">
+        <div class="w-full max-w-[520px] rounded-[34px] border-[12px] border-black bg-white shadow-2xl p-8">
+          <h3 class="text-2xl font-semibold text-center mb-8">
+            Como funciona para o visitante
+          </h3>
+
+          <div class="w-28 h-28 border-2 border-[#004737] rounded-xl mx-auto mb-10 flex items-center justify-center text-xs">
+            LOGO
+          </div>
+
+          <div class="grid grid-cols-2 gap-8">
+            <div class="flex gap-4">
+              <span class="w-10 h-10 rounded-xl bg-[#00715a] text-white flex items-center justify-center font-bold">1</span>
+              <p class="font-semibold">Design moderno e intuitivo</p>
+            </div>
+
+            <div class="flex gap-4">
+              <span class="w-10 h-10 rounded-xl bg-[#00715a] text-white flex items-center justify-center font-bold">2</span>
+              <p class="font-semibold">iOS e Android</p>
+            </div>
+
+            <div class="flex gap-4">
+              <span class="w-10 h-10 rounded-xl bg-[#00715a] text-white flex items-center justify-center font-bold">3</span>
+              <p class="font-semibold">Interface amigável</p>
+            </div>
+
+            <div class="flex gap-4">
+              <span class="w-10 h-10 rounded-xl bg-[#00715a] text-white flex items-center justify-center font-bold">4</span>
+              <p class="font-semibold">QR Code, WhatsApp e filtros</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden lg:block"></div>
+
+      <div class="space-y-10 max-w-md lg:ml-auto">
+        <div>
+          <h4 class="text-2xl leading-snug mb-4">
+            03 - Interface <br>
+            responsiva e amigável
+          </h4>
+          <p class="text-lg leading-8">
+            Totalmente compatível com smartphones e tablets, oferecendo usabilidade
+            fluida em qualquer dispositivo.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-2xl leading-snug mb-4">
+            04 - Busca facilitada com <br>
+            tecnologia integrada
+          </h4>
+          <p class="text-lg leading-8">
+            Acesso direto por QR Code, WhatsApp ou busca avançada por filtros
+            personalizados, agilizando a localização de lojas, serviços e empresas.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AVALIAÇÕES -->
+  <section id="avaliacoes" class="bg-white py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6 md:px-10">
+
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-5xl md:text-6xl mb-6">Avaliações</h2>
+        <p class="text-lg text-gray-700">
+          Veja como a plataforma melhora a experiência de empresas, visitantes e administradores.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="border border-gray-200 rounded-2xl p-8 shadow-sm">
+          <p class="text-lg leading-8 mb-6">
+            “Facilitou muito a localização dos serviços dentro do condomínio.”
+          </p>
+          <strong>Administrador</strong>
+        </div>
+
+        <div class="border border-gray-200 rounded-2xl p-8 shadow-sm">
+          <p class="text-lg leading-8 mb-6">
+            “Agora os visitantes encontram nossa loja com muito mais facilidade.”
+          </p>
+          <strong>Anunciante</strong>
+        </div>
+
+        <div class="border border-gray-200 rounded-2xl p-8 shadow-sm">
+          <p class="text-lg leading-8 mb-6">
+            “A busca por QR Code deixou tudo mais prático e rápido.”
+          </p>
+          <strong>Visitante</strong>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato" class="bg-[#004737] text-white py-24">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+      <div>
+        <h2 class="text-5xl md:text-6xl mb-8">Contato</h2>
+        <p class="text-lg leading-8 max-w-lg">
+          Quer levar o CondoConnect para o seu condomínio empresarial?
+          Entre em contato e saiba como começar.
+        </p>
+      </div>
+
+      <div class="space-y-5 text-lg">
+        <p>
+          <strong>WhatsApp:</strong> 11 93029-9320
+        </p>
+        <p>
+          <strong>E-mail:</strong> condoconnectbr&#64;gmail.com
+        </p>
+        <p>
+          <strong>Atendimento:</strong> Segunda a sexta, das 9h às 18h
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BOTÃO FLUTUANTE -->
+  <a
+    href="https://wa.me/5511930299320"
+    target="_blank"
+    class="fixed right-6 bottom-6 z-50 w-16 h-16 rounded-full bg-[#e7c446] text-white shadow-xl flex items-center justify-center hover:scale-105 transition">
+    <span class="text-3xl">...</span>
+  </a>
+
 </div>

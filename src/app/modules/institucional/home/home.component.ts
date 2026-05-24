@@ -10,6 +10,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class HomeComponent {
   url: SafeResourceUrl;
+  menuOpen = false;
 
   constructor(private sanitizer: DomSanitizer) {
     const rawUrl = 'https://phtreinamentoecons.wixsite.com/condoconnect-1';
