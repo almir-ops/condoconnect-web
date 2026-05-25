@@ -24,7 +24,17 @@
       <tr *ngFor="let row of paginatedData(); let i = index"
         [ngClass]="{ 'bg-gray-100': i % 2 === 0, 'bg-white': i % 2 !== 0 }">
         <td *ngFor="let col of columns" class="py-2 px-4 border-b">
-          {{ formatStatus(row[col]) }}
+          <ng-container [ngSwitch]="col">
+            <button *ngSwitchCase="'trocar_condominio'" type="button"
+              class="bg-blue-700 text-sm text-white px-2 py-1 rounded"
+              (click)="onTrocarCondominio && onTrocarCondominio(row)">
+              Trocar condomínio
+            </button>
+
+            <span *ngSwitchDefault>
+              {{ formatStatus(row[col]) }}
+            </span>
+          </ng-container>
         </td>
 
         <td class="py-2 px-4 border-b flex gap-2 flex-wrap">

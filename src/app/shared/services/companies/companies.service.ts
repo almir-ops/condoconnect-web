@@ -47,4 +47,16 @@ export class CompaniesService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  trocarCondominioEmpresa(
+    empresaId: number,
+    condominioId: number,
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/${empresaId}/trocar-condominio`,
+      {
+        condominio_id: condominioId,
+      },
+    );
+  }
 }

@@ -1,12 +1,65 @@
-<div class="px-[70px] pt-5  text-gray-700 w-full">
+<div class="px-[70px] pt-5 text-gray-700 w-full">
   <div class="w-full">
     <div>
       <div class="text-xl text-gray-700">Empresas</div>
-      <div>Gerencie os empresas presentes no aplicativo</div>
+      <div>Gerencie as empresas presentes no aplicativo</div>
     </div>
+
     <div class="mt-4">
       <app-table class="w-full" [btnText1]="'Adicionar empresa'" [columns]="columns" [data]="data"
-        [onButtonClick]="handleButtonClick" [onToggleStatus]="toggleEmpresaStatus.bind(this)"></app-table>
+        [onButtonClick]="handleButtonClick" [onToggleStatus]="toggleEmpresaStatus.bind(this)"
+        [onTrocarCondominio]="abrirDialogTrocarCondominio.bind(this)"></app-table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="dialogTrocarCondominioAberto"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-5">
+    <div class="text-lg font-semibold text-gray-700">
+      Trocar condomínio da empresa
+    </div>
+
+    <div class="text-sm text-gray-500 mt-1">
+      Empresa:
+      <strong>{{ empresaSelecionada?.nome }}</strong>
+    </div>
+
+    <div class="text-sm text-gray-500 mt-1" *ngIf="empresaSelecionada?.condominios?.length">
+      Condomínio atual:
+      <strong>{{ empresaSelecionada?.condominios[0]?.nome }}</strong>
+    </div>
+
+    <div class="mt-4">
+      <label class="block text-sm text-gray-600 mb-1">
+        Novo condomínio
+      </label>
+
+      <select [(ngModel)]="condominioSelecionadoId"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <option [ngValue]="null">
+          Selecione um condomínio
+        </option>
+
+        <option *ngFor="let condominio of condominios" [ngValue]="condominio.id">
+          {{ condominio.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-5">
+      <button type="button" class="px-4 py-2 rounded-md border border-gray-300 text-gray-600"
+        (click)="fecharDialogTrocarCondominio()">
+        Cancelar
+      </button>
+
+      <button type="button" class="px-4 py-2 rounded-md text-white"
+        [disabled]="salvandoTroca || !condominioSelecionadoId" [ngClass]="{
+          'bg-primary': condominioSelecionadoId && !salvandoTroca,
+          'bg-gray-300 cursor-not-allowed': !condominioSelecionadoId || salvandoTroca
+        }" (click)="salvarTrocaCondominio()">
+        {{ salvandoTroca ? 'Salvando...' : 'Salvar' }}
+      </button>
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ export class TableComponent {
   @Input() onDelete?: (row: any) => void;
   @Input() onCustomAction?: (row: any) => void;
   @Input() onToggleStatus?: (row: any) => void;
+  @Input() onTrocarCondominio?: (row: any) => void;
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -73,6 +74,11 @@ export class TableComponent {
 
   capitalizeFirstLetter(text: string): string {
     if (!text) return '';
+
+    if (text === 'trocar_condominio') {
+      return 'Trocar condomínio';
+    }
+
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
