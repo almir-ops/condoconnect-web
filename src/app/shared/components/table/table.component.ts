@@ -18,7 +18,7 @@ export class TableComponent {
   @Input() onCustomAction?: (row: any) => void;
   @Input() onToggleStatus?: (row: any) => void;
   @Input() onTrocarCondominio?: (row: any) => void;
-
+  @Input() onQrCode?: (row: any) => void;
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;

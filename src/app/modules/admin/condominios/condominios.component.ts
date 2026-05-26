@@ -7,6 +7,7 @@ import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalConfirmDialogComponent } from '../../../shared/components/modais/modal-confirm-dialog/modal-confirm-dialog.component';
 import { CepService } from '../../../shared/services/cep/cep.service';
+import { ModalQrcodeCondominioComponent } from '../../../shared/components/modais/modal-qrcode-condominio/modal-qrcode-condominio.component';
 
 @Component({
   selector: 'app-condominios',
@@ -44,10 +45,32 @@ export class CondominiosComponent implements OnInit {
     this.abrirModalAdicionar();
   };
 
+  abrirQrCode = (condo: any) => {
+    if (!condo?.id) {
+      this._snackBar.open('Condomínio sem ID válido.', '', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+      });
+      return;
+    }
+
+    this.dialog.open(ModalQrcodeCondominioComponent, {
+      width: '720px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      data: {
+        condo: condo,
+      },
+    });
+  };
+
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalCondominioComponent, {
       width: '500px',
       height: '60%',
+      data: {
+        modo: 'adicionar',
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

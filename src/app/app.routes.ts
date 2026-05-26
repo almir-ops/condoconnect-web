@@ -14,6 +14,7 @@ import { CentralAuthGuard } from './core/guards/auth/central-auth.guard';
 import { CentralPerfilComponent } from './modules/central/central-perfil.component';
 import { CentralEmpresasComponent } from './modules/central/central-empresas.component';
 import { CentralAssinaturasComponent } from './modules/central/central-assinaturas.component';
+import { ListaCompanysComponent } from './modules/estabelecimentos/lista-companys/lista-companys.component';
 
 export const routes: Routes = [
   // ✅ NOVO PORTAL
@@ -37,7 +38,7 @@ export const routes: Routes = [
   { path: 'admin', children: adminRoutes },
   { path: 'reset-password', component: ForgotComponent },
   { path: 'empresa/:id/cartao-digital', component: CartaoComponent },
-  { path: 'condominio/:id', component: CondominiosComponent },
+  { path: 'condominio/:id', component: ListaCompanysComponent },
   { path: 'app', component: HomeComponent },
   { path: 'termos-de-uso', component: TermosDeUsoComponent },
   { path: 'politicas-privacidade', component: PoliticasPrivacidadeComponent },
