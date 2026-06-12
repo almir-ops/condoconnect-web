@@ -1,19 +1,84 @@
-
-<div class="px-[70px] pt-5 text-gray-700 w-full">
+<div class="w-full px-4 pt-5 text-gray-700 sm:px-6 lg:px-[70px]">
   <div class="w-full">
     <div>
-      <div class="text-xl text-gray-700">Usuarios</div>
-      <div>Gerencie os usuarios presentes no aplicativo</div>
+      <div class="text-xl text-gray-700">Usuários</div>
+      <div>Gerencie os usuários presentes no aplicativo</div>
     </div>
+
+    <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-sm text-gray-500">Total de usuários carregados</div>
+            <div class="mt-2 text-2xl font-semibold text-gray-800">{{ totalUsuarios() }}</div>
+          </div>
+          <button type="button"
+            class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-sm font-semibold text-gray-600"
+            (click)="abrirAjudaMetrica('Total de usuários carregados', 'Quantidade total de usuários retornados pela busca atual da API e carregados na tabela.')">
+            ?
+          </button>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-sm text-gray-500">Total de usuários ativos</div>
+            <div class="mt-2 text-2xl font-semibold text-gray-800">{{ totalUsuariosAtivos() }}</div>
+          </div>
+          <button type="button"
+            class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-sm font-semibold text-gray-600"
+            (click)="abrirAjudaMetrica('Total de usuários ativos', 'Quantidade de usuários carregados que estão marcados como ativos pelo campo status ou ativo.')">
+            ?
+          </button>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:col-span-2 xl:col-span-1">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-sm text-gray-500">Novos usuários do mês atual</div>
+            <div class="mt-2 text-2xl font-semibold text-gray-800">{{ totalUsuariosNovosMesAtual() }}</div>
+          </div>
+          <button type="button"
+            class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-sm font-semibold text-gray-600"
+            (click)="abrirAjudaMetrica('Novos usuários do mês atual', 'Quantidade de usuários carregados cuja data de criação está dentro do mês e ano atuais.')">
+            ?
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="mt-4">
       <app-table
         class="w-full"
-        [btnText1]="'Adicionar usuario'"
+        [btnText1]="'Adicionar usuário'"
         [columns]="columns"
         [data]="data"
+        [defaultSortColumn]="'createdAt'"
+        [defaultSortDirection]="'desc'"
         [onButtonClick]="handleButtonClick"
         [onEdit]="editarUsuario"
       ></app-table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedMetric" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+  <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-xl">
+    <div class="flex items-start justify-between gap-4">
+      <div class="text-lg font-semibold text-gray-800">{{ selectedMetric.title }}</div>
+      <button type="button" class="text-xl leading-none text-gray-500" (click)="fecharAjudaMetrica()">
+        ×
+      </button>
+    </div>
+
+    <p class="mt-3 text-sm leading-6 text-gray-600">{{ selectedMetric.description }}</p>
+
+    <div class="mt-5 flex justify-end">
+      <button type="button" class="rounded-md bg-primary px-4 py-2 text-white" (click)="fecharAjudaMetrica()">
+        Entendi
+      </button>
     </div>
   </div>
 </div>

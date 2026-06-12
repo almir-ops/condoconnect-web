@@ -12,7 +12,7 @@ import { InscricaoService } from '../../../shared/services/inscricao/plano.servi
   standalone: true,
   imports: [CommonModule, FormsModule, TableComponent, MatDialogModule],
   template: `
-    <div class="px-[70px] pt-5 text-gray-700 w-full">
+    <div class="w-full px-4 pt-5 text-gray-700 sm:px-6 lg:px-[70px]">
       <div class="w-full">
         <div>
           <div class="text-xl text-gray-700">Assinaturas</div>

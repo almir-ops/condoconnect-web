@@ -20,8 +20,9 @@ import { AlertService } from '../../../shared/components/dialog/alert.service';
 export class UsuariosComponent {
 
     columns = ['nome', 'email', 'telefone', 'tipo', 'status', 'createdAt'];
-    data = [];
+    data: any[] = [];
     categorias: any[] = [];
+    selectedMetric: { title: string; description: string } | null = null;
 
     constructor(
       private usuarioService: UsersService,
@@ -37,7 +38,7 @@ export class UsuariosComponent {
   getUsuarios() {
     this.usuarioService.getAllUsers().subscribe({
       next: (value: any) => {
-        this.data = value;
+        this.data = Array.isArray(value) ? value : [];
       },
     });
   }
@@ -105,4 +106,40 @@ export class UsuariosComponent {
   }
 
   desativarUsuario(){}
+
+  totalUsuarios(): number {
+    return this.data.length;
+  }
+
+  totalUsuariosAtivos(): number {
+    return this.data.filter((usuario) => this.isUsuarioAtivo(usuario)).length;
+  }
+
+  totalUsuariosNovosMesAtual(): number {
+    const now = new Date();
+
+    return this.data.filter((usuario) => {
+      const createdAt = new Date(usuario?.createdAt);
+
+      return (
+        !Number.isNaN(createdAt.getTime()) &&
+        createdAt.getMonth() === now.getMonth() &&
+        createdAt.getFullYear() === now.getFullYear()
+      );
+    }).length;
+  }
+
+  abrirAjudaMetrica(title: string, description: string) {
+    this.selectedMetric = { title, description };
+  }
+
+  fecharAjudaMetrica() {
+    this.selectedMetric = null;
+  }
+
+  private isUsuarioAtivo(usuario: any): boolean {
+    const status = String(usuario?.status ?? '').toLowerCase();
+
+    return usuario?.ativo === true || status === 'ativo' || status === 'active';
+  }
 }
