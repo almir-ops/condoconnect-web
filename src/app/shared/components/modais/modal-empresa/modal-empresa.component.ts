@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { ModalUsuarioComponent } from '../modal-usuario/modal-usuario.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,46 +7,44 @@ import { MaterialModule } from '../../../material-module';
 @Component({
   selector: 'app-modal-empresa',
   standalone: true,
-  imports: [MaterialModule,CommonModule,FormsModule],
+  imports: [MaterialModule, CommonModule, FormsModule],
   templateUrl: './modal-empresa.component.html',
   styleUrl: './modal-empresa.component.scss'
 })
 export class ModalEmpresaComponent {
 
   nome: string = '';
-  tipo: string = '';
   email: string = '';
-  status: string = '';
+  cnpj: string = '';
   telefone: string = '';
-  password: string = '';
-  editMode: boolean = false;
-
-  hiddenPassword: boolean = false;
+  celular: string = '';
+  endereco: string = '';
+  bairro: string = '';
+  cidade: string = '';
+  estado: string = '';
 
   constructor(
-    public dialogRef: MatDialogRef<ModalUsuarioComponent>,
+    public dialogRef: MatDialogRef<ModalEmpresaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.data = data || {}; // Garante que data nunca seja null ou undefined
-    this.nome = this.data.nome ?? ''; // Usa ?? para tratar valores null e undefined
-    this.tipo = this.data.tipo ?? 'cliente';
-    this.status = this.data.status ?? 'ativo';
-    this.email = this.data.email ?? '';
-    this.editMode = this.data.editMode ?? false;
+    this.data = data || {};
   }
 
   fechar(): void {
     this.dialogRef.close();
   }
-  viewPassword(): void {
-    this.hiddenPassword = !this.hiddenPassword;
-  }
 
   salvar(): void {
     this.dialogRef.close({
       nome: this.nome,
-      tipo: this.tipo,
-      editMode: this.editMode
+      email: this.email,
+      cnpj: this.cnpj,
+      telefone: this.telefone,
+      celular: this.celular,
+      endereco: this.endereco,
+      bairro: this.bairro,
+      cidade: this.cidade,
+      estado: this.estado,
     });
   }
 }

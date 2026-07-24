@@ -19,7 +19,7 @@ import { AlertService } from '../../../shared/components/dialog/alert.service';
 })
 export class UsuariosComponent {
 
-    columns = ['nome', 'email', 'telefone', 'tipo', 'status', 'createdAt'];
+    columns = ['nome', 'email', 'telefone', 'tipo', 'status', 'empresas', 'createdAt'];
     data: any[] = [];
     categorias: any[] = [];
     selectedMetric: { title: string; description: string } | null = null;
@@ -92,13 +92,19 @@ export class UsuariosComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(result);
         this.usuarioService.updateUserss(result.id, result).subscribe({
-          next: (res:any) => {
+          next: () => {
+            this.alertService.presentAlert('Muito bem!', 'Usuário atualizado com sucesso.');
             this.getUsuarios();
           },
-          error: (err:any) => {
-            console.log(err);
+          error: (err: any) => {
+            console.error('Erro ao atualizar usuário', err);
+
+            if (err.status === 400) {
+              this.alertService.presentAlert('Atenção', err.error?.message ?? 'Dados inválidos.');
+            } else {
+              this.alertService.presentAlert('Erro de Comunicação', 'Não foi possível atualizar o usuário, tente novamente.');
+            }
           }
         })
       }

@@ -34,6 +34,7 @@ export class ModalUsuarioComponent {
     this.tipo = this.usuario.tipo ?? 'cliente';
     this.status = this.usuario.status ?? 'ativo';
     this.email = this.usuario.email ?? '';
+    this.telefone = this.usuario.telefone ?? '';
     this.editMode = this.data.editMode ?? false;
   }
 

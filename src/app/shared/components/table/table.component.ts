@@ -123,8 +123,10 @@ export class TableComponent implements OnChanges {
       return value ? 'Ativo' : 'Inativo';
     }
 
-    if (Array.isArray(value) && value.length > 0) {
-      return value[0]?.nome || 'N/A';
+    if (Array.isArray(value)) {
+      if (value.length === 0) return 'N/A';
+
+      return value.map((item) => item?.nome).filter(Boolean).join(', ') || 'N/A';
     }
 
     if (typeof value === 'object' && value !== null) {

@@ -1,60 +1,29 @@
 <div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar Usuario</h2>
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar Empresa</h2>
   <p class="text-gray-600 mb-4">
-    Complete o formulario corretamente e clique em adicionar.
+    Complete o formulário corretamente e clique em adicionar.
   </p>
 
   <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
-      Nome
+    <label for="empresaNome" class="block text-sm font-medium text-gray-700">
+      Nome *
     </label>
     <input
-      id="nomeSubcategoria"
+      id="empresaNome"
       type="text"
       [(ngModel)]="nome"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o nome"
+      placeholder="Digite o nome da empresa"
     />
   </div>
 
   <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
-      Tipo
-    </label>
-    <select
-      id="categorias"
-      [(ngModel)]="tipo"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-    >
-      <option value="admin">Admin</option>
-      <option value="cliente">Cliente</option>
-
-    </select>
-  </div>
-
- <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
-      Status
-    </label>
-    <select
-      id="categorias"
-      [(ngModel)]="status"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-    >
-      <option value="ativo">Ativo</option>
-      <option value="inativo">Inativo</option>
-      <option value="bloquado">Bloqueado</option>
-
-    </select>
-  </div>
-
-  <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
-      Email
+    <label for="empresaEmail" class="block text-sm font-medium text-gray-700">
+      Email *
     </label>
     <input
-      id="nomeSubcategoria"
-      type="text"
+      id="empresaEmail"
+      type="email"
       [(ngModel)]="email"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
       placeholder="Digite o email"
@@ -62,42 +31,98 @@
   </div>
 
   <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
-      Telefone
+    <label for="empresaCnpj" class="block text-sm font-medium text-gray-700">
+      CNPJ
     </label>
     <input
-      id="nomeSubcategoria"
+      id="empresaCnpj"
       type="text"
-      [(ngModel)]="telefone"
+      [(ngModel)]="cnpj"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o telefone"
+      placeholder="Digite o CNPJ"
     />
   </div>
 
+  <div class="mb-4 grid grid-cols-2 gap-3">
+    <div>
+      <label for="empresaTelefone" class="block text-sm font-medium text-gray-700">
+        Telefone
+      </label>
+      <input
+        id="empresaTelefone"
+        type="text"
+        [(ngModel)]="telefone"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="Telefone"
+      />
+    </div>
 
-  <div class="mb-4 relative">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
-      Senha
+    <div>
+      <label for="empresaCelular" class="block text-sm font-medium text-gray-700">
+        Celular
+      </label>
+      <input
+        id="empresaCelular"
+        type="text"
+        [(ngModel)]="celular"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="Celular"
+      />
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label for="empresaEndereco" class="block text-sm font-medium text-gray-700">
+      Endereço
     </label>
     <input
-      id="custom-input"
+      id="empresaEndereco"
       type="text"
-      [type]="!hiddenPassword ? 'password' : 'text'"
-      [(ngModel)]="password"
-      placeholder=" "
+      [(ngModel)]="endereco"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      placeholder="Rua, número"
     />
-    <div
-    (click)="viewPassword()"
-    class="absolute top-[12px] right-3 cursor-pointer mt-5">
-    <img
-      *ngIf="hiddenPassword"
-      src="./assets/icon/eye-slash.svg"
-      class="h-5">
-    <img
-      *ngIf="!hiddenPassword"
-      src="./assets/icon/eye.svg"
-      class="h-5">
+  </div>
+
+  <div class="mb-4 grid grid-cols-3 gap-3">
+    <div>
+      <label for="empresaBairro" class="block text-sm font-medium text-gray-700">
+        Bairro
+      </label>
+      <input
+        id="empresaBairro"
+        type="text"
+        [(ngModel)]="bairro"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="Bairro"
+      />
+    </div>
+
+    <div>
+      <label for="empresaCidade" class="block text-sm font-medium text-gray-700">
+        Cidade
+      </label>
+      <input
+        id="empresaCidade"
+        type="text"
+        [(ngModel)]="cidade"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="Cidade"
+      />
+    </div>
+
+    <div>
+      <label for="empresaEstado" class="block text-sm font-medium text-gray-700">
+        UF
+      </label>
+      <input
+        id="empresaEstado"
+        type="text"
+        maxlength="2"
+        [(ngModel)]="estado"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase"
+        placeholder="UF"
+      />
     </div>
   </div>
 
@@ -105,7 +130,7 @@
     <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
       Fechar
     </button>
-    <button (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md">
+    <button (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md" [disabled]="!nome || !email">
       Adicionar
     </button>
   </div>
