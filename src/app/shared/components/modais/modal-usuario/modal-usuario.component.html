@@ -76,6 +76,24 @@
     />
   </div>
 
+  <div class="mb-4" *ngIf="editMode && empresasDisponiveis.length">
+    <label for="empresaVinculada" class="block text-sm font-medium text-gray-700">
+      Vincular empresa
+    </label>
+    <select
+      id="empresaVinculada"
+      [(ngModel)]="empresaSelecionadaId"
+      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+    >
+      <option [ngValue]="null">Nenhuma</option>
+      <option *ngFor="let empresa of empresasDisponiveis" [ngValue]="empresa.id">
+        {{ empresa.nome }}
+      </option>
+    </select>
+    <p class="mt-1 text-xs text-gray-500">
+      Este usuário ainda não tem empresa vinculada.
+    </p>
+  </div>
 
   <div class="mb-4 relative" *ngIf="!editMode">
     <label for="categorias" class="block text-sm font-medium text-gray-700">

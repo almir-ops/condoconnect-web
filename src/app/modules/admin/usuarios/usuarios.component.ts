@@ -9,6 +9,7 @@ import { UsersService } from '../../../shared/services/usuarios/users.service';
 import { ModalUsuarioComponent } from '../../../shared/components/modais/modal-usuario/modal-usuario.component';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
+import { CompaniesService } from '../../../shared/services/companies/companies.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -28,7 +29,8 @@ export class UsuariosComponent {
       private usuarioService: UsersService,
       private authService: AuthService,
       private dialog: MatDialog,
-      private alertService: AlertService
+      private alertService: AlertService,
+      private empresaService: CompaniesService,
     ) {}
 
   ngOnInit() {
@@ -82,31 +84,73 @@ export class UsuariosComponent {
   }
 
   editarUsuario = (usuario: any) => {
-   const dialogRef = this.dialog.open(ModalUsuarioComponent, {
-      width: '400px',
-      data: {
-        usuario: usuario,
-        editMode: true
+    const temEmpresaVinculada = Array.isArray(usuario?.empresas) && usuario.empresas.length > 0;
+
+    const abrirModal = (empresasDisponiveis: any[]) => {
+      const dialogRef = this.dialog.open(ModalUsuarioComponent, {
+        width: '400px',
+        data: {
+          usuario,
+          editMode: true,
+          empresasDisponiveis,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.salvarEdicaoUsuario(result);
+        }
+      });
+    };
+
+    // Só oferece o vínculo se o usuário ainda não tiver nenhuma empresa.
+    if (temEmpresaVinculada) {
+      abrirModal([]);
+      return;
+    }
+
+    this.empresaService.getAll().subscribe({
+      next: (empresas: any) => {
+        const disponiveis = (Array.isArray(empresas) ? empresas : []).filter(
+          (empresa: any) => !empresa?.usuario && !empresa?.usuario_id,
+        );
+        abrirModal(disponiveis);
       },
+      error: () => abrirModal([]),
     });
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.usuarioService.updateUserss(result.id, result).subscribe({
-          next: () => {
-            this.alertService.presentAlert('Muito bem!', 'Usuário atualizado com sucesso.');
-            this.getUsuarios();
-          },
-          error: (err: any) => {
-            console.error('Erro ao atualizar usuário', err);
+  private salvarEdicaoUsuario(result: any) {
+    this.usuarioService.updateUserss(result.id, result).subscribe({
+      next: () => this.vincularEmpresaSeSelecionada(result),
+      error: (err: any) => {
+        console.error('Erro ao atualizar usuário', err);
 
-            if (err.status === 400) {
-              this.alertService.presentAlert('Atenção', err.error?.message ?? 'Dados inválidos.');
-            } else {
-              this.alertService.presentAlert('Erro de Comunicação', 'Não foi possível atualizar o usuário, tente novamente.');
-            }
-          }
-        })
+        if (err.status === 400) {
+          this.alertService.presentAlert('Atenção', err.error?.message ?? 'Dados inválidos.');
+        } else {
+          this.alertService.presentAlert('Erro de Comunicação', 'Não foi possível atualizar o usuário, tente novamente.');
+        }
+      }
+    });
+  }
+
+  private vincularEmpresaSeSelecionada(result: any) {
+    if (!result.empresaId) {
+      this.alertService.presentAlert('Muito bem!', 'Usuário atualizado com sucesso.');
+      this.getUsuarios();
+      return;
+    }
+
+    this.empresaService.update(result.empresaId, { user_id: result.id }).subscribe({
+      next: () => {
+        this.alertService.presentAlert('Muito bem!', 'Usuário atualizado e empresa vinculada com sucesso.');
+        this.getUsuarios();
+      },
+      error: (err: any) => {
+        console.error('Erro ao vincular empresa ao usuário', err);
+        this.alertService.presentAlert('Atenção', 'Usuário atualizado, mas não foi possível vincular a empresa selecionada.');
+        this.getUsuarios();
       }
     });
   }

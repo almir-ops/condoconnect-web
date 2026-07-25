@@ -22,6 +22,8 @@ export class ModalUsuarioComponent {
 
   hiddenPassword: boolean = false;
   usuario:any;
+  empresasDisponiveis: any[] = [];
+  empresaSelecionadaId: number | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<ModalUsuarioComponent>,
@@ -36,6 +38,7 @@ export class ModalUsuarioComponent {
     this.email = this.usuario.email ?? '';
     this.telefone = this.usuario.telefone ?? '';
     this.editMode = this.data.editMode ?? false;
+    this.empresasDisponiveis = this.data.empresasDisponiveis ?? [];
   }
 
   fechar(): void {
@@ -64,7 +67,8 @@ export class ModalUsuarioComponent {
       email: this.email,
       status: this.status,
       telefone: this.telefone,
-      editMode: this.editMode
+      editMode: this.editMode,
+      empresaId: this.empresaSelecionadaId,
     });
   }
 }
