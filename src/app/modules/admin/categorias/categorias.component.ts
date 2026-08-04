@@ -89,7 +89,22 @@ export class CategoriasComponent implements OnInit {
     });
   }
 
-  excluirCategorias(Categorias: any) {
-    this.data = this.data.filter(u => u !== Categorias);
-  }
+  excluirCategorias = (categoria: any) => {
+    const confirmar = window.confirm(
+      `Deseja realmente excluir a categoria "${categoria.nome}"? As subcategorias dela também serão excluídas.`,
+    );
+
+    if (!confirmar) return;
+
+    this.categoriaService.deleteCategory(categoria.id).subscribe({
+      next: () => {
+        this.alertService.presentAlert('Muito bem!', 'Categoria excluída com sucesso.');
+        this.getCategories();
+      },
+      error: (err: any) => {
+        console.error('Erro ao excluir categoria:', err);
+        this.alertService.presentAlert('Atenção', 'Não foi possível excluir a categoria, tente novamente.');
+      },
+    });
+  };
 }
