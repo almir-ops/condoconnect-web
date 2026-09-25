@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +8,13 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  url: SafeResourceUrl;
   menuOpen = false;
+  readonly year = new Date().getFullYear();
+  readonly appleStore = 'https://apps.apple.com/br/app/condoconnect/id6748700594';
+  readonly googlePlay = 'https://play.google.com/store/apps/details?id=br.com.condoconnect';
+  readonly whatsapp = 'https://wa.me/5511930299320';
 
-  constructor(private sanitizer: DomSanitizer) {
-    const rawUrl = 'https://phtreinamentoecons.wixsite.com/condoconnect-1';
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+  closeMenu(): void {
+    this.menuOpen = false;
   }
 }
