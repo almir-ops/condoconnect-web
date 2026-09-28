@@ -16,6 +16,7 @@ export class TableComponent implements OnChanges {
   @Input() defaultSortDirection: 'asc' | 'desc' = 'asc';
   @Input() onButtonClick?: () => void;
   @Input() onEdit?: (row: any) => void;
+  @Input() editLabel = 'Editar';
   @Input() onDelete?: (row: any) => void;
   @Input() onCustomAction?: (row: any) => void;
   @Input() onToggleStatus?: (row: any) => void;

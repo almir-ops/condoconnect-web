@@ -7,6 +7,7 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { CondominiosService } from '../../../shared/services/condominios/condominios.service';
 import { ModalEmpresaComponent } from '../../../shared/components/modais/modal-empresa/modal-empresa.component';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
+import { CompanyCardEditorComponent } from '../company-card-editor/company-card-editor.component';
 
 @Component({
   selector: 'app-empresas',
@@ -130,6 +131,23 @@ export class EmpresasComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.adicionarEmpresa(result);
+      }
+    });
+  };
+
+  editarCard = (empresa: any) => {
+    this.dialog.open(CompanyCardEditorComponent, {
+      data: { id: Number(empresa.id) },
+      width: '1120px',
+      maxWidth: '96vw',
+      maxHeight: '96dvh',
+      ariaLabelledBy: 'card-editor-title',
+      autoFocus: 'first-heading',
+      disableClose: true,
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.alertService.presentAlert('Card atualizado', 'As alterações foram salvas com sucesso.');
+        this.getEmpresas();
       }
     });
   };

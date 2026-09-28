@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:card-editor": "ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/admin/company-card-editor/company-card-editor.component.spec.ts --ts-config=tsconfig.card-editor.spec.json"
   },
   "private": true,
   "dependencies": {

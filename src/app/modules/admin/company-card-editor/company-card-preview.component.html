@@ -1,0 +1,31 @@
+        <article class="company-card">
+          <div class="cover">
+            <img *ngIf="imageSource('banner') as src" [src]="src" alt="Capa da empresa" (error)="imageFailed('banner')">
+            <span *ngIf="!imageSource('banner')">Capa da empresa</span>
+          </div>
+          <div class="card-content">
+            <div class="card-top">
+              <div class="avatar"><img *ngIf="imageSource('avatar') as src; else avatarFallback" [src]="src" alt="Logo da empresa" (error)="imageFailed('avatar')"><ng-template #avatarFallback>{{ (model['nome'] || 'E').charAt(0) }}</ng-template></div>
+              <div class="card-icons" aria-hidden="true"><span>♡</span><span>⌖</span><span>↗</span></div>
+            </div>
+            <h3>{{ model['nome'] || 'Nome da empresa' }}</h3>
+            <p class="muted">{{ condoNames || 'Condomínio da empresa' }}</p>
+            <p class="location">{{ model['complemento'] }}</p>
+            <p class="slogan" *ngIf="model['slogan']">{{ model['slogan'] }}</p>
+            <p class="description">{{ model['descricao'] || 'A descrição dos seus serviços aparecerá aqui.' }}</p>
+            <div class="contact-block"><h4>Contato</h4>
+              <p *ngIf="model['email']">✉ {{ model['email'] }}</p>
+              <p *ngIf="model['celular']">☎ {{ model['celular'] }}</p>
+              <p *ngIf="model['telefone']">☎ {{ model['telefone'] }}</p>
+            </div>
+            <p class="address" *ngIf="model['endereco']">{{ model['endereco'] }}<span *ngIf="model['bairro']"> · {{ model['bairro'] }}</span><br>{{ model['cidade'] }}<span *ngIf="model['estado']"> / {{ model['estado'] }}</span></p>
+            <div class="socials">
+              <img *ngIf="model['facebook_url']" src="assets/icon/facebook.svg" alt="Facebook">
+              <img *ngIf="model['celular']" src="assets/icon/whatsapp.svg" alt="WhatsApp">
+              <img *ngIf="model['instagram_url']" src="assets/icon/instagram.svg" alt="Instagram">
+              <img *ngIf="model['site_url']" src="assets/icon/site.svg" alt="Site">
+              <span *ngIf="model['youtube_url']">YouTube</span>
+            </div>
+          </div>
+        </article>
+        <div class="ad" *ngIf="imageSource('banner_anuncio') as src"><img [src]="src" alt="Anúncio complementar" (error)="imageFailed('banner_anuncio')"></div>

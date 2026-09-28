@@ -1,0 +1,102 @@
+<div class="editor">
+  <header class="editor-header">
+    <div><p class="eyebrow">CONTEÚDO DA EMPRESA</p><h2 id="card-editor-title">Editar card</h2><p>Atualize as informações e acompanhe a prévia.</p></div>
+    <button type="button" class="icon-button" aria-label="Fechar editor" (click)="close()" [disabled]="saving || uploading.size">✕</button>
+  </header>
+
+  <div *ngIf="loading" class="empty" role="status">Carregando informações do card…</div>
+  <div *ngIf="!loading && !model['id']" class="empty">
+    <p role="alert">{{ error }}</p><button class="primary" type="button" (click)="load()">Tentar novamente</button>
+  </div>
+
+  <form *ngIf="!loading && model['id']" #cardForm="ngForm" (ngSubmit)="save(cardForm)" class="editor-form">
+    <div class="mobile-switch" aria-label="Visualização do editor">
+      <button type="button" [class.selected]="!mobilePreview" [attr.aria-pressed]="!mobilePreview" (click)="showPreview(false)">Editar informações</button>
+      <button type="button" [class.selected]="mobilePreview" [attr.aria-pressed]="mobilePreview" (click)="showPreview(true)">Ver prévia</button>
+    </div>
+    <div #workspace class="workspace" [class.preview-mode]="mobilePreview">
+      <fieldset class="fields" [disabled]="saving">
+        <section class="form-section">
+          <div class="section-title"><span>01</span><div><h3>Imagens do card</h3><p>JPG, PNG ou WebP, até 5 MB por imagem.</p></div></div>
+          <div *ngFor="let image of images" class="image-row">
+            <div class="thumbnail" [class.round]="image.key === 'avatar'">
+              <img *ngIf="imageSource(image.key) as src; else noThumb" [src]="src" alt="" (error)="imageFailed(image.key)">
+              <ng-template #noThumb><span aria-hidden="true">▧</span></ng-template>
+            </div>
+            <div class="image-controls">
+              <label [for]="'url-' + image.key">{{ image.label }}</label>
+              <small>{{ image.hint }}</small>
+              <input [id]="'url-' + image.key" [name]="image.key" type="url" maxlength="255"
+                [(ngModel)]="model[image.key]" (ngModelChange)="changed()" placeholder="https://…"
+                [disabled]="uploading.has(image.key)" [attr.aria-describedby]="'upload-error-' + image.key">
+              <div class="image-actions">
+                <label class="upload-button" [class.busy]="uploading.has(image.key)">
+                  {{ uploading.has(image.key) ? 'Enviando…' : 'Enviar imagem' }}
+                  <input type="file" accept="image/png,image/jpeg,image/webp" [attr.aria-label]="'Enviar ' + image.label"
+                    (change)="upload($event, image.key)" [disabled]="uploading.has(image.key)">
+                </label>
+                <button type="button" class="text-button" *ngIf="model[image.key]" [disabled]="uploading.has(image.key)" (click)="removeImage(image.key)">Remover</button>
+              </div>
+              <small class="field-error" [id]="'upload-error-' + image.key" role="status">{{ imageErrors[image.key] }}</small>
+              <small *ngIf="model[image.key] && !imageSource(image.key)" class="field-error">Não foi possível exibir esta imagem. Confira o link.</small>
+            </div>
+          </div>
+        </section>
+
+        <section *ngFor="let group of groups; let groupIndex = index" class="form-section">
+          <div class="section-title"><span>0{{ groupIndex + 2 }}</span><h3>{{ group.title }}</h3></div>
+          <div class="field-grid">
+            <div *ngFor="let field of group.fields" [class.wide]="field.type === 'textarea'">
+              <label [for]="'card-' + field.key">{{ field.label }}<span *ngIf="field.required" aria-hidden="true"> *</span></label>
+              <ng-container *ngIf="field.type !== 'textarea'; else textArea">
+                <input [id]="'card-' + field.key" [name]="field.key" [type]="field.type || 'text'"
+                  [(ngModel)]="model[field.key]" (ngModelChange)="changed()" #control="ngModel"
+                  [required]="!!field.required" [email]="field.type === 'email'" [maxlength]="field.max"
+                  [attr.step]="field.type === 'number' ? 'any' : null"
+                  [attr.aria-invalid]="control.invalid && control.touched"
+                  [attr.aria-describedby]="'hint-' + field.key">
+                <small *ngIf="control.invalid && control.touched" class="field-error">Confira {{ field.label.toLowerCase() }}.</small>
+              </ng-container>
+              <ng-template #textArea>
+                <textarea [id]="'card-' + field.key" [name]="field.key" rows="5" [maxlength]="field.max"
+                  [(ngModel)]="model[field.key]" (ngModelChange)="changed()"></textarea>
+                <small>{{ (model[field.key] || '').length }} / {{ field.max }} caracteres</small>
+              </ng-template>
+              <small [id]="'hint-' + field.key">{{ field.hint }}</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title"><span>06</span><div><h3>Condomínios e categorias</h3><p>Selecione os vínculos usados para encontrar esta empresa.</p></div></div>
+          <app-card-multiselect id="card-condos" label="Condomínios" [options]="condominios"
+            [(value)]="condoIds" (valueChange)="changed()" [disabled]="saving"></app-card-multiselect>
+          <app-card-multiselect id="card-categories" label="Categorias" [options]="categorias"
+            [(value)]="categoryIds" (valueChange)="categoriesChanged()" [disabled]="saving"></app-card-multiselect>
+          <app-card-multiselect id="card-subcategories" label="Subcategorias" [options]="visibleSubcategories"
+            [(value)]="subcategoryIds" (valueChange)="changed()" [disabled]="saving || !categoryIds.length"></app-card-multiselect>
+          <small *ngIf="!categoryIds.length">Escolha uma categoria para selecionar as subcategorias.</small>
+        </section>
+      </fieldset>
+
+      <aside class="preview" aria-label="Prévia do card no aplicativo">
+        <div class="preview-heading"><span class="eyebrow">PRÉVIA DO APLICATIVO</span><span class="live-dot">Ao vivo</span></div>
+        <p class="preview-note">As alterações aparecem aqui antes de salvar.</p>
+        <app-company-card-preview [model]="model" [condoNames]="condoNames"></app-company-card-preview>
+      </aside>
+    </div>
+
+    <footer class="editor-footer">
+      <p *ngIf="error" class="error-banner" role="alert">{{ error }}</p>
+      <div *ngIf="discard" class="discard" role="alert">
+        <span>Descartar as alterações não salvas?</span>
+        <button type="button" (click)="discard = false">Continuar editando</button>
+        <button type="button" (click)="dialog.close()">Descartar</button>
+      </div>
+      <div class="footer-actions"><small role="status">{{ saving ? 'Salvando card…' : uploading.size ? 'Aguarde o envio das imagens…' : dirty ? 'Alterações ainda não salvas' : 'Nenhuma alteração pendente' }}</small>
+        <div><button type="button" (click)="close()" [disabled]="saving || uploading.size">Cancelar</button>
+          <button type="submit" class="primary" [disabled]="saving || uploading.size || !dirty">{{ saving ? 'Salvando…' : 'Salvar alterações' }}</button></div>
+      </div>
+    </footer>
+  </form>
+</div>
