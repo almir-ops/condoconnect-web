@@ -2,47 +2,15 @@
   <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..."
     class="w-full rounded-md border p-2 sm:max-w-sm" />
 
-  <div *ngIf="companyCards" class="sort-controls">
-    <label for="company-sort">Ordenar por</label>
-    <select id="company-sort" [ngModel]="sortColumn" (ngModelChange)="sortColumn = $event; currentPage = 1">
-      <option value="">Cadastro</option>
-      <option value="nome">Nome</option>
-      <option value="email">E-mail</option>
-      <option value="ativo">Status</option>
-    </select>
-    <button type="button" (click)="sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'" [disabled]="!sortColumn"
-      [attr.aria-label]="sortDirection === 'asc' ? 'Ordem crescente' : 'Ordem decrescente'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</button>
-  </div>
-
   <div *ngIf="btnText1" (click)="onButtonClick && onButtonClick()"
     class="flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-primary px-3 text-white shadow-md sm:w-auto">
     {{ btnText1 }}
   </div>
 </div>
 
-<div *ngIf="companyCards" class="company-list" aria-label="Empresas">
-  <article *ngFor="let row of paginatedData()" class="company-item">
-    <header class="company-heading">
-      <h3>{{ row.nome || 'Empresa sem nome' }}</h3>
-      <span class="status" [class.active]="row.ativo">{{ row.ativo ? 'Ativa' : 'Inativa' }}</span>
-    </header>
-    <dl class="company-details">
-      <div><dt>E-mail</dt><dd class="email">{{ row.email || 'Não informado' }}</dd></div>
-      <div><dt>Telefone</dt><dd>{{ row.telefone || 'Não informado' }}</dd></div>
-      <div><dt>Condomínios</dt><dd>{{ formatStatus(row.condominios) }}</dd></div>
-      <div><dt>Usuário</dt><dd>{{ formatStatus(row.usuario) || 'Não informado' }}</dd></div>
-    </dl>
-    <div class="company-actions">
-      <button *ngIf="onEdit" type="button" class="main-action" (click)="onEdit(row)">{{ editLabel }}</button>
-      <button *ngIf="onTrocarCondominio" type="button" class="secondary-action" (click)="onTrocarCondominio(row)">Trocar condomínio</button>
-      <button *ngIf="onToggleStatus" type="button" class="status-action" (click)="onToggleStatus(row)">{{ getToggleLabel(row) }}</button>
-    </div>
-  </article>
-  <p *ngIf="!paginatedData().length" class="company-empty">Nenhuma empresa encontrada.</p>
-</div>
-
-<div *ngIf="!companyCards" class="w-full overflow-x-auto">
-  <table class="min-w-[760px] !w-full rounded-lg border border-gray-300 bg-white shadow-md">
+<p *ngIf="companyTable" class="table-swipe-hint">Deslize a tabela para os lados para ver todas as colunas.</p>
+<div class="w-full overflow-x-auto" [class.company-scroll]="companyTable">
+  <table class="min-w-[760px] !w-full rounded-lg border border-gray-300 bg-white shadow-md" [class.company-table]="companyTable">
     <thead>
       <tr class="bg-primary">
         <th *ngFor="let col of columns" class="border-b px-4 py-3 text-left">
@@ -73,13 +41,18 @@
           </ng-container>
         </td>
 
-        <td class="flex flex-wrap gap-2 border-b px-4 py-2">
+        <td class="border-b px-4 py-2" [class.company-action-cell]="companyTable" [class.flex]="!companyTable" [class.flex-wrap]="!companyTable" [class.gap-2]="!companyTable">
+          <ng-container *ngIf="companyTable">
+            <button *ngIf="onEdit" type="button" (click)="onEdit(row)" class="rounded bg-primary px-2 py-1 text-sm text-white">{{ editLabel }}</button>
+            <button *ngIf="onTrocarCondominio" type="button" (click)="onTrocarCondominio(row)" class="rounded bg-blue-700 px-2 py-1 text-sm text-white">Trocar condomínio</button>
+            <button *ngIf="onToggleStatus" type="button" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">{{ getToggleLabel(row) }}</button>
+          </ng-container>
           <button *ngIf="onQrCode" (click)="onQrCode(row)"
             class="rounded bg-emerald-700 px-2 py-1 text-sm text-white">
             QR Code
           </button>
 
-          <button *ngIf="onToggleStatus" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">
+          <button *ngIf="!companyTable && onToggleStatus" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">
             {{ getToggleLabel(row) }}
           </button>
 
@@ -88,7 +61,7 @@
             Ver pagamentos
           </button>
 
-          <button *ngIf="onEdit" (click)="onEdit(row)" class="rounded bg-primary px-2 py-1 text-sm text-white">
+          <button *ngIf="!companyTable && onEdit" (click)="onEdit(row)" class="rounded bg-primary px-2 py-1 text-sm text-white">
             {{ editLabel }}
           </button>
 

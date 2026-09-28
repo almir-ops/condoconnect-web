@@ -18,7 +18,7 @@ export class TableComponent implements OnChanges {
   @Input() onButtonClick?: () => void;
   @Input() onEdit?: (row: any) => void;
   @Input() editLabel = 'Editar';
-  @Input() companyCards = false;
+  @Input() companyTable = false;
   @Input() onDelete?: (row: any) => void;
   @Input() onCustomAction?: (row: any) => void;
   @Input() onToggleStatus?: (row: any) => void;
@@ -141,6 +141,14 @@ export class TableComponent implements OnChanges {
 
   capitalizeFirstLetter(text: string): string {
     if (!text) return '';
+
+    if (this.companyTable) {
+      const labels: Record<string, string> = {
+        nome: 'Nome', telefone: 'Telefone', condominios: 'Condomínios',
+        email: 'E-mail', usuario: 'Usuário', ativo: 'Status',
+      };
+      if (labels[text]) return labels[text];
+    }
 
     if (text === 'trocar_condominio') {
       return 'Trocar condomínio';

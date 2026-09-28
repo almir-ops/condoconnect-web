@@ -18,7 +18,7 @@
     </div>
 
     <div class="mt-4">
-      <app-table class="block w-full min-w-0" [companyCards]="true" [btnText1]="'Adicionar empresa'" [columns]="columns" [data]="data"
+      <app-table class="block w-full min-w-0" [companyTable]="true" [btnText1]="'Adicionar empresa'" [columns]="columns" [data]="data"
         [onButtonClick]="handleButtonClick" [onEdit]="editarCard" editLabel="Editar card" [onToggleStatus]="toggleEmpresaStatus.bind(this)"
         [onTrocarCondominio]="abrirDialogTrocarCondominio.bind(this)"></app-table>
     </div>

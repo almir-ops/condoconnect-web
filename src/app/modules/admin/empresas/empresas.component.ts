@@ -24,7 +24,6 @@ export class EmpresasComponent {
     'email',
     'usuario',
     'ativo',
-    'trocar_condominio',
   ];
 
   data: any[] = [];
