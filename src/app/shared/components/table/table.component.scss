@@ -1,5 +1,6 @@
 :host { display:block; min-width:0; }
-.company-scroll { border:1px solid #d9e2df; border-radius:9px; background:#fff; scrollbar-gutter:stable; }
+.company-scroll { width:100%; max-width:100%; min-width:0; overflow-x:auto; border:1px solid #d9e2df; border-radius:9px; background:#fff; scrollbar-gutter:stable; }
+.company-scroll:focus-visible { outline:2px solid #0a806a; outline-offset:2px; }
 .company-table { width:max-content!important; min-width:100%!important; border:0; border-collapse:separate; border-spacing:0; box-shadow:none; }
 .company-table th,.company-table td { white-space:nowrap; vertical-align:middle; padding:12px 14px; }
 .company-table th { font-size:12px; }.company-table td { font-size:13px; line-height:1.4; }

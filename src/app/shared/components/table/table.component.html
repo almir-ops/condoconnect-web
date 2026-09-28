@@ -9,7 +9,9 @@
 </div>
 
 <p *ngIf="companyTable" class="table-swipe-hint">Deslize a tabela para os lados para ver todas as colunas.</p>
-<div class="w-full overflow-x-auto" [class.company-scroll]="companyTable">
+<div class="w-full overflow-x-auto" [class.company-scroll]="companyTable"
+  [attr.tabindex]="companyTable ? 0 : null"
+  [attr.aria-label]="companyTable ? 'Tabela de empresas. Use as setas para ver todas as colunas.' : null">
   <table class="min-w-[760px] !w-full rounded-lg border border-gray-300 bg-white shadow-md" [class.company-table]="companyTable">
     <thead>
       <tr class="bg-primary">

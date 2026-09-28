@@ -8,29 +8,12 @@ import { SideMenuComponent } from '../../shared/components/side-menu/side-menu.c
   standalone: true,
   imports: [CommonModule, RouterModule,SideMenuComponent],
   template: `
-  <div class="flex bg-gray-100 h-screen w-screen">
-    <app-side-menu></app-side-menu>
-    <router-outlet></router-outlet>
+  <div class="flex h-screen w-screen overflow-hidden bg-gray-100">
+    <app-side-menu class="shrink-0"></app-side-menu>
+    <div class="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
+      <router-outlet></router-outlet>
+    </div>
   </div>
   `,
-  styles: [`
-    .admin-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-    nav a {
-      margin: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      color: blue;
-    }
-    main {
-      width: 80%;
-      margin-top: 20px;
-    }
-  `]
 })
 export class AdminComponent {}
