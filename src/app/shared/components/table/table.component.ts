@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './table.component.html',
+  styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnChanges {
   @Input() columns: string[] = [];
@@ -17,6 +18,7 @@ export class TableComponent implements OnChanges {
   @Input() onButtonClick?: () => void;
   @Input() onEdit?: (row: any) => void;
   @Input() editLabel = 'Editar';
+  @Input() companyCards = false;
   @Input() onDelete?: (row: any) => void;
   @Input() onCustomAction?: (row: any) => void;
   @Input() onToggleStatus?: (row: any) => void;
