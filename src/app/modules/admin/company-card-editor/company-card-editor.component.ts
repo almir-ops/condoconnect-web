@@ -60,14 +60,8 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       { key: 'celular', label: 'Celular / WhatsApp', max: 20, type: 'tel' },
       { key: 'cnpj', label: 'CPF / CNPJ', max: 20 },
     ]},
-    { title: 'Localização', fields: [
+    { title: 'Local no condomínio', fields: [
       { key: 'complemento', label: 'Sala, andar ou complemento', max: 255 },
-      { key: 'endereco', label: 'Endereço', max: 255 },
-      { key: 'bairro', label: 'Bairro', max: 255 },
-      { key: 'cidade', label: 'Cidade', max: 100 },
-      { key: 'estado', label: 'Estado', max: 50 },
-      { key: 'latitude', label: 'Latitude', max: 30, type: 'number', hint: 'De -90 a 90.' },
-      { key: 'longitude', label: 'Longitude', max: 30, type: 'number', hint: 'De -180 a 180.' },
     ]},
     { title: 'Site e redes sociais', fields: [
       { key: 'site_url', label: 'Site', max: 255, hint: 'https://suaempresa.com.br' },
@@ -215,15 +209,6 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       this.error = 'Confira os campos obrigatórios e os valores informados.';
       this.mobilePreview = false;
       return;
-    }
-    for (const [key, limit] of [['latitude', 90], ['longitude', 180]] as const) {
-      const value = this.model[key];
-      if (value !== null && value !== undefined && value !== '' &&
-        (!Number.isFinite(Number(value)) || Math.abs(Number(value)) > limit)) {
-        this.error = key === 'latitude' ? 'Latitude deve estar entre -90 e 90.' : 'Longitude deve estar entre -180 e 180.';
-        this.mobilePreview = false;
-        return;
-      }
     }
     const payload = this.buildPayload();
     for (const field of [...this.images.map(i => i.key), 'site_url', 'facebook_url', 'instagram_url', 'youtube_url']) {

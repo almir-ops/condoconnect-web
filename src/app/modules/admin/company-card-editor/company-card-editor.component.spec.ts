@@ -116,13 +116,16 @@ describe('Company card editor', () => {
     expect(editor.subcategoryIds).toEqual([]);
   });
 
-  it('rejects invalid coordinates and keeps valid zero coordinates', () => {
+  it('edits the complement without changing stored address or coordinates', () => {
+    editor.model['complemento'] = 'Torre B, sala 12';
     editor.model['latitude'] = 91;
     editor.save(form());
-    expect(companies.update).not.toHaveBeenCalled();
-    editor.model['latitude'] = 0;
-    editor.model['longitude'] = 0;
-    expect(editor.buildPayload()['latitude']).toBe(0);
+    const payload = companies.update.calls.mostRecent().args[1];
+    expect(payload.complemento).toBe('Torre B, sala 12');
+    for (const key of ['endereco', 'bairro', 'cidade', 'estado', 'latitude', 'longitude']) {
+      expect(Object.keys(payload)).not.toContain(key);
+      expect(fixture.nativeElement.querySelector(`#card-${key}`)).toBeNull();
+    }
   });
 
   it('accepts an Instagram handle and saves it as a profile URL', () => {

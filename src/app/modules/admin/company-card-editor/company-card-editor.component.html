@@ -46,7 +46,7 @@
         <section *ngFor="let group of groups; let groupIndex = index" class="form-section">
           <div class="section-title"><span>0{{ groupIndex + 2 }}</span><h3>{{ group.title }}</h3></div>
           <div class="field-grid">
-            <div *ngFor="let field of group.fields" [class.wide]="field.type === 'textarea'">
+            <div *ngFor="let field of group.fields" [class.wide]="field.type === 'textarea' || field.key === 'complemento'">
               <label [for]="'card-' + field.key">{{ field.label }}<span *ngIf="field.required" aria-hidden="true"> *</span></label>
               <ng-container *ngIf="field.type !== 'textarea'; else textArea">
                 <input [id]="'card-' + field.key" [name]="field.key" [type]="field.type || 'text'"
