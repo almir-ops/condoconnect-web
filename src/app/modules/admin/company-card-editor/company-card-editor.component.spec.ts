@@ -124,4 +124,21 @@ describe('Company card editor', () => {
     editor.model['longitude'] = 0;
     expect(editor.buildPayload()['latitude']).toBe(0);
   });
+
+  it('accepts an Instagram handle and saves it as a profile URL', () => {
+    editor.model['instagram_url'] = '@nike';
+    editor.changed();
+    editor.save(form());
+    expect(companies.update.calls.mostRecent().args[1].instagram_url)
+      .toBe('https://www.instagram.com/nike');
+    expect(editor.error).toBe('');
+  });
+
+  it('identifies the field when a link is invalid', () => {
+    editor.model['instagram_url'] = '@nome inválido';
+    editor.changed();
+    editor.save(form());
+    expect(companies.update).not.toHaveBeenCalled();
+    expect(editor.error).toContain('Instagram');
+  });
 });

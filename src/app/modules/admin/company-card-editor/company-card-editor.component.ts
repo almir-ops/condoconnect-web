@@ -72,7 +72,7 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     { title: 'Site e redes sociais', fields: [
       { key: 'site_url', label: 'Site', max: 255, hint: 'https://suaempresa.com.br' },
       { key: 'facebook_url', label: 'Facebook', max: 255, hint: 'Link completo do perfil.' },
-      { key: 'instagram_url', label: 'Instagram', max: 255, hint: 'Link completo do perfil.' },
+      { key: 'instagram_url', label: 'Instagram', max: 255, hint: '@usuario ou link completo do perfil.' },
       { key: 'youtube_url', label: 'YouTube', max: 255, hint: 'Link completo do canal.' },
     ]},
   ];
@@ -195,7 +195,9 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       const value = this.model[field.key];
       payload[field.key] = value === null || value === undefined || String(value).trim() === ''
         ? null : field.type === 'number' ? Number(value) : String(value).trim();
-      if (field.key.endsWith('_url') && payload[field.key] && !/^https?:\/\//i.test(payload[field.key])) {
+      if (field.key === 'instagram_url' && /^@[a-z\d._]+$/i.test(payload[field.key] || '')) {
+        payload[field.key] = 'https://www.instagram.com/' + payload[field.key].slice(1);
+      } else if (field.key.endsWith('_url') && payload[field.key] && !/^https?:\/\//i.test(payload[field.key])) {
         payload[field.key] = 'https://' + payload[field.key];
       }
     }
@@ -230,7 +232,10 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
           const url = new URL(payload[field]);
           if (!['https:', 'http:'].includes(url.protocol) || !url.hostname.includes('.')) throw new Error();
         } catch {
-          this.error = 'Informe links válidos com http:// ou https:// nas imagens e redes sociais.';
+          const label = this.images.find(image => image.key === field)?.label
+            || this.groups.flatMap(group => group.fields).find(item => item.key === field)?.label || field;
+          this.error = `Confira o campo ${label}: informe um link válido${field === 'instagram_url' ? ' ou um @usuário' : ''}.`;
+          this.mobilePreview = false;
           return;
         }
       }
