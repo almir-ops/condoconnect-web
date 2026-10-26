@@ -50,7 +50,7 @@
               <label [for]="'card-' + field.key">{{ field.label }}<span *ngIf="field.required" aria-hidden="true"> *</span></label>
               <ng-container *ngIf="field.type !== 'textarea'; else textArea">
                 <input [id]="'card-' + field.key" [name]="field.key" [type]="field.type || 'text'"
-                  [(ngModel)]="model[field.key]" (ngModelChange)="changed()" #control="ngModel"
+                  [(ngModel)]="model[field.key]" (ngModelChange)="fieldChanged(field, $event)" #control="ngModel"
                   [required]="!!field.required" [email]="field.type === 'email'" [maxlength]="field.max"
                   [attr.step]="field.type === 'number' ? 'any' : null"
                   [attr.aria-invalid]="control.invalid && control.touched"

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, HostBinding, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -64,48 +64,21 @@ export class SideMenuComponent {
     },
   ];
 
-  open: any = 'w-0 md:w-16 -ml-2 md:ml-0 lg:flex lg:flex-col';
+  @HostBinding('class.expanded') isOpen = false;
 
-  isOpen: any = false;
-
-  title: string = '';
-
-  @ViewChild('search') searchElement!: ElementRef;
-
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {}
+  constructor(public router: Router) {}
 
   hiddenMenu() {
-    if (this.isOpen) {
-      this.open = 'w-0 md:w-16';
-    }
-    if (!this.isOpen) {
-      this.open = 'w-60';
-    }
     this.isOpen = !this.isOpen;
   }
 
-  showMenu() {
-    if (!this.isOpen) {
-      this.open = 'w-60';
-      this.isOpen = !this.isOpen;
-    }
+  @HostListener('document:keydown.escape') closeOnEscape() {
+    this.isOpen = false;
   }
 
-  searchFocus() {
-    setTimeout(() => {
-      this.searchElement.nativeElement.focus();
-    }, 0);
-  }
-
-  changeScreen(rota: any) {
-    console.log(rota);
+  changeScreen(rota: string) {
     this.router.navigate([rota]);
-  }
-
-  handleInput(event: Event) {
-    this.title = (event.target as HTMLInputElement).value;
+    if (window.matchMedia('(max-width: 767px)').matches) this.isOpen = false;
   }
 
   logout() {

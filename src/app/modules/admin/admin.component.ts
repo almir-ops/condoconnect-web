@@ -8,9 +8,9 @@ import { SideMenuComponent } from '../../shared/components/side-menu/side-menu.c
   standalone: true,
   imports: [CommonModule, RouterModule,SideMenuComponent],
   template: `
-  <div class="flex h-screen w-screen overflow-hidden bg-gray-100">
+  <div class="flex h-[100dvh] w-full overflow-hidden bg-gray-100">
     <app-side-menu class="shrink-0"></app-side-menu>
-    <div class="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
+    <div class="min-w-0 flex-1 overflow-x-hidden overflow-y-auto pt-14 md:pt-0">
       <router-outlet></router-outlet>
     </div>
   </div>

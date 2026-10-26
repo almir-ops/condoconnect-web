@@ -67,7 +67,7 @@ export class CondominiosComponent implements OnInit {
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalCondominioComponent, {
       width: '500px',
-      height: '60%',
+      maxHeight: '90dvh',
       data: {
         modo: 'adicionar',
       },
@@ -124,7 +124,7 @@ export class CondominiosComponent implements OnInit {
   abrirModalEditar(condo: any) {
     const dialogRef = this.dialog.open(ModalCondominioComponent, {
       width: '500px',
-      height: '60%',
+      maxHeight: '90dvh',
       data: {
         condo: condo,
         modo: 'editar',

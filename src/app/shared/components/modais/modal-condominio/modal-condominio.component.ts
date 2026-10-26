@@ -5,11 +5,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CepService } from '../../../services/cep/cep.service';
 import { NgZone } from '@angular/core';
+import { EmailLowercaseDirective } from '../../../directives/email-lowercase.directive';
 
 @Component({
   selector: 'app-modal-condominio',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, EmailLowercaseDirective],
   templateUrl: './modal-condominio.component.html',
   styleUrl: './modal-condominio.component.scss',
 })
@@ -41,7 +42,7 @@ export class ModalCondominioComponent {
     this.editMode = this.data.modo === 'editar';
 
     this.nome = condo.nome ?? '';
-    this.email = condo.email ?? '';
+    this.email = String(condo.email ?? '').toLowerCase();
     this.telefone = condo.telefone ?? '';
     this.endereco = condo.endereco ?? '';
     this.numero = condo.numero ?? '';
@@ -89,7 +90,7 @@ export class ModalCondominioComponent {
 
     this.dialogRef.close({
       nome: this.nome,
-      email: this.email,
+      email: this.email.trim().toLowerCase(),
       telefone: this.telefone,
       endereco: this.endereco,
       numero: this.numero,

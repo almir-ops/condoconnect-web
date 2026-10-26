@@ -81,7 +81,10 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     private http: HttpClient,
   ) { this.dialog.disableClose = true; }
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.dialog.backdropClick?.().pipe(takeUntil(this.destroyed)).subscribe(() => this.close());
+    this.load();
+  }
 
   load(): void {
     this.loading = true;
@@ -93,7 +96,7 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       subcategories: this.subcategories.getAllSubCategories(),
     }).pipe(takeUntil(this.destroyed)).subscribe({
       next: ({ company, condos, categories, subcategories }) => {
-        this.model = { ...company };
+        this.model = { ...company, email: String(company.email || '').toLowerCase() };
         this.condominios = this.mergeOptions(condos, company.condominios);
         this.categorias = this.mergeOptions(categories, company.categorias);
         this.subcategorias = this.mergeOptions(subcategories, company.subCategorias);
@@ -127,6 +130,11 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
   }
 
   changed(): void { this.dirty = true; this.discard = false; this.error = ''; }
+
+  fieldChanged(field: Field, value: string): void {
+    if (field.type === 'email') this.model[field.key] = value.toLowerCase();
+    this.changed();
+  }
 
   showPreview(preview: boolean): void {
     this.mobilePreview = preview;
@@ -188,7 +196,7 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     for (const field of this.groups.flatMap(g => g.fields)) {
       const value = this.model[field.key];
       payload[field.key] = value === null || value === undefined || String(value).trim() === ''
-        ? null : field.type === 'number' ? Number(value) : String(value).trim();
+        ? null : field.type === 'number' ? Number(value) : field.type === 'email' ? String(value).trim().toLowerCase() : String(value).trim();
       if (field.key === 'instagram_url' && /^@[a-z\d._]+$/i.test(payload[field.key] || '')) {
         payload[field.key] = 'https://www.instagram.com/' + payload[field.key].slice(1);
       } else if (field.key.endsWith('_url') && payload[field.key] && !/^https?:\/\//i.test(payload[field.key])) {

@@ -3,11 +3,12 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material-module';
+import { EmailLowercaseDirective } from '../../../directives/email-lowercase.directive';
 
 @Component({
   selector: 'app-modal-usuario',
   standalone: true,
-  imports: [MaterialModule,CommonModule,FormsModule],
+  imports: [MaterialModule,CommonModule,FormsModule,EmailLowercaseDirective],
   templateUrl: './modal-usuario.component.html',
   styleUrl: './modal-usuario.component.scss'
 })
@@ -35,7 +36,7 @@ export class ModalUsuarioComponent {
     this.nome = this.usuario.nome ?? ''; // Usa ?? para tratar valores null e undefined
     this.tipo = this.usuario.tipo ?? 'cliente';
     this.status = this.usuario.status ?? 'ativo';
-    this.email = this.usuario.email ?? '';
+    this.email = String(this.usuario.email ?? '').toLowerCase();
     this.telefone = this.usuario.telefone ?? '';
     this.editMode = this.data.editMode ?? false;
     this.empresasDisponiveis = this.data.empresasDisponiveis ?? [];
@@ -52,7 +53,7 @@ export class ModalUsuarioComponent {
     this.dialogRef.close({
       nome: this.nome,
       tipo: this.tipo,
-      email: this.email,
+      email: this.email.trim().toLowerCase(),
       status: this.status,
       telefone: this.telefone,
       editMode: this.editMode
@@ -64,7 +65,7 @@ export class ModalUsuarioComponent {
       id: this.usuario.id,
       nome: this.nome,
       tipo: this.tipo,
-      email: this.email,
+      email: this.email.trim().toLowerCase(),
       status: this.status,
       telefone: this.telefone,
       editMode: this.editMode,

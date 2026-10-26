@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CentralAuthService } from '../../shared/services/auth/central-auth.service';
+import { EmailLowercaseDirective } from '../../shared/directives/email-lowercase.directive';
 
 @Component({
   selector: 'app-central-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, EmailLowercaseDirective],
   templateUrl: './central-login.component.html',
 })
 export class CentralLoginComponent {
@@ -33,6 +34,7 @@ export class CentralLoginComponent {
     this.hiddenPassword = !this.hiddenPassword;
   }
   onSubmit() {
+    this.email.setValue(String(this.email.value || '').trim().toLowerCase());
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
