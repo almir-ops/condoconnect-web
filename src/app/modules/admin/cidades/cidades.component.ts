@@ -36,7 +36,8 @@ export class CidadesComponent {
 
   handleButtonClick = () => {
     const dialogRef = this.dialog.open(DialogAdicionaCidadeComponent, {
-      width: '400px'
+      width: '400px',
+      data: { existentes: this.data.map((c: any) => c.nome) },
     });
 
     dialogRef.afterClosed().subscribe((nomeCidade: string) => {
@@ -54,6 +55,11 @@ export class CidadesComponent {
     const cidade = { nome: nomeCidade };
     this.cidadeService.createCidades(cidade).subscribe({
       next: () => {
+        this.getCidades();
+      },
+      error: (err) => {
+        // outra pessoa pode ter cadastrado a mesma cidade depois de a lista ser carregada
+        alert(err?.error?.message || err?.error?.error || 'Não foi possível adicionar a cidade.');
         this.getCidades();
       },
     });

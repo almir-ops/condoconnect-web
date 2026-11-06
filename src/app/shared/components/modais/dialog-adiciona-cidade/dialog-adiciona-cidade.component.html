@@ -1,15 +1,35 @@
 <h2 mat-dialog-title>Adicionar Cidade</h2>
 
 <mat-dialog-content class="mat-typography">
-  <p>Digite o nome da cidade corretamente e clique em adicionar</p>
+  <p>Escolha o estado e selecione a cidade na lista.</p>
 
   <mat-form-field class="w-full">
-    <mat-label>Cidade</mat-label>
-    <input matInput [(ngModel)]="nomeCidade">
+    <mat-label>Estado</mat-label>
+    <mat-select [(ngModel)]="estado" (selectionChange)="carregarMunicipios()">
+      @for (uf of estados; track uf) {
+        <mat-option [value]="uf">{{ uf }}</mat-option>
+      }
+    </mat-select>
   </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>{{ carregando ? 'Carregando cidades...' : 'Cidade' }}</mat-label>
+    <mat-select [(ngModel)]="nomeCidade" [disabled]="carregando || erroLista">
+      @for (cidade of municipios; track cidade) {
+        <mat-option [value]="cidade" [disabled]="jaExiste(cidade)">{{ cidade }}{{ jaExiste(cidade) ? ' (já cadastrada)' : '' }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (jaCadastrada) {
+    <p class="text-red-600 text-sm">A cidade {{ nomeCidade }} já está cadastrada.</p>
+  }
+  @if (erroLista) {
+    <p class="text-red-600 text-sm">Não foi possível carregar as cidades. Feche e tente novamente.</p>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="fecharDialog()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="adicionarCidade()">Adicionar</button>
+  <button mat-raised-button color="primary" (click)="adicionarCidade()" [disabled]="!nomeCidade || jaCadastrada">Adicionar</button>
 </mat-dialog-actions>

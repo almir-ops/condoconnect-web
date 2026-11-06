@@ -53,3 +53,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Remove qualquer padding do container do Material e aplica no conteúdo */
 .cc-dialog .mat-mdc-dialog-container { padding: 0 !important; }
 .cc-dialog .mdc-dialog__content { padding: 1.5rem !important; } /* 24px */
+
+app-admin button, .mat-mdc-dialog-container button {
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+@media (max-width: 640px) {
+  .cdk-overlay-pane:has(.mat-mdc-dialog-container) {
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  app-admin button, .mat-mdc-dialog-container button { transition: none; }
+}

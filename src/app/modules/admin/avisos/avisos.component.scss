@@ -1,0 +1,23 @@
+.avisos { max-width: 1100px; padding: 2rem; margin: auto; color: #243b36; }
+h1 { font-size: 2rem; font-weight: 700; } h2 { font-size: 1.25rem; font-weight: 650; margin-bottom: 1rem; }
+header p, .muted { color: #60716c; } small { font-size: .8rem; }
+.card { background: white; border: 1px solid #dce5e0; border-radius: 16px; padding: 1.5rem; margin: 1.25rem 0; box-shadow: 0 2px 12px #173a2810; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+label { display: flex; flex-direction: column; font-weight: 600; gap: .35rem; margin-bottom: 1rem; }
+label.inline { flex-direction: row; align-items: center; font-weight: 500; margin: 0 1rem .4rem 0; }
+input:not([type=checkbox]):not([type=radio]), select, textarea { width: 100%; border: 1px solid #bbcfc5; border-radius: 8px; padding: .65rem; background: white; font-weight: 400; }
+fieldset { border: 1px solid #dce5e0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; } legend { font-weight: 600; padding: 0 .4rem; }
+.options { display: flex; flex-wrap: wrap; } .picker { margin-top: .75rem; }
+.list { max-height: 220px; overflow: auto; border: 1px solid #e3ebe6; border-radius: 8px; padding: .5rem; margin: .5rem 0; } .row { margin: 0 0 .3rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; } .chip { background: #e5f0eb; border-radius: 20px; padding: .2rem .3rem .2rem .7rem; font-size: .85rem; }
+.chip button { background: none; color: #075e4e; padding: 0 .4rem; font-size: 1rem; }
+.preview { border: 1px solid #bbcfc5; border-left: 5px solid #075e4e; border-radius: 10px; padding: .9rem 1rem; margin: 1rem 0; display: flex; flex-direction: column; gap: .2rem; }
+.preview[data-tipo=novidade] { border-left-color: #2563eb; } .preview[data-tipo=alerta] { border-left-color: #d97706; }
+.fake-btn { align-self: flex-start; background: #075e4e; color: #fff; border-radius: 8px; padding: .35rem .8rem; font-size: .85rem; }
+.actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+button { background: #075e4e; color: white; border-radius: 8px; padding: .65rem 1rem; } button.secondary { background: #e5f0eb; color: #075e4e; } button.danger { background: #fde8e8; color: #a32020; } button:disabled { opacity: .5; }
+.error, .success { border-radius: 8px; padding: .8rem 1rem; margin: 1rem 0; } .error { background: #ffe5e5; } .success { background: #e1f3e9; }
+.item { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid #e3ebe6; padding: 1rem 0; } .item p { margin: .15rem 0; }
+.badge { font-size: .75rem; border-radius: 20px; padding: .1rem .55rem; background: #edf5ef; margin-left: .4rem; }
+.badge[data-s='No ar'] { background: #d6f2df; } .badge[data-s='Desativado'], .badge[data-s='Encerrado'] { background: #eee; } .badge[data-s='Agendado'] { background: #fff1cc; }
+@media(max-width: 700px) { .avisos { padding: 1rem; } .item { display: block; } .actions { margin-top: .6rem; } }

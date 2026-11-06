@@ -51,12 +51,13 @@
   </div>
 
   <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
+    <label for="usuario-email" class="block text-sm font-medium text-gray-700">
       Email
     </label>
     <input
-      id="nomeSubcategoria"
-      type="text"
+      id="usuario-email"
+      type="email"
+      appEmailLowercase inputmode="email" autocapitalize="off" [spellcheck]="false"
       [(ngModel)]="email"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
       placeholder="Digite o email"
@@ -65,17 +66,28 @@
 
   <div class="mb-4">
     <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
-      Telefone
+      Telefone com DDD {{ editMode ? '' : '(obrigatório)' }}
     </label>
     <input
-      id="nomeSubcategoria"
-      type="text"
-      [(ngModel)]="telefone"
+      id="telefone-usuario"
+      type="tel"
+      [ngModel]="telefone"
+      (ngModelChange)="telefone = formatPhone($event); phoneError = ''"
+      (blur)="validarTelefone()"
+      [required]="!editMode"
+      [attr.aria-invalid]="!!phoneError"
+      [attr.aria-describedby]="phoneError ? 'telefone-usuario-erro' : null"
+      inputmode="tel"
+      autocomplete="tel"
       class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      placeholder="Digite o telefone"
+      placeholder="(11) 99999-9999"
     />
   </div>
 
+  <p id="telefone-usuario-erro" *ngIf="phoneError" role="alert" class="text-sm text-red-600">{{ phoneError }}</p>
+  <p *ngIf="editMode && !usuario.telefone" class="text-sm text-gray-600">
+    Cadastro antigo sem telefone. Complete o contato quando disponível; o acesso permanece liberado.
+  </p>
   <div class="mb-4" *ngIf="editMode && empresasDisponiveis.length">
     <label for="empresaVinculada" class="block text-sm font-medium text-gray-700">
       Vincular empresa

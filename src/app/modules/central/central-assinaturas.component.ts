@@ -1,3 +1,4 @@
+import { validDocument, validEmail } from '../../shared/utils/validation';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -325,64 +326,15 @@ export class CentralAssinaturasComponent {
      VALIDADORES CPF/CNPJ
      ===================== */
   isValidCPFOrCNPJ(value: string): boolean {
-    if (!value) return false;
-    const cleaned = value.replace(/\D/g, '');
-
-    if (cleaned.length === 11) return this.isValidCPF(cleaned);
-    if (cleaned.length === 14) return this.isValidCNPJ(cleaned);
-    return false;
+    return validDocument(value);
   }
 
   isValidCPF(cpf: string): boolean {
-    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-
-    let sum = 0;
-    for (let i = 1; i <= 9; i++) sum += parseInt(cpf[i - 1]) * (11 - i);
-
-    let remainder = (sum * 10) % 11;
-    if (remainder === 10 || remainder === 11) remainder = 0;
-    if (remainder !== parseInt(cpf[9])) return false;
-
-    sum = 0;
-    for (let i = 1; i <= 10; i++) sum += parseInt(cpf[i - 1]) * (12 - i);
-
-    remainder = (sum * 10) % 11;
-    if (remainder === 10 || remainder === 11) remainder = 0;
-
-    return remainder === parseInt(cpf[10]);
+    return validDocument(cpf);
   }
 
   isValidCNPJ(cnpj: string): boolean {
-    if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
-
-    let size = cnpj.length - 2;
-    let numbers = cnpj.substring(0, size);
-    let digits = cnpj.substring(size);
-
-    let sum = 0;
-    let pos = size - 7;
-
-    for (let i = size; i >= 1; i--) {
-      sum += Number(numbers[size - i]) * pos--;
-      if (pos < 2) pos = 9;
-    }
-
-    let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-    if (result !== Number(digits[0])) return false;
-
-    size = size + 1;
-    numbers = cnpj.substring(0, size);
-
-    sum = 0;
-    pos = size - 7;
-
-    for (let i = size; i >= 1; i--) {
-      sum += Number(numbers[size - i]) * pos--;
-      if (pos < 2) pos = 9;
-    }
-
-    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-    return result === Number(digits[1]);
+    return validDocument(cnpj);
   }
 
   private getActiveTrial(): any | null {

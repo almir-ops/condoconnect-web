@@ -3,11 +3,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../material-module';
+import { EmailLowercaseDirective } from '../../../directives/email-lowercase.directive';
 
 @Component({
   selector: 'app-modal-empresa',
   standalone: true,
-  imports: [MaterialModule, CommonModule, FormsModule],
+  imports: [MaterialModule, CommonModule, FormsModule, EmailLowercaseDirective],
   templateUrl: './modal-empresa.component.html',
   styleUrl: './modal-empresa.component.scss'
 })
@@ -37,7 +38,7 @@ export class ModalEmpresaComponent {
   salvar(): void {
     this.dialogRef.close({
       nome: this.nome,
-      email: this.email,
+      email: this.email.trim().toLowerCase(),
       cnpj: this.cnpj,
       telefone: this.telefone,
       celular: this.celular,

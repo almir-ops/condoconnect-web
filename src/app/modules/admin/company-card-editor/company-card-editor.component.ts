@@ -1,3 +1,4 @@
+import { socialUrl } from '../../../shared/utils/social-url';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -14,7 +15,7 @@ import { CardMultiselectComponent } from './card-multiselect.component';
 
 type ImageField = 'avatar' | 'banner' | 'banner_anuncio';
 interface Option { id: number; nome: string; categoria_id?: number; categoria?: { id: number }; }
-interface Field { key: string; label: string; max: number; type?: string; required?: boolean; hint?: string; }
+interface Field { key: string; label: string; max: number; type?: string; required?: boolean; hint?: string; help?: string; }
 
 @Component({
   selector: 'app-company-card-editor',
@@ -64,10 +65,10 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       { key: 'complemento', label: 'Sala, andar ou complemento', max: 255 },
     ]},
     { title: 'Site e redes sociais', fields: [
-      { key: 'site_url', label: 'Site', max: 255, hint: 'https://suaempresa.com.br' },
-      { key: 'facebook_url', label: 'Facebook', max: 255, hint: 'Link completo do perfil.' },
-      { key: 'instagram_url', label: 'Instagram', max: 255, hint: '@usuario ou link completo do perfil.' },
-      { key: 'youtube_url', label: 'YouTube', max: 255, hint: 'Link completo do canal.' },
+      { key: 'site_url', label: 'Site', max: 255, hint: 'https://suaempresa.com.br', help: 'Abra o site da empresa e copie o endereço da barra do navegador.' },
+      { key: 'facebook_url', label: 'Facebook', max: 255, hint: 'facebook.com/suaempresa ou @suaempresa', help: 'Abra a página ou perfil no Facebook e copie o endereço no navegador. No aplicativo, procure Compartilhar e Copiar link. Use o usuário do endereço, não o nome de exibição.' },
+      { key: 'instagram_url', label: 'Instagram', max: 255, hint: '@suaempresa ou instagram.com/suaempresa', help: 'Abra seu perfil e copie o nome de usuário exibido no topo, ou copie o endereço do perfil no navegador.' },
+      { key: 'youtube_url', label: 'YouTube', max: 255, hint: 'youtube.com/@suaempresa', help: 'Abra o canal no YouTube e copie seu endereço no navegador ou use Compartilhar canal e Copiar link.' },
     ]},
   ];
 
@@ -81,7 +82,10 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     private http: HttpClient,
   ) { this.dialog.disableClose = true; }
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.dialog.backdropClick?.().pipe(takeUntil(this.destroyed)).subscribe(() => this.close());
+    this.load();
+  }
 
   load(): void {
     this.loading = true;
@@ -93,7 +97,7 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
       subcategories: this.subcategories.getAllSubCategories(),
     }).pipe(takeUntil(this.destroyed)).subscribe({
       next: ({ company, condos, categories, subcategories }) => {
-        this.model = { ...company };
+        this.model = { ...company, email: String(company.email || '').toLowerCase() };
         this.condominios = this.mergeOptions(condos, company.condominios);
         this.categorias = this.mergeOptions(categories, company.categorias);
         this.subcategorias = this.mergeOptions(subcategories, company.subCategorias);
@@ -127,6 +131,11 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
   }
 
   changed(): void { this.dirty = true; this.discard = false; this.error = ''; }
+
+  fieldChanged(field: Field, value: string): void {
+    if (field.type === 'email') this.model[field.key] = value.toLowerCase();
+    this.changed();
+  }
 
   showPreview(preview: boolean): void {
     this.mobilePreview = preview;
@@ -188,9 +197,10 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     for (const field of this.groups.flatMap(g => g.fields)) {
       const value = this.model[field.key];
       payload[field.key] = value === null || value === undefined || String(value).trim() === ''
-        ? null : field.type === 'number' ? Number(value) : String(value).trim();
-      if (field.key === 'instagram_url' && /^@[a-z\d._]+$/i.test(payload[field.key] || '')) {
-        payload[field.key] = 'https://www.instagram.com/' + payload[field.key].slice(1);
+        ? null : field.type === 'number' ? Number(value) : field.type === 'email' ? String(value).trim().toLowerCase() : String(value).trim();
+      if (field.key === 'instagram_url' || field.key === 'facebook_url') {
+        const network = field.key === 'instagram_url' ? 'instagram' : 'facebook';
+        payload[field.key] = socialUrl(network, payload[field.key]) ?? payload[field.key];
       } else if (field.key.endsWith('_url') && payload[field.key] && !/^https?:\/\//i.test(payload[field.key])) {
         payload[field.key] = 'https://' + payload[field.key];
       }
@@ -214,6 +224,9 @@ export class CompanyCardEditorComponent implements OnInit, OnDestroy {
     for (const field of [...this.images.map(i => i.key), 'site_url', 'facebook_url', 'instagram_url', 'youtube_url']) {
       if (payload[field]) {
         try {
+          if (field === 'facebook_url' || field === 'instagram_url') {
+            if (socialUrl(field === 'facebook_url' ? 'facebook' : 'instagram', payload[field]) === null) throw new Error();
+          }
           const url = new URL(payload[field]);
           if (!['https:', 'http:'].includes(url.protocol) || !url.hostname.includes('.')) throw new Error();
         } catch {

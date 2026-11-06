@@ -1,0 +1,29 @@
+<section class="reminders">
+  <header><h1>Lembretes automáticos</h1><p>Programe mensagens para clientes depois do cadastro. Cada dia configurado dispara uma única vez por pessoa.</p></header>
+  <div class="notice" *ngIf="!status.schedulerEnabled">O agendador está desligado na API. Configure REMINDERS_ENABLED=true para ativar regras.</div>
+  <div class="readiness"><span>E-mail: {{ status.emailReady ? 'configurado' : 'aguardando credenciais' }}</span><span>Android: {{ status.androidReady ? 'FCM configurado' : 'aguardando Firebase' }}</span><span>iOS: {{ status.iosReady ? 'APNs configurado' : 'aguardando chave Apple' }}</span></div>
+  <p class="error" *ngIf="error" role="alert">{{error}}</p><p class="success" *ngIf="success" role="status">{{success}}</p>
+  <form (ngSubmit)="save()" class="card">
+    <h2>{{form.id ? 'Editar lembrete' : 'Novo lembrete'}}</h2>
+    <div class="grid">
+      <label>Nome da regra<input name="name" [(ngModel)]="form.name" maxlength="120" required placeholder="Ex.: concluir cadastro" /></label>
+      <label>Canal<select name="channel" [(ngModel)]="form.channel"><option value="email">E-mail</option><option value="push">Push no aplicativo</option></select></label>
+      <label>Público<select name="audience" [(ngModel)]="form.audience"><option value="without_company">Clientes sem empresa cadastrada</option><option value="all">Todos os clientes ativos</option></select></label>
+      <label>Assunto / título<input name="subject" [(ngModel)]="form.subject" maxlength="160" required /></label>
+      <label>Dias após cadastro<input name="days" [(ngModel)]="daysText" required placeholder="1, 3, 7" /><small>Separe por vírgula. Cada número representa um envio.</small></label>
+      <label>Quantidade máxima<input name="max" type="number" [(ngModel)]="form.maxSends" min="1" max="12" required /></label>
+      <label>Horário<input name="time" type="time" [(ngModel)]="form.sendTime" required /></label>
+      <label>Fuso horário<input name="timezone" [(ngModel)]="form.timezone" required placeholder="America/Sao_Paulo" /></label>
+    </div>
+    <label>Mensagem<textarea name="message" [(ngModel)]="form.message" required maxlength="2000" rows="5" placeholder="Escreva a mensagem para o cliente"></textarea></label>
+    <div class="actions"><button type="submit" [disabled]="loading || form.enabled">{{loading ? 'Salvando...' : 'Salvar rascunho'}}</button><button type="button" class="secondary" (click)="clear()">Limpar</button></div>
+    <small *ngIf="form.enabled">Pause a regra para editar.</small>
+  </form>
+  <section class="card"><h2>Regras</h2><p *ngIf="!rules.length">Nenhum lembrete criado.</p>
+    <div class="rule" *ngFor="let rule of rules"><div><strong>{{rule.name}}</strong><p>{{rule.channel === 'email' ? 'E-mail' : 'Push'}} · {{rule.audience === 'without_company' ? 'Sem empresa' : 'Todos os clientes'}} · dias {{rule.days.join(', ')}} · {{rule.sendTime}} ({{rule.timezone}})</p></div>
+      <div class="actions"><button type="button" class="secondary" (click)="edit(rule)" [disabled]="rule.enabled">Editar</button><button type="button" (click)="toggle(rule)">{{rule.enabled ? 'Pausar' : 'Ativar'}}</button><button type="button" class="secondary" (click)="showHistory(rule)">Histórico</button></div></div>
+  </section>
+  <section class="card" *ngIf="selected"><h2>Histórico: {{selected.name}}</h2><p *ngIf="!history.length">Nenhum envio registrado.</p><div class="history" *ngFor="let item of history"><span>{{item.createdAt | date:'short'}}</span><span>{{item.recipient?.email || item.userId}}</span><span>Dia {{item.step}}</span><strong>{{item.status}}</strong><span>{{item.error}}</span></div></section>
+</section>
+
+

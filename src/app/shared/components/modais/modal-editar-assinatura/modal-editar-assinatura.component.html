@@ -1,5 +1,5 @@
-<div class="p-4  pl-10">
-  <div class="mx-4">
+<div class="p-4 sm:pl-10">
+  <div class="mx-0 sm:mx-4">
     <div class="text-lg font-semibold mb-1">
       {{ data?.mode === 'edit' ? 'Editar assinatura' : 'Criar assinatura' }}
     </div>
@@ -8,8 +8,8 @@
       {{ model.plano_id }}
     </div>
 
-    <form class="space-y-3 mx-4" (ngSubmit)="onSubmit()">
-      <div class="grid grid-cols-2 gap-3">
+    <form class="space-y-3 mx-0 sm:mx-4" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="text-sm text-gray-600">Empresa ID</label>
           <input class="border rounded w-full p-2" [(ngModel)]="model.empresa_id" name="empresa_id"
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="text-sm text-gray-600">Início</label>
           <input type="date" class="border rounded w-full p-2" [(ngModel)]="model.start_date" name="start_date" />
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="text-sm text-gray-600">Ativa?</label>
           <select class="border rounded w-full p-2" [(ngModel)]="model.is_active" name="is_active">

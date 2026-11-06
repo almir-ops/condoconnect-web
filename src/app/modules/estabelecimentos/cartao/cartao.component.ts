@@ -1,3 +1,5 @@
+import { socialUrl } from '../../../shared/utils/social-url';
+import { validEmail } from '../../../shared/utils/validation';
 import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -59,7 +61,7 @@ export class CartaoComponent  implements OnInit {
       this.formCompany = this.fb.group({
         id: ['', [Validators.required]],
         nome: ['', [Validators.required, Validators.maxLength(100)]],
-        email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, ((c: any) => !c.value || validEmail(c.value) ? null : {email:true})]],
         cnpj: ['', [Validators.required, Validators.pattern(/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/)]],
         telefone: [''],
         celular: [''],
@@ -219,7 +221,8 @@ salvarFavorito(): void {
     openFacebook() {
       const facebookUrl = this.formCompany.controls['facebook_url'].value;
       if (facebookUrl) {
-        window.open(facebookUrl, '_blank');
+        const url = socialUrl('facebook', facebookUrl);
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
       }
     }
 
@@ -231,7 +234,8 @@ salvarFavorito(): void {
         instagramUrl = instagramUrl.replace(/^@/, '');
 
         // Monta o link completo
-        const profileUrl = `https://instagram.com/${instagramUrl}`;
+        const profileUrl = socialUrl('instagram', instagramUrl);
+        if (!profileUrl) return;
 
         window.open(profileUrl, '_blank');
       }

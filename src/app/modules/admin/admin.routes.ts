@@ -24,6 +24,16 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: 'lembretes',
+        canActivate: [authGuard],
+        loadComponent: () => import('../admin/lembretes/lembretes.component').then(m => m.LembretesComponent),
+      },
+      {
+        path: 'avisos',
+        canActivate: [authGuard],
+        loadComponent: () => import('../admin/avisos/avisos.component').then(m => m.AvisosComponent),
+      },
+      {
         path: 'usuarios',
         canActivate: [authGuard],
         loadComponent: () =>

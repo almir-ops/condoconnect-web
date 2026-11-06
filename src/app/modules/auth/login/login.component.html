@@ -1,24 +1,25 @@
-<div class="bg-primary h-screen" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">
+<div class="bg-primary min-h-[100dvh] overflow-y-auto pb-8" style="background: linear-gradient(to bottom, #055e4c, #007673, #004745);">
   <!-- Toolbar -->
-  <div class="flex justify-center items-center h-[20%]">
-    <div class="flex flex-col h-[20%]">
+  <div class="flex justify-center items-center pt-12 pb-6">
+    <div class="flex flex-col gap-2">
       <img class="h-16 w-16 mx-auto" src="../assets/images/logo_sem_texto.png">
       <img class="h-8 " src="./assets/images/logo_texto.png">
     </div>
   </div>
-  <div class="flex-1 mt-16 mb-5 bg-white sm:max-w-[400px] sm:mx-auto rounded-lg shadow-lg px-4 pt-2 pb-8 mx-3 relative ">
+  <div class="mb-5 bg-white sm:max-w-[400px] sm:mx-auto rounded-lg shadow-lg px-4 pt-2 pb-8 mx-3 relative ">
 
       <!-- Email Input -->
       <div class="relative w-full mt-8 ">
         <input
-          id="custom-input"
-          type="text"
+          id="login-email"
+          type="email"
+          appEmailLowercase inputmode="email" autocapitalize="off" [spellcheck]="false"
           placeholder=" "
           [(ngModel)]="email"
           class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition"
         />
         <label
-          for="custom-input"
+          for="login-email"
           class="absolute left-4  text-gray-500 text-sm px-1   transform -translate-y-1/2  transition-all peer-placeholder-shown:top-1/2
              peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
             peer-focus:text-sm peer-focus:text-primary bg-white"
@@ -29,7 +30,7 @@
       <!-- Password Input -->
       <div class="relative w-full mt-6">
         <input
-          id="custom-input"
+          id="login-password"
           type="text"
           [type]="!hiddenPassword ? 'password' : 'text'"
           [(ngModel)]="password"
@@ -37,7 +38,7 @@
           class="peer w-full h-10 px-4 text-sm rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition"
         />
         <label
-          for="custom-input"
+          for="login-password"
           class="absolute left-4 transform -translate-y-1/2 text-gray-500 text-sm px-1 transition-all
             peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
             peer-focus:text-sm peer-focus:text-primary bg-white"

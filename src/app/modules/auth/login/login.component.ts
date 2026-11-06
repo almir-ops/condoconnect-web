@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { AlertService } from '../../../shared/components/dialog/alert.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { EmailLowercaseDirective } from '../../../shared/directives/email-lowercase.directive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,EmailLowercaseDirective],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -26,11 +27,13 @@ export class LoginComponent {
   ) { }
 
   ngOnInit() {
-    localStorage.getItem('savedEmail');
+    this.email = (localStorage.getItem('savedEmail') || '').toLowerCase();
+    this.rememberEmail = !!this.email;
 
   }
 
   login() {
+    this.email = this.email.trim().toLowerCase();
     if(this.email && this.password) {
       this.authService.login({ email: this.email, senha: this.password });
 

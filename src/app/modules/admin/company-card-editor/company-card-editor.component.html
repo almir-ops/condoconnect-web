@@ -48,10 +48,12 @@
           <div class="field-grid">
             <div *ngFor="let field of group.fields" [class.wide]="field.type === 'textarea' || field.key === 'complemento'">
               <label [for]="'card-' + field.key">{{ field.label }}<span *ngIf="field.required" aria-hidden="true"> *</span></label>
+              <details *ngIf="field.help" class="field-help"><summary>Dúvida? Como preencher {{ field.label }}</summary><p>{{ field.help }}</p><p *ngIf="field.key === 'facebook_url' || field.key === 'instagram_url'">Aceitamos usuário com ou sem &#64; e link completo. Padronizamos o endereço ao salvar.</p></details>
               <ng-container *ngIf="field.type !== 'textarea'; else textArea">
                 <input [id]="'card-' + field.key" [name]="field.key" [type]="field.type || 'text'"
-                  [(ngModel)]="model[field.key]" (ngModelChange)="changed()" #control="ngModel"
+                  [(ngModel)]="model[field.key]" (ngModelChange)="fieldChanged(field, $event)" #control="ngModel"
                   [required]="!!field.required" [email]="field.type === 'email'" [maxlength]="field.max"
+                  [placeholder]="field.hint || ''"
                   [attr.step]="field.type === 'number' ? 'any' : null"
                   [attr.aria-invalid]="control.invalid && control.touched"
                   [attr.aria-describedby]="'hint-' + field.key">

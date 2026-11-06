@@ -51,7 +51,7 @@ export class UsuariosComponent {
   abrirModalAdicionar() {
     const dialogRef = this.dialog.open(ModalUsuarioComponent, {
       width: '400px',
-
+      data: { telefonesExistentes: this.data.map(({ id, telefone }) => ({ id, telefone })) },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -93,6 +93,7 @@ export class UsuariosComponent {
           usuario,
           editMode: true,
           empresasDisponiveis,
+          telefonesExistentes: this.data.map(({ id, telefone }) => ({ id, telefone })),
         },
       });
 

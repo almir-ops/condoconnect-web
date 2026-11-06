@@ -3,11 +3,12 @@ import { DOCUMENT } from '@angular/common';
 import { Inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { ValidationNoticeComponent } from './shared/validation-notice';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ValidationNoticeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

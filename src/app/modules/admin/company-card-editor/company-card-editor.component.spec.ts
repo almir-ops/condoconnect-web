@@ -144,4 +144,23 @@ describe('Company card editor', () => {
     expect(companies.update).not.toHaveBeenCalled();
     expect(editor.error).toContain('Instagram');
   });
+  it('normalizes Facebook handles and preserves numeric profile IDs', () => {
+    editor.model['facebook_url'] = '@minhaempresa';
+    expect(editor.buildPayload()['facebook_url']).toBe('https://www.facebook.com/minhaempresa');
+    editor.model['facebook_url'] = 'https://m.facebook.com/profile.php?id=12345&ref=share';
+    expect(editor.buildPayload()['facebook_url']).toBe('https://www.facebook.com/profile.php?id=12345');
+  });
+  it('rejects different networks and deceptive hosts', () => {
+    for (const url of ['https://instagram.com/empresa', 'https://facebook.com.evil.test/empresa', 'javascript:alert(1)']) {
+      editor.model['facebook_url'] = url;
+      editor.save(form());
+      expect(companies.update).not.toHaveBeenCalled();
+      expect(editor.error).toContain('Facebook');
+    }
+  });
+  it('does not duplicate the Instagram domain', () => {
+    editor.model['instagram_url'] = 'https://www.instagram.com/empresa/?igsh=abc';
+    expect(editor.buildPayload()['instagram_url']).toBe('https://www.instagram.com/empresa');
+  });
+
 });

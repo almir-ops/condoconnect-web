@@ -26,8 +26,8 @@
 </div>
 
 <div *ngIf="dialogTrocarCondominioAberto"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 px-4">
-  <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 px-4" (click)="!salvandoTroca && fecharDialogTrocarCondominio()">
+  <div class="w-full max-w-md rounded-lg bg-white p-5 shadow-lg" (click)="$event.stopPropagation()">
     <div class="text-lg font-semibold text-gray-700">
       Trocar condomínio da empresa
     </div>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="flex justify-end gap-3 mt-5">
-      <button type="button" class="px-4 py-2 rounded-md border border-gray-300 text-gray-600"
+      <button type="button" class="px-4 py-2 rounded-md border border-gray-300 text-gray-600" [disabled]="salvandoTroca"
         (click)="fecharDialogTrocarCondominio()">
         Cancelar
       </button>
