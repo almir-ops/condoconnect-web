@@ -33,7 +33,7 @@ export class AvisosComponent implements OnInit {
 
   constructor(private http: HttpClient, private users: UsersService, private companies: CompaniesService) {}
 
-  private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token') || ''}` }) }; }
+  private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('auth_token') || ''}` }) }; }
   private blank(): Aviso {
     return { id: '', titulo: '', mensagem: '', tipo: 'aviso', publico: 'todos', usuarioIds: [], empresaIds: [],
       permiteDispensar: true, botaoTexto: '', botaoUrl: '', inicio: '', fim: '', ativo: true };

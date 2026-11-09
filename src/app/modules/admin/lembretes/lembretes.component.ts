@@ -24,7 +24,7 @@ export class LembretesComponent implements OnInit {
   test = { email: '', title: 'Teste CondoConnect', message: 'Se você recebeu isto, o push está funcionando.' };
   testing = false;
   constructor(private http: HttpClient) {}
-  private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token') || ''}` }) }; }
+  private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('auth_token') || ''}` }) }; }
   private blank(): Rule { return { id: '', name: '', channel: 'email', audience: 'without_company',
     subject: 'Seu cadastro no CondoConnect', message: '', days: [1, 3, 7], maxSends: 3,
     sendTime: '10:00', timezone: 'America/Sao_Paulo', enabled: false }; }
