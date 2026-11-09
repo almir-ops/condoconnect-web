@@ -21,6 +21,8 @@ export class LembretesComponent implements OnInit {
   status = { schedulerEnabled: false, emailReady: false, pushReady: false, androidReady: false, iosReady: false };
   error = ''; success = ''; loading = false; daysText = '1, 3, 7';
   form: Rule = this.blank();
+  test = { email: '', title: 'Teste CondoConnect', message: 'Se você recebeu isto, o push está funcionando.' };
+  testing = false;
   constructor(private http: HttpClient) {}
   private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token') || ''}` }) }; }
   private blank(): Rule { return { id: '', name: '', channel: 'email', audience: 'without_company',
@@ -54,6 +56,13 @@ export class LembretesComponent implements OnInit {
     this.selected = rule; this.history = [];
     this.http.get<any[]>(`${this.url}/rules/${rule.id}/history`, this.headers())
       .subscribe({ next: data => this.history = data, error: e => this.fail(e) });
+  }
+  testPush() {
+    this.error = ''; this.success = '';
+    if (!this.test.email.trim()) { this.error = 'Informe o e-mail do usuário que vai receber o teste.'; return; }
+    this.testing = true;
+    this.http.post<{ message: string }>(`${this.url}/test-push`, this.test, this.headers())
+      .subscribe({ next: r => { this.testing = false; this.success = r.message; }, error: e => { this.testing = false; this.fail(e); } });
   }
   private fail(error: any) { this.error = error?.error?.message || 'Não foi possível concluir a operação.'; }
 }

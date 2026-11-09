@@ -3,6 +3,16 @@
   <div class="notice" *ngIf="!status.schedulerEnabled">O agendador está desligado na API. Configure REMINDERS_ENABLED=true para ativar regras.</div>
   <div class="readiness"><span>E-mail: {{ status.emailReady ? 'configurado' : 'aguardando credenciais' }}</span><span>Android: {{ status.androidReady ? 'FCM configurado' : 'aguardando Firebase' }}</span><span>iOS: {{ status.iosReady ? 'APNs configurado' : 'aguardando chave Apple' }}</span></div>
   <p class="error" *ngIf="error" role="alert">{{error}}</p><p class="success" *ngIf="success" role="status">{{success}}</p>
+  <form (ngSubmit)="testPush()" class="card">
+    <h2>Enviar push de teste</h2>
+    <p>Envia agora, sem regra e sem agendador, para os aparelhos que o usuário registrou no app (ele precisa ter feito login e permitido as notificações).</p>
+    <div class="grid">
+      <label>E-mail do usuário<input name="testEmail" type="email" [(ngModel)]="test.email" required placeholder="usuario@email.com" /></label>
+      <label>Título<input name="testTitle" [(ngModel)]="test.title" maxlength="160" /></label>
+    </div>
+    <label>Mensagem<textarea name="testMessage" [(ngModel)]="test.message" maxlength="500" rows="2"></textarea></label>
+    <div class="actions"><button type="submit" [disabled]="testing">{{testing ? 'Enviando...' : 'Enviar push de teste'}}</button></div>
+  </form>
   <form (ngSubmit)="save()" class="card">
     <h2>{{form.id ? 'Editar lembrete' : 'Novo lembrete'}}</h2>
     <div class="grid">
