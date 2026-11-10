@@ -1,0 +1,193 @@
+<section class="cc-card">
+  <h2>Envio manual</h2>
+  <p class="cc-muted intro">Liste usuários ou empresas com filtros, marque quem deve receber e envie agora por push e/ou e-mail. Dá para incluir uma ação: ao tocar no push (ou no botão do e-mail) a pessoa cai numa tela do app.</p>
+
+  <!-- 1. Público -->
+  <div class="step"><span class="step-n">1</span><strong>Quem recebe</strong></div>
+  <div class="cc-actions tabs" role="tablist">
+    <button type="button" class="cc-btn" [ngClass]="type === 'usuarios' ? 'cc-btn-primary' : 'cc-btn-ghost'" (click)="setType('usuarios')">Usuários</button>
+    <button type="button" class="cc-btn" [ngClass]="type === 'empresas' ? 'cc-btn-primary' : 'cc-btn-ghost'" (click)="setType('empresas')">Empresas (envia para o dono)</button>
+  </div>
+
+  <div class="presets">
+    <span class="cc-hint">Atalhos:</span>
+    <ng-container *ngIf="type === 'usuarios'">
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('usuarios-sem-empresa')">Sem empresa cadastrada</button>
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('usuarios-sem-empresa-7d')">Sem empresa há 7+ dias</button>
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('usuarios-sem-push')">Sem aparelho de push</button>
+    </ng-container>
+    <ng-container *ngIf="type === 'empresas'">
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('empresas-incompletas')">Cadastro incompleto (obrigatórios)</button>
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('empresas-sem-condominio')">Sem condomínio</button>
+      <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="preset('empresas-sem-assinatura')">Ativas sem assinatura</button>
+    </ng-container>
+  </div>
+
+  <div class="cc-grid filters">
+    <label class="cc-field">Buscar
+      <input class="cc-input" name="search" [(ngModel)]="filters.search" (keyup.enter)="list()" placeholder="Nome, e-mail, telefone ou cidade" />
+    </label>
+
+    <ng-container *ngIf="type === 'usuarios'">
+      <label class="cc-field">Tipo de conta
+        <select class="cc-input" name="tipo" [(ngModel)]="filters.tipo">
+          <option value="cliente">Clientes</option><option value="admin">Administradores</option><option value="todos">Todos</option>
+        </select>
+      </label>
+      <label class="cc-field">Situação
+        <select class="cc-input" name="status" [(ngModel)]="filters.status">
+          <option value="ativo">Ativos</option><option value="inativo">Inativos</option><option value="bloqueado">Bloqueados</option><option value="todos">Todos</option>
+        </select>
+      </label>
+      <label class="cc-field">Empresa cadastrada
+        <select class="cc-input" name="empresa" [(ngModel)]="filters.empresa">
+          <option value="todos">Tanto faz</option><option value="sem">Sem empresa</option><option value="com">Com empresa</option>
+        </select>
+      </label>
+      <label class="cc-field">Telefone
+        <select class="cc-input" name="telefone" [(ngModel)]="filters.telefone">
+          <option value="todos">Tanto faz</option><option value="sem">Sem telefone</option><option value="com">Com telefone</option>
+        </select>
+      </label>
+      <label class="cc-field">Cadastrado há pelo menos (dias)
+        <input class="cc-input" name="dias" type="number" min="1" [(ngModel)]="filters.cadastradoHaDias" placeholder="Ex.: 7" />
+      </label>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'empresas'">
+      <label class="cc-field">Situação da empresa
+        <select class="cc-input" name="ativa" [(ngModel)]="filters.ativa">
+          <option value="todos">Todas</option><option value="ativa">Ativas</option><option value="inativa">Inativas</option>
+        </select>
+      </label>
+      <label class="cc-field">Assinatura
+        <select class="cc-input" name="assin" [(ngModel)]="filters.semAssinatura">
+          <option [ngValue]="false">Tanto faz</option><option [ngValue]="true">Sem nenhuma assinatura</option>
+        </select>
+      </label>
+    </ng-container>
+
+    <label class="cc-field">Aparelho para push
+      <select class="cc-input" name="pushf" [(ngModel)]="filters.push">
+        <option value="todos">Tanto faz</option><option value="com">Já registrou (recebe push)</option><option value="sem">Nunca registrou</option>
+      </select>
+    </label>
+  </div>
+
+  <fieldset *ngIf="type === 'empresas'" class="missing">
+    <legend>Campos que estão faltando no cadastro</legend>
+    <p class="cc-hint">Marque os campos: lista as empresas em que eles estão vazios.</p>
+    <div class="group"><span class="group-title">Obrigatórios no app</span>
+      <label class="cc-check" *ngFor="let f of requiredFields"><input type="checkbox" [checked]="faltando.has(f.key)" (change)="toggleField(f.key)" /> {{ f.label }}</label>
+    </div>
+    <div class="group"><span class="group-title">Opcionais</span>
+      <label class="cc-check" *ngFor="let f of optionalFields"><input type="checkbox" [checked]="faltando.has(f.key)" (change)="toggleField(f.key)" /> {{ f.label }}</label>
+    </div>
+    <label class="cc-field mode" *ngIf="faltando.size > 1">Quando marcar vários
+      <select class="cc-input" name="modo" [(ngModel)]="filters.faltandoModo">
+        <option value="qualquer">Falta qualquer um dos marcados</option><option value="todos">Faltam todos os marcados</option>
+      </select>
+    </label>
+  </fieldset>
+
+  <div class="cc-actions">
+    <button type="button" class="cc-btn cc-btn-primary" (click)="list()" [disabled]="loadingList">{{ loadingList ? 'Buscando...' : 'Listar' }}</button>
+    <button type="button" class="cc-btn cc-btn-ghost" (click)="reset()">Limpar filtros</button>
+  </div>
+
+  <p class="cc-alert cc-alert-error top" *ngIf="error" role="alert">{{ error }}</p>
+
+  <!-- Lista -->
+  <ng-container *ngIf="listed">
+    <div class="list-head">
+      <strong>{{ total }} encontrado(s)</strong>
+      <span class="cc-muted" *ngIf="truncated"> · mostrando os primeiros {{ items.length }}; refine os filtros</span>
+      <span class="cc-muted"> · {{ selected.size }} marcado(s)<ng-container *ngIf="type === 'empresas' && recipients.length !== selected.size - withoutOwner"> ({{ recipients.length }} donos distintos)</ng-container></span>
+    </div>
+    <div class="cc-table-wrap scroll">
+      <table class="cc-table">
+        <thead>
+          <tr>
+            <th class="check"><input type="checkbox" [checked]="allSelected" (change)="toggleAll()" aria-label="Marcar todos" /></th>
+            <th>{{ type === 'empresas' ? 'Empresa' : 'Nome' }}</th>
+            <th>E-mail</th>
+            <th>Detalhes</th>
+            <th *ngIf="type === 'empresas'">Faltando</th>
+            <th>Push</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" (click)="toggle(item)" class="pick" [class.chosen]="isSelected(item)">
+            <td class="check"><input type="checkbox" [checked]="isSelected(item)" (click)="$event.stopPropagation()" (change)="toggle(item)" [attr.aria-label]="'Marcar ' + item.nome" /></td>
+            <td>{{ item.nome }}</td>
+            <td>{{ item.email }}</td>
+            <td [title]="item.detalhe">{{ item.detalhe }}</td>
+            <td *ngIf="type === 'empresas'" [title]="(item.faltando || []).join(', ')">{{ (item.faltando || []).length ? (item.faltando || []).join(', ') : 'completo' }}</td>
+            <td>{{ pushLabel(item) }}</td>
+          </tr>
+          <tr *ngIf="!items.length"><td class="cc-empty" [attr.colspan]="type === 'empresas' ? 6 : 5">Ninguém encontrado com esses filtros.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+
+  <!-- 2. Mensagem -->
+  <ng-container *ngIf="listed && items.length">
+    <div class="step"><span class="step-n">2</span><strong>Mensagem</strong></div>
+    <div class="cc-actions channels">
+      <label class="cc-check"><input type="checkbox" [(ngModel)]="channels.push" name="chPush" /> Push no app</label>
+      <label class="cc-check"><input type="checkbox" [(ngModel)]="channels.email" name="chEmail" /> E-mail</label>
+    </div>
+    <div class="cc-grid">
+      <label class="cc-field">Título
+        <input class="cc-input" name="title" [(ngModel)]="title" maxlength="160" placeholder="Ex.: Termine o cadastro da sua empresa" />
+      </label>
+    </div>
+    <label class="cc-field">Mensagem
+      <textarea class="cc-input" name="message" [(ngModel)]="message" [attr.maxlength]="channels.push && !channels.email ? 500 : 2000" rows="4" placeholder="Escreva o texto"></textarea>
+      <span class="cc-hint">{{ message.length }} caracteres<ng-container *ngIf="channels.push"> · no push até 500</ng-container></span>
+    </label>
+
+    <div class="cc-grid">
+      <label class="cc-field">Ao tocar no push / botão do e-mail
+        <select class="cc-input" name="actionType" [(ngModel)]="actionType">
+          <option value="none">Nada (só abre o app / e-mail normal)</option>
+          <option value="app">Abrir uma tela do app</option>
+          <option value="link">Abrir um link</option>
+        </select>
+      </label>
+      <label class="cc-field" *ngIf="actionType === 'app'">Tela do app
+        <select class="cc-input" name="actionRoute" [(ngModel)]="actionRoute">
+          <option *ngFor="let r of appRoutes" [value]="r.route">{{ r.label }}</option>
+        </select>
+      </label>
+      <label class="cc-field" *ngIf="actionType === 'link'">Link (https://...)
+        <input class="cc-input" name="actionUrl" [(ngModel)]="actionUrl" placeholder="https://..." />
+      </label>
+      <label class="cc-field" *ngIf="actionType !== 'none' && channels.email">Texto do botão do e-mail
+        <input class="cc-input" name="buttonText" [(ngModel)]="buttonText" maxlength="40" [placeholder]="actionType === 'app' ? 'Abrir o app' : 'Saiba mais'" />
+      </label>
+    </div>
+    <p class="cc-hint" *ngIf="actionType === 'app'">Push: tocar na notificação abre a tela escolhida. E-mail: o botão abre uma página do site que leva ao app (se a pessoa não tiver o app, ela vê os links para baixar).</p>
+
+    <!-- 3. Enviar -->
+    <div class="step"><span class="step-n">3</span><strong>Enviar</strong></div>
+    <p class="cc-alert cc-alert-warning" *ngIf="channels.push && recipients.length && withoutDevice">
+      {{ withoutDevice }} dos {{ recipients.length }} destinatário(s) nunca registrou aparelho e <b>não vai receber o push</b>
+      <ng-container *ngIf="channels.email"> (vai receber o e-mail)</ng-container>.
+    </p>
+    <p class="cc-alert cc-alert-warning" *ngIf="withoutOwner">{{ withoutOwner }} empresa(s) marcada(s) não têm dono cadastrado e serão ignoradas.</p>
+    <div class="cc-actions">
+      <button type="button" class="cc-btn cc-btn-primary" (click)="send()" [disabled]="!canSend">
+        {{ sending ? 'Enviando...' : 'Enviar para ' + recipients.length + ' destinatário(s)' }}
+      </button>
+    </div>
+
+    <div class="cc-alert cc-alert-success result" *ngIf="result" role="status">
+      <strong>Envio concluído para {{ result.total }} destinatário(s).</strong>
+      <div *ngIf="channels.push">Push: {{ result.push.sent }} enviado(s), {{ result.push.noDevice }} sem aparelho, {{ result.push.failed }} com falha.</div>
+      <div *ngIf="channels.email">E-mail: {{ result.email.sent }} enviado(s), {{ result.email.failed }} com falha<ng-container *ngIf="result.email.noEmail">, {{ result.email.noEmail }} sem e-mail</ng-container>.</div>
+      <ul *ngIf="result.errors.length"><li *ngFor="let e of result.errors">{{ e.destinatario }} ({{ e.canal }}): {{ e.erro }}</li></ul>
+    </div>
+  </ng-container>
+</section>

@@ -13,6 +13,8 @@
   <p class="cc-alert cc-alert-error" *ngIf="error" role="alert">{{ error }}</p>
   <p class="cc-alert cc-alert-success" *ngIf="success" role="status">{{ success }}</p>
 
+  <app-envio-manual></app-envio-manual>
+
   <form (ngSubmit)="testPush()" class="cc-card">
     <h2>Enviar push de teste</h2>
     <p class="cc-muted" style="margin: -.5rem 0 1rem;">Envia agora, sem regra e sem agendador, para os aparelhos que o usuário registrou no app (ele precisa ter feito login e permitido as notificações).</p>

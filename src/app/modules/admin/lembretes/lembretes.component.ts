@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
+import { EnvioManualComponent } from './envio-manual.component';
 
 interface Rule {
   id: string; name: string; channel: 'email' | 'push'; audience: 'all' | 'without_company';
@@ -10,7 +11,7 @@ interface Rule {
   timezone: string; enabled: boolean;
 }
 @Component({
-  selector: 'app-lembretes', standalone: true, imports: [CommonModule, FormsModule],
+  selector: 'app-lembretes', standalone: true, imports: [CommonModule, FormsModule, EnvioManualComponent],
   templateUrl: './lembretes.component.html', styleUrl: './lembretes.component.scss',
 })
 export class LembretesComponent implements OnInit {

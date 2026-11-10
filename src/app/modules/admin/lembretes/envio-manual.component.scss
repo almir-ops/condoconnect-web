@@ -1,0 +1,24 @@
+// O visual base vem das classes cc-* do styles global. Aqui só o que é desta seção.
+.intro { margin: -.5rem 0 1rem; }
+.step { display: flex; align-items: center; gap: .6rem; margin: 1.5rem 0 .75rem; font-size: 1rem; color: var(--cc-primary-dark); }
+.step:first-of-type { margin-top: .5rem; }
+.step-n { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 999px; background: var(--cc-primary); color: #fff; font-size: .8rem; font-weight: 700; }
+.tabs { margin-bottom: .75rem; }
+.presets { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+.filters { margin-bottom: .25rem; }
+.missing { border: 1px solid var(--cc-line); border-radius: .75rem; padding: .75rem 1rem 1rem; margin: 0 0 1rem; }
+.missing legend { font-size: .875rem; font-weight: 600; padding: 0 .4rem; }
+.group { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; margin-top: .6rem; }
+.group-title { min-width: 9.5rem; font-size: .8rem; font-weight: 700; color: var(--cc-muted); text-transform: uppercase; letter-spacing: .03em; }
+.mode { max-width: 22rem; margin: 1rem 0 0; }
+.top { margin-top: 1rem; }
+.list-head { margin: 1.25rem 0 .6rem; font-size: .9rem; }
+.scroll { max-height: 24rem; overflow: auto; }
+.scroll thead th { position: sticky; top: 0; z-index: 1; }
+.check { width: 2.5rem; text-align: center; padding-left: .5rem !important; padding-right: .5rem !important; }
+.check input { width: 1rem; height: 1rem; accent-color: var(--cc-primary); cursor: pointer; }
+.pick { cursor: pointer; }
+:host ::ng-deep .cc-table tbody tr.chosen td { background: #dcece5; }
+.channels { margin-bottom: 1rem; gap: 1.5rem; }
+.result { margin-top: 1rem; }
+.result ul { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .85rem; }
