@@ -18,7 +18,7 @@ export class SideMenuComponent {
        url:''
      }, */
     {
-      title: 'Condominios',
+      title: 'Condomínios',
       icon: 'building',
       url: 'admin/condominios',
     },
@@ -38,7 +38,7 @@ export class SideMenuComponent {
       url: 'admin/categorias',
     },
     {
-      title: 'SubCategorias',
+      title: 'Subcategorias',
       icon: 'list-ul-alt-1-svgrepo-com',
       url: 'admin/subcategorias',
     },
@@ -68,7 +68,7 @@ export class SideMenuComponent {
       url: 'admin/avisos',
     },
     {
-      title: 'Usuarios',
+      title: 'Usuários',
       icon: 'users-svgrepo-com',
       url: 'admin/usuarios',
     },

@@ -16,94 +16,94 @@
   <div class="px-6 py-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Nome<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="nome"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o nome do condomínio" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Email
         </label>
         <input type="email" appEmailLowercase inputmode="email" autocapitalize="off" [spellcheck]="false" [(ngModel)]="email"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o email" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Telefone
         </label>
         <input type="text" [(ngModel)]="telefone"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o telefone" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           CEP<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="cep" (keyup.enter)="buscarEndereco()"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o CEP e pressione Enter" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Estado<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="estado"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o estado" />
       </div>
 
       <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Rua<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="endereco"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite a rua" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Número<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="numero"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o número" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Bairro<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="bairro"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite o bairro" />
       </div>
 
       <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="cc-label">
           Cidade<span class="text-red-700 ml-2">*</span>
         </label>
         <input type="text" [(ngModel)]="cidade"
-          class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          class="cc-input"
           placeholder="Digite a cidade" />
       </div>
     </div>
   </div>
 
   <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex justify-end space-x-2">
-    <button type="button" (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">
+    <button type="button" (click)="fechar()" class="cc-btn cc-btn-ghost">
       Fechar
     </button>
 
-    <button type="button" (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+    <button type="button" (click)="salvar()" class="cc-btn cc-btn-primary">
       {{ editMode ? 'Salvar alterações' : 'Adicionar' }}
     </button>
   </div>

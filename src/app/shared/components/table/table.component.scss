@@ -1,18 +1,21 @@
-:host { display:block; min-width:0; }
-.company-scroll { width:100%; max-width:100%; min-width:0; overflow-x:auto; border:1px solid #d9e2df; border-radius:9px; background:#fff; scrollbar-gutter:stable; }
-.company-scroll:focus-visible { outline:2px solid #0a806a; outline-offset:2px; }
-.company-table { width:max-content!important; min-width:100%!important; border:0; border-collapse:separate; border-spacing:0; box-shadow:none; }
-.company-table th,.company-table td { white-space:nowrap; vertical-align:middle; padding:12px 14px; }
-.company-table th { font-size:12px; }.company-table td { font-size:13px; line-height:1.4; }
-.company-table th:first-child,.company-table td:first-child { min-width:260px; }
-.company-table th:nth-child(2),.company-table td:nth-child(2) { min-width:125px; }
-.company-table th:nth-child(3),.company-table td:nth-child(3) { min-width:190px; }
-.company-table th:nth-child(4),.company-table td:nth-child(4) { min-width:225px; }
-.company-table th:nth-child(5),.company-table td:nth-child(5) { min-width:190px; }
-.company-table th:nth-child(6),.company-table td:nth-child(6) { min-width:90px; }
-.company-table th:last-child,.company-table td:last-child { position:sticky; right:0; min-width:280px; box-shadow:-8px 0 12px -12px #24433c55; }
-.company-table th:last-child { background:#005e50; }.company-table tbody tr:nth-child(odd) td:last-child { background:#f3f4f6; }.company-table tbody tr:nth-child(even) td:last-child { background:white; }
-.company-action-cell { white-space:nowrap; }.company-action-cell button { display:inline-flex; align-items:center; justify-content:center; margin-right:7px; white-space:nowrap; padding:8px 10px; font-weight:600; }.company-action-cell button:last-child { margin-right:0; }
-.table-swipe-hint { display:none; color:#64776d; font-size:12px; margin:0 0 8px; }
-@media(max-width:1200px) { .table-swipe-hint { display:block; } }
-@media(max-width:700px) { .company-table th:last-child,.company-table td:last-child { position:static; box-shadow:none; } }
+:host { display: block; min-width: 0; }
+
+// Tabela de empresas: colunas largas, rolagem para os lados e coluna "Ações" fixa à direita.
+.company-scroll { max-width: 100%; min-width: 0; scrollbar-gutter: stable; }
+.company-scroll:focus-visible { outline: 2px solid #0a806a; outline-offset: 2px; }
+.company-table { width: max-content !important; min-width: 100% !important; }
+.company-table th, .company-table td { white-space: nowrap; }
+.company-table td { line-height: 1.4; }
+.company-table th:first-child, .company-table td:first-child { min-width: 260px; }
+.company-table th:nth-child(2), .company-table td:nth-child(2) { min-width: 125px; }
+.company-table th:nth-child(3), .company-table td:nth-child(3) { min-width: 190px; }
+.company-table th:nth-child(4), .company-table td:nth-child(4) { min-width: 225px; }
+.company-table th:nth-child(5), .company-table td:nth-child(5) { min-width: 190px; }
+.company-table th:nth-child(6), .company-table td:nth-child(6) { min-width: 90px; }
+// A célula fixa precisa de fundo próprio (o das linhas listradas vem de .cc-table no styles global).
+.company-table th:last-child, .company-table td:last-child { position: sticky; right: 0; min-width: 300px; box-shadow: -8px 0 12px -12px #24433c55; }
+.company-table th:last-child { background: var(--cc-primary); }
+.cc-actions-nowrap { flex-wrap: nowrap; }
+.table-swipe-hint { display: none; color: #64776d; font-size: 12px; margin: 0 0 8px; }
+@media (max-width: 1200px) { .table-swipe-hint { display: block; } }
+@media (max-width: 700px) { .company-table th:last-child, .company-table td:last-child { position: static; box-shadow: none; } }

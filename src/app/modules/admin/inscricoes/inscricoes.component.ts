@@ -12,12 +12,12 @@ import { InscricaoService } from '../../../shared/services/inscricao/plano.servi
   standalone: true,
   imports: [CommonModule, FormsModule, TableComponent, MatDialogModule],
   template: `
-    <div class="w-full px-4 pt-5 text-gray-700 sm:px-6 lg:px-[70px]">
+    <div class="cc-page">
       <div class="w-full">
-        <div>
-          <div class="text-xl text-gray-700">Assinaturas</div>
-          <div>Gerencie as inscrições/assinaturas das empresas</div>
-        </div>
+        <header class="cc-page-header">
+          <h1>Assinaturas</h1>
+          <p>Gerencie as inscrições/assinaturas das empresas</p>
+        </header>
 
         <div class="mt-4">
           <app-table

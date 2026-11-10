@@ -1,4 +1,4 @@
-<div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
+<div class="cc-modal">
   <h2 class="text-xl font-semibold text-gray-800">
     {{ editMode ? 'Editando Plano' : 'Adicionar Plano' }}
   </h2>
@@ -10,31 +10,31 @@
 
   <!-- Nome -->
   <div class="mb-2">
-    <label for="nomePlano" class="block text-sm font-medium text-gray-700">
+    <label for="nomePlano" class="cc-label">
       Nome
     </label>
     <input id="nomePlano" type="text" [(ngModel)]="nome"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o nome do plano" />
   </div>
 
   <!-- Valor -->
   <div class="mb-4">
-    <label for="valorPlano" class="block text-sm font-medium text-gray-700">
+    <label for="valorPlano" class="cc-label">
       Valor
     </label>
     <input id="valorPlano" type="number" [(ngModel)]="valor"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Ex.: 99.90" />
   </div>
 
   <!-- Ciclo -->
   <div class="mb-4">
-    <label for="cicloPlano" class="block text-sm font-medium text-gray-700">
+    <label for="cicloPlano" class="cc-label">
       Ciclo de pagamento
     </label>
     <select id="cicloPlano" [(ngModel)]="pagamento_ciclo"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      class="cc-input">
       <option value="WEEKLY">Semanal</option>
       <option value="BIWEEKLY">Quinzenal</option>
       <option value="MONTHLY">Mensal</option>
@@ -55,20 +55,20 @@
 
   <!-- Dias de Trial -->
   <div class="mb-4" *ngIf="trial_enabled">
-    <label for="diasTrial" class="block text-sm font-medium text-gray-700">
+    <label for="diasTrial" class="cc-label">
       Dias de trial
     </label>
     <input id="diasTrial" type="number" min="1" [(ngModel)]="trial_days"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Ex.: 14" />
     <div class="text-xs text-gray-500 mt-1">Informe a duração do período de teste.</div>
   </div>
 
   <!-- Descrição -->
   <div class="w-full">
-    <label for="descPlano" class="block text-sm font-medium text-gray-700">Descrição do plano</label>
+    <label for="descPlano" class="cc-label">Descrição do plano</label>
     <textarea id="descPlano" rows="4" [(ngModel)]="descricao" (input)="atualizarContagem()"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Descrição curta do plano (até 150 caracteres)"></textarea>
     <div class="text-xs text-gray-500 mt-1">
       {{ caracteresRestantes }}/150 caracteres restantes
@@ -77,13 +77,13 @@
 
   <!-- Ações -->
   <div class="flex justify-end space-x-2 mt-4">
-    <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
+    <button (click)="fechar()" class="cc-btn cc-btn-ghost">
       Fechar
     </button>
-    <button *ngIf="editMode" (click)="update()" class="px-4 py-2 bg-primary text-white rounded-md">
+    <button *ngIf="editMode" (click)="update()" class="cc-btn cc-btn-primary">
       Salvar
     </button>
-    <button *ngIf="!editMode" (click)="salvar()" class="px-4 py-2 bg-primary text-white rounded-md">
+    <button *ngIf="!editMode" (click)="salvar()" class="cc-btn cc-btn-primary">
       Adicionar
     </button>
   </div>

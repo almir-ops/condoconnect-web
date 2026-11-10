@@ -1,4 +1,4 @@
-<div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
+<div class="cc-modal">
   <h2 class="text-xl font-semibold text-gray-800 mb-4">
     {{ editMode ? 'Editando Usuario' : 'Adicionar Usuario' }}
   </h2>
@@ -7,26 +7,26 @@
   </p>
 
   <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
+    <label for="nomeSubcategoria" class="cc-label">
       Nome
     </label>
     <input
       id="nomeSubcategoria"
       type="text"
       [(ngModel)]="nome"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o nome"
     />
   </div>
 
   <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
+    <label for="categorias" class="cc-label">
       Tipo
     </label>
     <select
       id="categorias"
       [(ngModel)]="tipo"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
     >
       <option value="admin">Admin</option>
       <option value="cliente">Cliente</option>
@@ -35,13 +35,13 @@
   </div>
 
  <div class="mb-4">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
+    <label for="categorias" class="cc-label">
       Status
     </label>
     <select
       id="categorias"
       [(ngModel)]="status"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
     >
       <option value="ativo">Ativo</option>
       <option value="inativo">Inativo</option>
@@ -51,7 +51,7 @@
   </div>
 
   <div class="mb-4">
-    <label for="usuario-email" class="block text-sm font-medium text-gray-700">
+    <label for="usuario-email" class="cc-label">
       Email
     </label>
     <input
@@ -59,13 +59,13 @@
       type="email"
       appEmailLowercase inputmode="email" autocapitalize="off" [spellcheck]="false"
       [(ngModel)]="email"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o email"
     />
   </div>
 
   <div class="mb-4">
-    <label for="nomeSubcategoria" class="block text-sm font-medium text-gray-700">
+    <label for="nomeSubcategoria" class="cc-label">
       Telefone com DDD {{ editMode ? '' : '(obrigatório)' }}
     </label>
     <input
@@ -79,7 +79,7 @@
       [attr.aria-describedby]="phoneError ? 'telefone-usuario-erro' : null"
       inputmode="tel"
       autocomplete="tel"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="(11) 99999-9999"
     />
   </div>
@@ -89,13 +89,13 @@
     Cadastro antigo sem telefone. Complete o contato quando disponível; o acesso permanece liberado.
   </p>
   <div class="mb-4" *ngIf="editMode && empresasDisponiveis.length">
-    <label for="empresaVinculada" class="block text-sm font-medium text-gray-700">
+    <label for="empresaVinculada" class="cc-label">
       Vincular empresa
     </label>
     <select
       id="empresaVinculada"
       [(ngModel)]="empresaSelecionadaId"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
     >
       <option [ngValue]="null">Nenhuma</option>
       <option *ngFor="let empresa of empresasDisponiveis" [ngValue]="empresa.id">
@@ -108,7 +108,7 @@
   </div>
 
   <div class="mb-4 relative" *ngIf="!editMode">
-    <label for="categorias" class="block text-sm font-medium text-gray-700">
+    <label for="categorias" class="cc-label">
       Senha
     </label>
     <input
@@ -117,7 +117,7 @@
       [type]="!hiddenPassword ? 'password' : 'text'"
       [(ngModel)]="password"
       placeholder=" "
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
     />
     <div
     (click)="viewPassword()"
@@ -134,13 +134,13 @@
   </div>
 
   <div class="flex justify-end space-x-2 mt-4">
-    <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
+    <button (click)="fechar()" class="cc-btn cc-btn-ghost">
       Fechar
     </button>
-    <button *ngIf="!editMode" (click)="salvar()" class="px-4 py-2 bg-primary text-white rounded-md">
+    <button *ngIf="!editMode" (click)="salvar()" class="cc-btn cc-btn-primary">
       Adicionar
     </button>
-    <button *ngIf="editMode" (click)="update()" class="px-4 py-2 bg-primary text-white rounded-md">
+    <button *ngIf="editMode" (click)="update()" class="cc-btn cc-btn-primary">
       Atualizar
     </button>
   </div>

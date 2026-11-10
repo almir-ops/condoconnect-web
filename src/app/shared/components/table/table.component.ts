@@ -121,6 +121,18 @@ export class TableComponent implements OnChanges {
     return this.sortDirection === 'asc' ? '↑' : '↓';
   }
 
+  // Datas vindas da API (ISO) aparecem como dd/mm/aaaa hh:mm; o resto segue o formatStatus.
+  displayValue(row: any, col: string): string {
+    const value = row?.[col];
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value)) {
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime())) {
+        return date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+      }
+    }
+    return this.formatStatus(value);
+  }
+
   formatStatus(value: any): string {
     if (typeof value === 'boolean') {
       return value ? 'Ativo' : 'Inativo';
@@ -142,13 +154,14 @@ export class TableComponent implements OnChanges {
   capitalizeFirstLetter(text: string): string {
     if (!text) return '';
 
-    if (this.companyTable) {
-      const labels: Record<string, string> = {
-        nome: 'Nome', telefone: 'Telefone', condominios: 'Condomínios',
-        email: 'E-mail', usuario: 'Usuário', ativo: 'Status',
-      };
-      if (labels[text]) return labels[text];
-    }
+    const labels: Record<string, string> = {
+      nome: 'Nome', descricao: 'Descrição', createdAt: 'Criado em', updatedAt: 'Atualizado em',
+      telefone: 'Telefone', endereco: 'Endereço', cidade: 'Cidade', estado: 'Estado',
+      condominios: 'Condomínios', email: 'E-mail', usuario: 'Usuário', ativo: 'Status',
+      esta_ativo: 'Status', valor: 'Valor', trial: 'Período de teste', imagem: 'Imagem',
+      empresa: 'Empresa', categoria: 'Categoria',
+    };
+    if (labels[text]) return labels[text];
 
     if (text === 'trocar_condominio') {
       return 'Trocar condomínio';
@@ -163,8 +176,8 @@ export class TableComponent implements OnChanges {
 
   getToggleClass(row: any): string {
     return row?.ativo
-      ? 'bg-orange-600 text-sm text-white px-2 py-1 rounded'
-      : 'bg-green-600 text-sm text-white px-2 py-1 rounded';
+      ? 'cc-btn cc-btn-warning cc-btn-sm'
+      : 'cc-btn cc-btn-secondary cc-btn-sm';
   }
 
   private compareValues(a: any, b: any): number {

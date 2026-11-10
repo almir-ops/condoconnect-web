@@ -1,86 +1,89 @@
-<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-  <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..."
-    class="w-full rounded-md border p-2 sm:max-w-sm" />
+<div class="cc-table-toolbar">
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." aria-label="Buscar na tabela"
+    class="cc-input" />
 
-  <div *ngIf="btnText1" (click)="onButtonClick && onButtonClick()"
-    class="flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-primary px-3 text-white shadow-md sm:w-auto">
+  <button *ngIf="btnText1" type="button" (click)="onButtonClick && onButtonClick()"
+    class="cc-btn cc-btn-primary">
     {{ btnText1 }}
-  </div>
+  </button>
 </div>
 
 <p *ngIf="companyTable" class="table-swipe-hint">Deslize a tabela para os lados para ver todas as colunas.</p>
-<div class="w-full overflow-x-auto" [class.company-scroll]="companyTable"
+<div class="cc-table-wrap" [class.company-scroll]="companyTable"
   [attr.tabindex]="companyTable ? 0 : null"
   [attr.aria-label]="companyTable ? 'Tabela de empresas. Use as setas para ver todas as colunas.' : null">
-  <table class="min-w-[760px] !w-full rounded-lg border border-gray-300 bg-white shadow-md" [class.company-table]="companyTable">
+  <table class="cc-table min-w-[640px]" [class.company-table]="companyTable">
     <thead>
-      <tr class="bg-primary">
-        <th *ngFor="let col of columns" class="border-b px-4 py-3 text-left">
+      <tr>
+        <th *ngFor="let col of columns">
           <button type="button" (click)="sortBy(col)"
-            class="flex w-full items-center justify-between gap-2 text-left !text-white">
+            class="flex w-full items-center justify-between gap-2 text-left">
             <span>{{ capitalizeFirstLetter(col) }}</span>
             <span class="text-xs leading-none opacity-90">{{ getSortIcon(col) }}</span>
           </button>
         </th>
-        <th class="border-b px-4 py-3 text-left !text-white">Ações</th>
+        <th>Ações</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let row of paginatedData(); let i = index"
-        [ngClass]="{ 'bg-gray-100': i % 2 === 0, 'bg-white': i % 2 !== 0 }">
-        <td *ngFor="let col of columns" class="border-b px-4 py-2">
+      <tr *ngFor="let row of paginatedData()">
+        <td *ngFor="let col of columns">
           <ng-container [ngSwitch]="col">
             <button *ngSwitchCase="'trocar_condominio'" type="button"
-              class="rounded bg-blue-700 px-2 py-1 text-sm text-white"
+              class="cc-btn cc-btn-secondary cc-btn-sm"
               (click)="onTrocarCondominio && onTrocarCondominio(row)">
               Trocar condomínio
             </button>
 
             <span *ngSwitchDefault>
-              {{ formatStatus(row[col]) }}
+              {{ displayValue(row, col) }}
             </span>
           </ng-container>
         </td>
 
-        <td class="border-b px-4 py-2" [class.company-action-cell]="companyTable" [class.flex]="!companyTable" [class.flex-wrap]="!companyTable" [class.gap-2]="!companyTable">
-          <ng-container *ngIf="companyTable">
-            <button *ngIf="onEdit" type="button" (click)="onEdit(row)" class="rounded bg-primary px-2 py-1 text-sm text-white">{{ editLabel }}</button>
-            <button *ngIf="onTrocarCondominio" type="button" (click)="onTrocarCondominio(row)" class="rounded bg-blue-700 px-2 py-1 text-sm text-white">Trocar condomínio</button>
-            <button *ngIf="onToggleStatus" type="button" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">{{ getToggleLabel(row) }}</button>
-          </ng-container>
-          <button *ngIf="onQrCode" (click)="onQrCode(row)"
-            class="rounded bg-emerald-700 px-2 py-1 text-sm text-white">
-            QR Code
-          </button>
+        <td [class.company-action-cell]="companyTable">
+          <div class="cc-actions" [class.cc-actions-nowrap]="companyTable">
+            <ng-container *ngIf="companyTable">
+              <button *ngIf="onEdit" type="button" (click)="onEdit(row)" class="cc-btn cc-btn-primary cc-btn-sm">{{ editLabel }}</button>
+              <button *ngIf="onTrocarCondominio" type="button" (click)="onTrocarCondominio(row)" class="cc-btn cc-btn-secondary cc-btn-sm">Trocar condomínio</button>
+              <button *ngIf="onToggleStatus" type="button" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">{{ getToggleLabel(row) }}</button>
+            </ng-container>
 
-          <button *ngIf="!companyTable && onToggleStatus" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">
-            {{ getToggleLabel(row) }}
-          </button>
+            <button *ngIf="onQrCode" type="button" (click)="onQrCode(row)" class="cc-btn cc-btn-secondary cc-btn-sm">
+              QR Code
+            </button>
 
-          <button *ngIf="onCustomAction" (click)="onCustomAction(row)"
-            class="rounded bg-blue-700 px-2 py-1 text-sm text-white">
-            Ver pagamentos
-          </button>
+            <button *ngIf="!companyTable && onToggleStatus" type="button" (click)="onToggleStatus(row)" [ngClass]="getToggleClass(row)">
+              {{ getToggleLabel(row) }}
+            </button>
 
-          <button *ngIf="!companyTable && onEdit" (click)="onEdit(row)" class="rounded bg-primary px-2 py-1 text-sm text-white">
-            {{ editLabel }}
-          </button>
+            <button *ngIf="onCustomAction" type="button" (click)="onCustomAction(row)" class="cc-btn cc-btn-secondary cc-btn-sm">
+              Ver pagamentos
+            </button>
 
-          <button *ngIf="onDelete" (click)="onDelete(row)" class="rounded bg-red-700 px-2 py-1 text-sm text-white">
-            Excluir
-          </button>
+            <button *ngIf="!companyTable && onEdit" type="button" (click)="onEdit(row)" class="cc-btn cc-btn-primary cc-btn-sm">
+              {{ editLabel }}
+            </button>
+
+            <button *ngIf="onDelete" type="button" (click)="onDelete(row)" class="cc-btn cc-btn-danger cc-btn-sm">
+              Excluir
+            </button>
+          </div>
         </td>
+      </tr>
+      <tr *ngIf="!paginatedData().length">
+        <td class="cc-empty" [attr.colspan]="columns.length + 1">Nenhum registro encontrado.</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-  <label class="flex items-center gap-2 text-sm text-gray-600">
+<div class="cc-table-footer">
+  <label class="flex items-center gap-2">
     Itens por página
     <select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)"
-      class="rounded-md border border-gray-300 bg-white px-2 py-1">
+      class="cc-input cc-input-auto">
       <option *ngFor="let option of pageSizeOptions" [ngValue]="option">
         {{ option }}
       </option>
@@ -88,15 +91,15 @@
   </label>
 
   <div class="flex items-center justify-between gap-3 sm:justify-end">
-    <button (click)="prevPage()" [disabled]="currentPage === 1"
-      class="rounded-md bg-gray-300 px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">
+    <button type="button" (click)="prevPage()" [disabled]="currentPage === 1"
+      class="cc-btn cc-btn-ghost">
       Anterior
     </button>
 
-    <span class="whitespace-nowrap text-sm">Página {{ currentPage }} de {{ totalPages() }}</span>
+    <span class="whitespace-nowrap">Página {{ currentPage }} de {{ totalPages() }}</span>
 
-    <button (click)="nextPage()" [disabled]="currentPage >= totalPages()"
-      class="rounded-md bg-gray-300 px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">
+    <button type="button" (click)="nextPage()" [disabled]="currentPage >= totalPages()"
+      class="cc-btn cc-btn-ghost">
       Próximo
     </button>
   </div>

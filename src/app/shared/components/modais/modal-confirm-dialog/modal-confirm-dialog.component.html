@@ -1,6 +1,8 @@
-<h2 mat-dialog-title>{{ data.titulo }}</h2>
-<mat-dialog-content>{{ data.mensagem }}</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="fechar(false)">Não</button>
-  <button mat-raised-button color="primary" (click)="fechar(true)">Sim</button>
-</mat-dialog-actions>
+<div class="cc-modal">
+  <h2>{{ data.titulo }}</h2>
+  <p class="cc-modal-text">{{ data.mensagem }}</p>
+  <div class="cc-actions-end">
+    <button type="button" class="cc-btn cc-btn-ghost" (click)="fechar(false)">Não</button>
+    <button type="button" class="cc-btn cc-btn-primary" (click)="fechar(true)">Sim</button>
+  </div>
+</div>

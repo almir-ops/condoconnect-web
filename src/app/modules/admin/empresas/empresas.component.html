@@ -1,17 +1,17 @@
-<div class="w-full px-4 pt-5 text-gray-700 sm:px-6 lg:px-[70px]">
+<div class="cc-page">
   <div class="w-full">
-    <div>
-      <div class="text-xl text-gray-700">Empresas</div>
-      <div>Gerencie as empresas presentes no aplicativo</div>
-    </div>
+    <header class="cc-page-header">
+      <h1>Empresas</h1>
+      <p>Gerencie as empresas presentes no aplicativo</p>
+    </header>
 
-    <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <div class="cc-stats">
+      <div class="cc-card cc-stat">
         <div class="text-sm text-gray-500">Total de empresas cadastradas</div>
         <div class="mt-2 text-2xl font-semibold text-gray-800">{{ totalEmpresas() }}</div>
       </div>
 
-      <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      <div class="cc-card cc-stat">
         <div class="text-sm text-gray-500">Total de empresas ativas</div>
         <div class="mt-2 text-2xl font-semibold text-gray-800">{{ totalEmpresasAtivas() }}</div>
       </div>
@@ -43,12 +43,12 @@
     </div>
 
     <div class="mt-4">
-      <label class="block text-sm text-gray-600 mb-1">
+      <label class="cc-label">
         Novo condomínio
       </label>
 
       <select [(ngModel)]="condominioSelecionadoId"
-        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        class="cc-input">
         <option [ngValue]="null">
           Selecione um condomínio
         </option>
@@ -60,16 +60,13 @@
     </div>
 
     <div class="flex justify-end gap-3 mt-5">
-      <button type="button" class="px-4 py-2 rounded-md border border-gray-300 text-gray-600" [disabled]="salvandoTroca"
+      <button type="button" class="cc-btn cc-btn-ghost" [disabled]="salvandoTroca"
         (click)="fecharDialogTrocarCondominio()">
         Cancelar
       </button>
 
-      <button type="button" class="px-4 py-2 rounded-md text-white"
-        [disabled]="salvandoTroca || !condominioSelecionadoId" [ngClass]="{
-          'bg-primary': condominioSelecionadoId && !salvandoTroca,
-          'bg-gray-300 cursor-not-allowed': !condominioSelecionadoId || salvandoTroca
-        }" (click)="salvarTrocaCondominio()">
+      <button type="button" class="cc-btn cc-btn-primary"
+        [disabled]="salvandoTroca || !condominioSelecionadoId" (click)="salvarTrocaCondominio()">
         {{ salvandoTroca ? 'Salvando...' : 'Salvar' }}
       </button>
     </div>

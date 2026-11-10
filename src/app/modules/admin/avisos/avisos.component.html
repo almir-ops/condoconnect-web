@@ -1,87 +1,87 @@
-<section class="avisos">
-  <header>
+<div class="cc-page">
+  <header class="cc-page-header">
     <h1>Avisos e novidades</h1>
     <p>Crie um aviso que aparece no app quando a pessoa entra. Escolha quem recebe, por quanto tempo e se ela pode pedir para não ver mais. Todos os avisos ficam no "Quadro de avisos" do app.</p>
   </header>
 
-  <p class="error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="success" *ngIf="success" role="status">{{ success }}</p>
+  <p class="cc-alert cc-alert-error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="cc-alert cc-alert-success" *ngIf="success" role="status">{{ success }}</p>
 
-  <form (ngSubmit)="save()" class="card">
+  <form (ngSubmit)="save()" class="cc-card">
     <h2>{{ form.id ? 'Editar aviso' : 'Novo aviso' }}</h2>
-    <div class="grid">
-      <label>Título<input name="titulo" [(ngModel)]="form.titulo" maxlength="120" required placeholder="Ex.: Novidade no app" /></label>
-      <label>Tipo
-        <select name="tipo" [(ngModel)]="form.tipo"><option *ngFor="let t of tipos" [value]="t.valor">{{ t.nome }}</option></select>
+    <div class="cc-grid">
+      <label class="cc-field">Título<input class="cc-input" name="titulo" [(ngModel)]="form.titulo" maxlength="120" required placeholder="Ex.: Novidade no app" /></label>
+      <label class="cc-field">Tipo
+        <select class="cc-input" name="tipo" [(ngModel)]="form.tipo"><option *ngFor="let t of tipos" [value]="t.valor">{{ t.nome }}</option></select>
       </label>
-      <label>Começa em (opcional)<input name="inicio" type="datetime-local" [(ngModel)]="form.inicio" /></label>
-      <label>Termina em (opcional)<input name="fim" type="datetime-local" [(ngModel)]="form.fim" /></label>
+      <label class="cc-field">Começa em (opcional)<input class="cc-input" name="inicio" type="datetime-local" [(ngModel)]="form.inicio" /></label>
+      <label class="cc-field">Termina em (opcional)<input class="cc-input" name="fim" type="datetime-local" [(ngModel)]="form.fim" /></label>
     </div>
-    <label>Mensagem<textarea name="mensagem" [(ngModel)]="form.mensagem" required maxlength="2000" rows="5" placeholder="Escreva o texto que a pessoa vai ler"></textarea></label>
+    <label class="cc-field">Mensagem<textarea class="cc-input" name="mensagem" [(ngModel)]="form.mensagem" required maxlength="2000" rows="5" placeholder="Escreva o texto que a pessoa vai ler"></textarea></label>
 
-    <div class="grid">
-      <label>Botão (opcional) — texto<input name="botaoTexto" [(ngModel)]="form.botaoTexto" maxlength="40" placeholder="Ex.: Saiba mais" /></label>
-      <label>Botão (opcional) — link<input name="botaoUrl" [(ngModel)]="form.botaoUrl" maxlength="500" placeholder="https://..." /></label>
+    <div class="cc-grid">
+      <label class="cc-field">Botão (opcional) — texto<input class="cc-input" name="botaoTexto" [(ngModel)]="form.botaoTexto" maxlength="40" placeholder="Ex.: Saiba mais" /></label>
+      <label class="cc-field">Botão (opcional) — link<input class="cc-input" name="botaoUrl" [(ngModel)]="form.botaoUrl" maxlength="500" placeholder="https://..." /></label>
     </div>
 
     <fieldset>
       <legend>Quem recebe</legend>
       <div class="options">
-        <label class="inline"><input type="radio" name="publico" value="todos" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Todos os usuários</label>
-        <label class="inline"><input type="radio" name="publico" value="empresas" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Uma ou mais empresas</label>
-        <label class="inline"><input type="radio" name="publico" value="usuarios" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Um ou mais usuários</label>
+        <label class="cc-check"><input type="radio" name="publico" value="todos" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Todos os usuários</label>
+        <label class="cc-check"><input type="radio" name="publico" value="empresas" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Uma ou mais empresas</label>
+        <label class="cc-check"><input type="radio" name="publico" value="usuarios" [(ngModel)]="form.publico" (ngModelChange)="trocarPublico()" /> Um ou mais usuários</label>
       </div>
       <div *ngIf="form.publico !== 'todos'" class="picker">
-        <input name="busca" [(ngModel)]="busca" [placeholder]="form.publico === 'usuarios' ? 'Buscar usuário por nome ou e-mail' : 'Buscar empresa por nome, cidade ou e-mail'" />
+        <input class="cc-input" name="busca" [(ngModel)]="busca" [placeholder]="form.publico === 'usuarios' ? 'Buscar usuário por nome ou e-mail' : 'Buscar empresa por nome, cidade ou e-mail'" />
         <div class="chips" *ngIf="selecionados.length">
           <span class="chip" *ngFor="let id of selecionados">{{ nomeDe(id, form.publico) }}
             <button type="button" (click)="alternar({ id: id, nome: '', detalhe: '' })" aria-label="Remover">×</button></span>
         </div>
         <div class="list">
-          <label class="inline row" *ngFor="let o of filtradas">
+          <label class="cc-check row" *ngFor="let o of filtradas">
             <input type="checkbox" [name]="'o' + o.id" [checked]="marcado(o)" (change)="alternar(o)" />
-            <span><strong>{{ o.nome }}</strong> <small>{{ o.detalhe }}</small></span>
+            <span><strong>{{ o.nome }}</strong> <small class="cc-muted">{{ o.detalhe }}</small></span>
           </label>
-          <p *ngIf="!filtradas.length" class="muted">Nenhum resultado.</p>
+          <p *ngIf="!filtradas.length" class="cc-muted">Nenhum resultado.</p>
         </div>
-        <small class="muted">{{ selecionados.length }} selecionado(s). {{ opcoes.length > 60 && !busca ? 'Mostrando 60; use a busca para achar os demais.' : '' }}</small>
+        <small class="cc-muted">{{ selecionados.length }} selecionado(s). {{ opcoes.length > 60 && !busca ? 'Mostrando 60; use a busca para achar os demais.' : '' }}</small>
       </div>
     </fieldset>
 
     <div class="options">
-      <label class="inline"><input type="checkbox" name="dispensar" [(ngModel)]="form.permiteDispensar" /> A pessoa pode marcar "Não mostrar novamente"</label>
-      <label class="inline"><input type="checkbox" name="ativo" [(ngModel)]="form.ativo" /> Aviso ativo</label>
+      <label class="cc-check"><input type="checkbox" name="dispensar" [(ngModel)]="form.permiteDispensar" /> A pessoa pode marcar "Não mostrar novamente"</label>
+      <label class="cc-check"><input type="checkbox" name="ativo" [(ngModel)]="form.ativo" /> Aviso ativo</label>
     </div>
-    <small class="muted">Se "não mostrar novamente" estiver desmarcado, o aviso aparece toda vez que a pessoa entrar no app, enquanto estiver no ar.</small>
+    <p class="cc-hint">Se "não mostrar novamente" estiver desmarcado, o aviso aparece toda vez que a pessoa entrar no app, enquanto estiver no ar.</p>
 
     <div class="preview" [attr.data-tipo]="form.tipo">
-      <small class="muted">Prévia do que aparece no app</small>
+      <small class="cc-muted">Prévia do que aparece no app</small>
       <strong>{{ form.titulo || 'Título do aviso' }}</strong>
       <p>{{ form.mensagem || 'A mensagem aparece aqui.' }}</p>
       <span class="fake-btn" *ngIf="form.botaoTexto">{{ form.botaoTexto }}</span>
     </div>
 
-    <div class="actions">
-      <button type="submit" [disabled]="loading">{{ loading ? 'Salvando...' : (form.id ? 'Salvar alterações' : 'Publicar aviso') }}</button>
-      <button type="button" class="secondary" (click)="clear()">Limpar</button>
+    <div class="cc-actions">
+      <button type="submit" class="cc-btn cc-btn-primary" [disabled]="loading">{{ loading ? 'Salvando...' : (form.id ? 'Salvar alterações' : 'Publicar aviso') }}</button>
+      <button type="button" class="cc-btn cc-btn-ghost" (click)="clear()">Limpar</button>
     </div>
   </form>
 
-  <section class="card">
+  <section class="cc-card">
     <h2>Avisos criados</h2>
-    <p *ngIf="!avisos.length" class="muted">Nenhum aviso criado.</p>
-    <div class="item" *ngFor="let a of avisos">
+    <p *ngIf="!avisos.length" class="cc-muted">Nenhum aviso criado.</p>
+    <div class="cc-list-item" *ngFor="let a of avisos">
       <div>
-        <strong>{{ a.titulo }}</strong> <span class="badge" [attr.data-s]="situacao(a)">{{ situacao(a) }}</span>
-        <p class="muted">{{ resumoPublico(a) }} · {{ a.permiteDispensar ? 'pode dispensar' : 'aparece sempre' }}
+        <strong>{{ a.titulo }}</strong> <span class="cc-badge badge" [attr.data-s]="situacao(a)">{{ situacao(a) }}</span>
+        <p>{{ resumoPublico(a) }} · {{ a.permiteDispensar ? 'pode dispensar' : 'aparece sempre' }}
           <ng-container *ngIf="a.inicio || a.fim"> · {{ a.inicio ? (a.inicio | date:'dd/MM/yy HH:mm') : 'agora' }} até {{ a.fim ? (a.fim | date:'dd/MM/yy HH:mm') : 'sem fim' }}</ng-container></p>
-        <p class="muted">{{ a.vistos || 0 }} pessoa(s) viram · {{ a.dispensados || 0 }} pediram para não ver mais</p>
+        <p>{{ a.vistos || 0 }} pessoa(s) viram · {{ a.dispensados || 0 }} pediram para não ver mais</p>
       </div>
-      <div class="actions">
-        <button type="button" class="secondary" (click)="edit(a)">Editar</button>
-        <button type="button" class="secondary" (click)="toggle(a)">{{ a.ativo ? 'Desativar' : 'Ativar' }}</button>
-        <button type="button" class="danger" (click)="remove(a)">Excluir</button>
+      <div class="cc-actions">
+        <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="edit(a)">Editar</button>
+        <button type="button" class="cc-btn cc-btn-sm" [ngClass]="a.ativo ? 'cc-btn-warning' : 'cc-btn-primary'" (click)="toggle(a)">{{ a.ativo ? 'Desativar' : 'Ativar' }}</button>
+        <button type="button" class="cc-btn cc-btn-danger cc-btn-sm" (click)="remove(a)">Excluir</button>
       </div>
     </div>
   </section>
-</section>
+</div>

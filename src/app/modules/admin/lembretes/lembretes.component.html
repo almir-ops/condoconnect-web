@@ -1,39 +1,74 @@
-<section class="reminders">
-  <header><h1>Lembretes automáticos</h1><p>Programe mensagens para clientes depois do cadastro. Cada dia configurado dispara uma única vez por pessoa.</p></header>
-  <div class="notice" *ngIf="!status.schedulerEnabled">O agendador está desligado na API. Configure REMINDERS_ENABLED=true para ativar regras.</div>
-  <div class="readiness"><span>E-mail: {{ status.emailReady ? 'configurado' : 'aguardando credenciais' }}</span><span>Android: {{ status.androidReady ? 'FCM configurado' : 'aguardando Firebase' }}</span><span>iOS: {{ status.iosReady ? 'APNs configurado' : 'aguardando chave Apple' }}</span></div>
-  <p class="error" *ngIf="error" role="alert">{{error}}</p><p class="success" *ngIf="success" role="status">{{success}}</p>
-  <form (ngSubmit)="testPush()" class="card">
+<div class="cc-page">
+  <header class="cc-page-header">
+    <h1>Lembretes automáticos</h1>
+    <p>Programe mensagens para clientes depois do cadastro. Cada dia configurado dispara uma única vez por pessoa.</p>
+  </header>
+
+  <div class="cc-alert cc-alert-warning" *ngIf="!status.schedulerEnabled">O agendador está desligado na API. Configure REMINDERS_ENABLED=true para ativar regras.</div>
+  <div class="cc-pills">
+    <span class="cc-pill">E-mail: {{ status.emailReady ? 'configurado' : 'aguardando credenciais' }}</span>
+    <span class="cc-pill">Android: {{ status.androidReady ? 'FCM configurado' : 'aguardando Firebase' }}</span>
+    <span class="cc-pill">iOS: {{ status.iosReady ? 'APNs configurado' : 'aguardando chave Apple' }}</span>
+  </div>
+  <p class="cc-alert cc-alert-error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="cc-alert cc-alert-success" *ngIf="success" role="status">{{ success }}</p>
+
+  <form (ngSubmit)="testPush()" class="cc-card">
     <h2>Enviar push de teste</h2>
-    <p>Envia agora, sem regra e sem agendador, para os aparelhos que o usuário registrou no app (ele precisa ter feito login e permitido as notificações).</p>
-    <div class="grid">
-      <label>E-mail do usuário<input name="testEmail" type="email" [(ngModel)]="test.email" required placeholder="usuario@email.com" /></label>
-      <label>Título<input name="testTitle" [(ngModel)]="test.title" maxlength="160" /></label>
+    <p class="cc-muted" style="margin: -.5rem 0 1rem;">Envia agora, sem regra e sem agendador, para os aparelhos que o usuário registrou no app (ele precisa ter feito login e permitido as notificações).</p>
+    <div class="cc-grid">
+      <label class="cc-field">E-mail do usuário<input class="cc-input" name="testEmail" type="email" [(ngModel)]="test.email" required placeholder="usuario@email.com" /></label>
+      <label class="cc-field">Título<input class="cc-input" name="testTitle" [(ngModel)]="test.title" maxlength="160" /></label>
     </div>
-    <label>Mensagem<textarea name="testMessage" [(ngModel)]="test.message" maxlength="500" rows="2"></textarea></label>
-    <div class="actions"><button type="submit" [disabled]="testing">{{testing ? 'Enviando...' : 'Enviar push de teste'}}</button></div>
+    <label class="cc-field">Mensagem<textarea class="cc-input" name="testMessage" [(ngModel)]="test.message" maxlength="500" rows="2"></textarea></label>
+    <div class="cc-actions"><button type="submit" class="cc-btn cc-btn-primary" [disabled]="testing">{{ testing ? 'Enviando...' : 'Enviar push de teste' }}</button></div>
   </form>
-  <form (ngSubmit)="save()" class="card">
-    <h2>{{form.id ? 'Editar lembrete' : 'Novo lembrete'}}</h2>
-    <div class="grid">
-      <label>Nome da regra<input name="name" [(ngModel)]="form.name" maxlength="120" required placeholder="Ex.: concluir cadastro" /></label>
-      <label>Canal<select name="channel" [(ngModel)]="form.channel"><option value="email">E-mail</option><option value="push">Push no aplicativo</option></select></label>
-      <label>Público<select name="audience" [(ngModel)]="form.audience"><option value="without_company">Clientes sem empresa cadastrada</option><option value="all">Todos os clientes ativos</option></select></label>
-      <label>Assunto / título<input name="subject" [(ngModel)]="form.subject" maxlength="160" required /></label>
-      <label>Dias após cadastro<input name="days" [(ngModel)]="daysText" required placeholder="1, 3, 7" /><small>Separe por vírgula. Cada número representa um envio.</small></label>
-      <label>Quantidade máxima<input name="max" type="number" [(ngModel)]="form.maxSends" min="1" max="12" required /></label>
-      <label>Horário<input name="time" type="time" [(ngModel)]="form.sendTime" required /></label>
-      <label>Fuso horário<input name="timezone" [(ngModel)]="form.timezone" required placeholder="America/Sao_Paulo" /></label>
+
+  <form (ngSubmit)="save()" class="cc-card">
+    <h2>{{ form.id ? 'Editar lembrete' : 'Novo lembrete' }}</h2>
+    <div class="cc-grid">
+      <label class="cc-field">Nome da regra<input class="cc-input" name="name" [(ngModel)]="form.name" maxlength="120" required placeholder="Ex.: concluir cadastro" /></label>
+      <label class="cc-field">Canal<select class="cc-input" name="channel" [(ngModel)]="form.channel"><option value="email">E-mail</option><option value="push">Push no aplicativo</option></select></label>
+      <label class="cc-field">Público<select class="cc-input" name="audience" [(ngModel)]="form.audience"><option value="without_company">Clientes sem empresa cadastrada</option><option value="all">Todos os clientes ativos</option></select></label>
+      <label class="cc-field">Assunto / título<input class="cc-input" name="subject" [(ngModel)]="form.subject" maxlength="160" required /></label>
+      <label class="cc-field">Dias após cadastro<input class="cc-input" name="days" [(ngModel)]="daysText" required placeholder="1, 3, 7" /><span class="cc-hint">Separe por vírgula. Cada número representa um envio.</span></label>
+      <label class="cc-field">Quantidade máxima<input class="cc-input" name="max" type="number" [(ngModel)]="form.maxSends" min="1" max="12" required /></label>
+      <label class="cc-field">Horário<input class="cc-input" name="time" type="time" [(ngModel)]="form.sendTime" required /></label>
+      <label class="cc-field">Fuso horário<input class="cc-input" name="timezone" [(ngModel)]="form.timezone" required placeholder="America/Sao_Paulo" /></label>
     </div>
-    <label>Mensagem<textarea name="message" [(ngModel)]="form.message" required maxlength="2000" rows="5" placeholder="Escreva a mensagem para o cliente"></textarea></label>
-    <div class="actions"><button type="submit" [disabled]="loading || form.enabled">{{loading ? 'Salvando...' : 'Salvar rascunho'}}</button><button type="button" class="secondary" (click)="clear()">Limpar</button></div>
-    <small *ngIf="form.enabled">Pause a regra para editar.</small>
+    <label class="cc-field">Mensagem<textarea class="cc-input" name="message" [(ngModel)]="form.message" required maxlength="2000" rows="5" placeholder="Escreva a mensagem para o cliente"></textarea></label>
+    <div class="cc-actions">
+      <button type="submit" class="cc-btn cc-btn-primary" [disabled]="loading || form.enabled">{{ loading ? 'Salvando...' : 'Salvar rascunho' }}</button>
+      <button type="button" class="cc-btn cc-btn-ghost" (click)="clear()">Limpar</button>
+    </div>
+    <p class="cc-hint" style="margin-top: .75rem;" *ngIf="form.enabled">Pause a regra para editar.</p>
   </form>
-  <section class="card"><h2>Regras</h2><p *ngIf="!rules.length">Nenhum lembrete criado.</p>
-    <div class="rule" *ngFor="let rule of rules"><div><strong>{{rule.name}}</strong><p>{{rule.channel === 'email' ? 'E-mail' : 'Push'}} · {{rule.audience === 'without_company' ? 'Sem empresa' : 'Todos os clientes'}} · dias {{rule.days.join(', ')}} · {{rule.sendTime}} ({{rule.timezone}})</p></div>
-      <div class="actions"><button type="button" class="secondary" (click)="edit(rule)" [disabled]="rule.enabled">Editar</button><button type="button" (click)="toggle(rule)">{{rule.enabled ? 'Pausar' : 'Ativar'}}</button><button type="button" class="secondary" (click)="showHistory(rule)">Histórico</button></div></div>
+
+  <section class="cc-card">
+    <h2>Regras</h2>
+    <p class="cc-muted" *ngIf="!rules.length">Nenhum lembrete criado.</p>
+    <div class="cc-list-item" *ngFor="let rule of rules">
+      <div>
+        <strong>{{ rule.name }}</strong>
+        <p>{{ rule.channel === 'email' ? 'E-mail' : 'Push' }} · {{ rule.audience === 'without_company' ? 'Sem empresa' : 'Todos os clientes' }} · dias {{ rule.days.join(', ') }} · {{ rule.sendTime }} ({{ rule.timezone }})</p>
+      </div>
+      <div class="cc-actions">
+        <button type="button" class="cc-btn cc-btn-secondary cc-btn-sm" (click)="edit(rule)" [disabled]="rule.enabled">Editar</button>
+        <button type="button" class="cc-btn cc-btn-sm" [ngClass]="rule.enabled ? 'cc-btn-warning' : 'cc-btn-primary'" (click)="toggle(rule)">{{ rule.enabled ? 'Pausar' : 'Ativar' }}</button>
+        <button type="button" class="cc-btn cc-btn-ghost cc-btn-sm" (click)="showHistory(rule)">Histórico</button>
+      </div>
+    </div>
   </section>
-  <section class="card" *ngIf="selected"><h2>Histórico: {{selected.name}}</h2><p *ngIf="!history.length">Nenhum envio registrado.</p><div class="history" *ngFor="let item of history"><span>{{item.createdAt | date:'short'}}</span><span>{{item.recipient?.email || item.userId}}</span><span>Dia {{item.step}}</span><strong>{{item.status}}</strong><span>{{item.error}}</span></div></section>
-</section>
 
-
+  <section class="cc-card" *ngIf="selected">
+    <h2>Histórico: {{ selected.name }}</h2>
+    <p class="cc-muted" *ngIf="!history.length">Nenhum envio registrado.</p>
+    <div class="history" *ngFor="let item of history">
+      <span>{{ item.createdAt | date:'short' }}</span>
+      <span>{{ item.recipient?.email || item.userId }}</span>
+      <span>Dia {{ item.step }}</span>
+      <strong>{{ item.status }}</strong>
+      <span>{{ item.error }}</span>
+    </div>
+  </section>
+</div>

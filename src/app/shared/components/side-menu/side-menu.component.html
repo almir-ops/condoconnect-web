@@ -8,6 +8,11 @@
     <img *ngIf="isOpen" src="/assets/images/logo_texto.png" alt="CondoConnect" class="brand-wordmark" />
   </div>
   <nav class="menu-navigation" aria-label="Seções do painel">
+    <button type="button" class="menu-item menu-collapse" (click)="hiddenMenu()" [attr.aria-expanded]="isOpen"
+      [attr.title]="isOpen ? 'Recolher menu' : 'Expandir menu'" aria-label="Abrir ou fechar menu">
+      <img src="/assets/icons/menu-svgrepo-com.svg" alt="" />
+      <span *ngIf="isOpen">Recolher menu</span>
+    </button>
     <button type="button" *ngFor="let item of menuItems" class="menu-item"
       [class.active]="router.url === '/' + item.url"
       [attr.title]="!isOpen ? item.title : null"

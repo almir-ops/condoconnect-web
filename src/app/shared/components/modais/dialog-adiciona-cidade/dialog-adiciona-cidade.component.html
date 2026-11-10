@@ -1,35 +1,36 @@
-<h2 mat-dialog-title>Adicionar Cidade</h2>
+<div class="cc-modal">
+  <h2>Adicionar Cidade</h2>
+  <p class="cc-modal-text">Escolha o estado e selecione a cidade na lista.</p>
 
-<mat-dialog-content class="mat-typography">
-  <p>Escolha o estado e selecione a cidade na lista.</p>
-
-  <mat-form-field class="w-full">
-    <mat-label>Estado</mat-label>
-    <mat-select [(ngModel)]="estado" (selectionChange)="carregarMunicipios()">
+  <div class="mb-4">
+    <label class="cc-label" for="cidade-estado">Estado</label>
+    <select id="cidade-estado" class="cc-input" [ngModel]="estado" (ngModelChange)="estado = $event; carregarMunicipios()">
+      <option value="" disabled hidden>Selecione o estado</option>
       @for (uf of estados; track uf) {
-        <mat-option [value]="uf">{{ uf }}</mat-option>
+        <option [ngValue]="uf">{{ uf }}</option>
       }
-    </mat-select>
-  </mat-form-field>
+    </select>
+  </div>
 
-  <mat-form-field class="w-full">
-    <mat-label>{{ carregando ? 'Carregando cidades...' : 'Cidade' }}</mat-label>
-    <mat-select [(ngModel)]="nomeCidade" [disabled]="carregando || erroLista">
+  <div class="mb-2">
+    <label class="cc-label" for="cidade-nome">{{ carregando ? 'Carregando cidades...' : 'Cidade' }}</label>
+    <select id="cidade-nome" class="cc-input" [(ngModel)]="nomeCidade" [disabled]="carregando || erroLista">
+      <option value="" disabled hidden>Selecione a cidade</option>
       @for (cidade of municipios; track cidade) {
-        <mat-option [value]="cidade" [disabled]="jaExiste(cidade)">{{ cidade }}{{ jaExiste(cidade) ? ' (já cadastrada)' : '' }}</mat-option>
+        <option [ngValue]="cidade" [disabled]="jaExiste(cidade)">{{ cidade }}{{ jaExiste(cidade) ? ' (já cadastrada)' : '' }}</option>
       }
-    </mat-select>
-  </mat-form-field>
+    </select>
+  </div>
 
   @if (jaCadastrada) {
-    <p class="text-red-600 text-sm">A cidade {{ nomeCidade }} já está cadastrada.</p>
+    <p class="cc-alert cc-alert-error">A cidade {{ nomeCidade }} já está cadastrada.</p>
   }
   @if (erroLista) {
-    <p class="text-red-600 text-sm">Não foi possível carregar as cidades. Feche e tente novamente.</p>
+    <p class="cc-alert cc-alert-error">Não foi possível carregar as cidades. Feche e tente novamente.</p>
   }
-</mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="fecharDialog()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="adicionarCidade()" [disabled]="!nomeCidade || jaCadastrada">Adicionar</button>
-</mat-dialog-actions>
+  <div class="cc-actions-end">
+    <button type="button" class="cc-btn cc-btn-ghost" (click)="fecharDialog()">Cancelar</button>
+    <button type="button" class="cc-btn cc-btn-primary" (click)="adicionarCidade()" [disabled]="!nomeCidade || jaCadastrada">Adicionar</button>
+  </div>
+</div>

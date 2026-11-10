@@ -1,24 +1,24 @@
-<div class="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
+<div class="cc-modal">
   <h2 class="text-xl font-semibold text-gray-800 mb-4">Adicionar Empresa</h2>
   <p class="text-gray-600 mb-4">
     Complete o formulário corretamente e clique em adicionar.
   </p>
 
   <div class="mb-4">
-    <label for="empresaNome" class="block text-sm font-medium text-gray-700">
+    <label for="empresaNome" class="cc-label">
       Nome *
     </label>
     <input
       id="empresaNome"
       type="text"
       [(ngModel)]="nome"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o nome da empresa"
     />
   </div>
 
   <div class="mb-4">
-    <label for="empresaEmail" class="block text-sm font-medium text-gray-700">
+    <label for="empresaEmail" class="cc-label">
       Email *
     </label>
     <input
@@ -26,94 +26,94 @@
       type="email"
       appEmailLowercase inputmode="email" autocapitalize="off" [spellcheck]="false"
       [(ngModel)]="email"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o email"
     />
   </div>
 
   <div class="mb-4">
-    <label for="empresaCnpj" class="block text-sm font-medium text-gray-700">
+    <label for="empresaCnpj" class="cc-label">
       CNPJ
     </label>
     <input
       id="empresaCnpj"
       type="text"
       [(ngModel)]="cnpj"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Digite o CNPJ"
     />
   </div>
 
   <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
     <div>
-      <label for="empresaTelefone" class="block text-sm font-medium text-gray-700">
+      <label for="empresaTelefone" class="cc-label">
         Telefone
       </label>
       <input
         id="empresaTelefone"
         type="text"
         [(ngModel)]="telefone"
-        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="cc-input"
         placeholder="Telefone"
       />
     </div>
 
     <div>
-      <label for="empresaCelular" class="block text-sm font-medium text-gray-700">
+      <label for="empresaCelular" class="cc-label">
         Celular
       </label>
       <input
         id="empresaCelular"
         type="text"
         [(ngModel)]="celular"
-        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="cc-input"
         placeholder="Celular"
       />
     </div>
   </div>
 
   <div class="mb-4">
-    <label for="empresaEndereco" class="block text-sm font-medium text-gray-700">
+    <label for="empresaEndereco" class="cc-label">
       Endereço
     </label>
     <input
       id="empresaEndereco"
       type="text"
       [(ngModel)]="endereco"
-      class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      class="cc-input"
       placeholder="Rua, número"
     />
   </div>
 
   <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
     <div>
-      <label for="empresaBairro" class="block text-sm font-medium text-gray-700">
+      <label for="empresaBairro" class="cc-label">
         Bairro
       </label>
       <input
         id="empresaBairro"
         type="text"
         [(ngModel)]="bairro"
-        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="cc-input"
         placeholder="Bairro"
       />
     </div>
 
     <div>
-      <label for="empresaCidade" class="block text-sm font-medium text-gray-700">
+      <label for="empresaCidade" class="cc-label">
         Cidade
       </label>
       <input
         id="empresaCidade"
         type="text"
         [(ngModel)]="cidade"
-        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="cc-input"
         placeholder="Cidade"
       />
     </div>
 
     <div>
-      <label for="empresaEstado" class="block text-sm font-medium text-gray-700">
+      <label for="empresaEstado" class="cc-label">
         UF
       </label>
       <input
@@ -121,17 +121,17 @@
         type="text"
         maxlength="2"
         [(ngModel)]="estado"
-        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase"
+        class="cc-input uppercase"
         placeholder="UF"
       />
     </div>
   </div>
 
   <div class="flex justify-end space-x-2 mt-4">
-    <button (click)="fechar()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">
+    <button (click)="fechar()" class="cc-btn cc-btn-ghost">
       Fechar
     </button>
-    <button (click)="salvar()" class="px-4 py-2 bg-blue-500 text-white rounded-md" [disabled]="!nome || !email">
+    <button (click)="salvar()" class="cc-btn cc-btn-primary" [disabled]="!nome || !email">
       Adicionar
     </button>
   </div>

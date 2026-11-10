@@ -58,12 +58,19 @@
 .menu-item img { width: 1.55rem; height: 1.55rem; flex: none; object-fit: contain; }
 .menu-item span { overflow: hidden; text-overflow: ellipsis; }
 .menu-logout { flex: none; width: calc(100% - 1rem); margin: .5rem; }
+/* No computador o botão fica dentro da barra lateral (.menu-collapse), sem cobrir o conteúdo.
+   O botão flutuante abaixo só existe no celular. */
+.menu-collapse {
+  margin-bottom: .5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, .18);
+  border-radius: .6rem .6rem 0 0;
+}
 .menu-toggle {
   position: fixed;
   z-index: 42;
   top: .75rem;
   left: 5rem;
-  display: grid;
+  display: none;
   place-items: center;
   width: 2.6rem;
   height: 2.6rem;
@@ -87,7 +94,8 @@
     transition: transform .22s ease;
   }
   .menu-panel.expanded { transform: translateX(0); }
-  .menu-toggle, :host(.expanded) .menu-toggle { left: .75rem; }
+  .menu-collapse { display: none; }
+  .menu-toggle, :host(.expanded) .menu-toggle { left: .75rem; display: grid; }
   :host(.expanded) .menu-toggle { left: min(calc(17rem + .5rem), calc(84vw + .5rem)); }
   .menu-backdrop {
     position: fixed;
