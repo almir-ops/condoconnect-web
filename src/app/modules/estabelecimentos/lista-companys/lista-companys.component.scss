@@ -1,0 +1,30 @@
+:host { display: block; }
+
+// Cartões em carregamento (esqueleto com brilho passando)
+.sk {
+  border-radius: .6rem;
+  background: linear-gradient(90deg, #e3ebe7 25%, #f3f7f5 40%, #e3ebe7 60%);
+  background-size: 300% 100%;
+  animation: sk 1.4s ease-in-out infinite;
+}
+.sk-light {
+  background: linear-gradient(90deg, #ffffff26 25%, #ffffff4d 40%, #ffffff26 60%);
+  background-size: 300% 100%;
+}
+@keyframes sk { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+// Entrada suave dos blocos
+.rise { animation: rise .45s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.sheet { animation: sheet .28s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes sheet { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+
+.action { transition: transform .12s ease, box-shadow .15s ease, background-color .15s ease; }
+.action:active { transform: scale(.97); }
+
+.clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sk, .rise, .sheet { animation: none; }
+}
