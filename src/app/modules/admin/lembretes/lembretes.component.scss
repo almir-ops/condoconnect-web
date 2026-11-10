@@ -1,4 +1,32 @@
 // O visual (títulos, cartões, campos e botões) vem das classes cc-* do styles global.
-// Aqui fica só o que é específico desta tela: a linha do histórico de envios.
+// Aqui fica só o que é específico desta tela: escolha inicial, barra de modos e linha do histórico.
+
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.choice {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .4rem; text-align: left;
+  padding: 1.25rem; border: 1px solid var(--cc-line); border-radius: .75rem; background: var(--cc-surface);
+  color: var(--cc-text); font: inherit; cursor: pointer;
+  box-shadow: 0 1px 2px #0000000d; transition: border-color .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+.choice:hover { border-color: var(--cc-primary); box-shadow: 0 6px 18px #055e4c1f; transform: translateY(-1px); }
+.choice:focus-visible { outline: 2px solid var(--cc-primary); outline-offset: 2px; }
+.choice strong { font-size: 1.05rem; color: var(--cc-primary-dark); }
+.choice-icon { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: .75rem; background: var(--cc-primary-soft); color: var(--cc-primary); margin-bottom: .25rem; }
+.choice-text { font-size: .9rem; line-height: 1.45; color: var(--cc-muted); }
+.choice-meta { font-size: .8rem; font-weight: 600; color: var(--cc-primary); }
+.choice-go { margin-top: auto; padding-top: .5rem; font-size: .85rem; font-weight: 600; color: var(--cc-primary); }
+
+.modebar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+.modes { display: inline-flex; flex-wrap: wrap; gap: .25rem; padding: .25rem; border-radius: .6rem; background: var(--cc-primary-soft); }
+.mode { border: 0; border-radius: .45rem; padding: .45rem .9rem; background: transparent; color: var(--cc-primary); font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
+.mode.on { background: var(--cc-primary); color: #fff; }
+.mode:not(.on):hover { background: #ffffffaa; }
+
+.head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+.head h2 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--cc-primary-dark); }
+.head p { margin: .2rem 0 0; }
+
+.conexoes { margin-top: 1.5rem; align-items: center; }
+
 .history { display: grid; grid-template-columns: 130px 1fr 60px 80px 2fr; gap: .5rem; border-top: 1px solid var(--cc-line); padding: .6rem 0; font-size: .85rem; overflow-wrap: anywhere; }
 @media (max-width: 700px) { .history { display: block; } .history span { margin-right: .5rem; } }

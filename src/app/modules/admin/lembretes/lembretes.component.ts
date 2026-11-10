@@ -10,6 +10,7 @@ interface Rule {
   subject: string; message: string; days: number[]; maxSends: number; sendTime: string;
   timezone: string; enabled: boolean;
 }
+type Modo = 'enviar' | 'automaticos' | 'teste';
 @Component({
   selector: 'app-lembretes', standalone: true, imports: [CommonModule, FormsModule, EnvioManualComponent],
   templateUrl: './lembretes.component.html', styleUrl: './lembretes.component.scss',
@@ -24,17 +25,25 @@ export class LembretesComponent implements OnInit {
   form: Rule = this.blank();
   test = { email: '', title: 'Teste CondoConnect', message: 'Se você recebeu isto, o push está funcionando.' };
   testing = false;
+  // O que a pessoa escolheu fazer; vazio = mostra só as opções
+  modo: Modo | null = null;
+  showForm = false;
+  get ativas() { return this.rules.filter(r => r.enabled).length; }
   constructor(private http: HttpClient) {}
   private headers() { return { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('auth_token') || ''}` }) }; }
   private blank(): Rule { return { id: '', name: '', channel: 'email', audience: 'without_company',
     subject: 'Seu cadastro no CondoConnect', message: '', days: [1, 3, 7], maxSends: 3,
     sendTime: '10:00', timezone: 'America/Sao_Paulo', enabled: false }; }
   ngOnInit() { this.refresh(); }
+  escolher(modo: Modo) { this.modo = modo; this.error = ''; this.success = ''; this.showForm = false; window.scrollTo({ top: 0 }); }
+  voltar() { this.modo = null; this.showForm = false; this.error = ''; this.success = ''; }
+  novo() { this.clear(); this.showForm = true; }
+  cancelar() { this.clear(); this.showForm = false; }
   refresh() {
     this.http.get<Rule[]>(`${this.url}/rules`, this.headers()).subscribe({ next: data => this.rules = data, error: e => this.fail(e) });
     this.http.get<typeof this.status>(`${this.url}/status`, this.headers()).subscribe({ next: data => this.status = data, error: e => this.fail(e) });
   }
-  edit(rule: Rule) { this.form = { ...rule, days: [...rule.days] }; this.daysText = rule.days.join(', '); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  edit(rule: Rule) { this.form = { ...rule, days: [...rule.days] }; this.daysText = rule.days.join(', '); this.showForm = true; window.scrollTo({ top: 0, behavior: 'smooth' }); }
   clear() { this.form = this.blank(); this.daysText = '1, 3, 7'; }
   save() {
     this.error = ''; this.success = '';
@@ -45,7 +54,7 @@ export class LembretesComponent implements OnInit {
     const request = this.form.id
       ? this.http.put<Rule>(`${this.url}/rules/${this.form.id}`, body, this.headers())
       : this.http.post<Rule>(`${this.url}/rules`, body, this.headers());
-    request.subscribe({ next: () => { this.loading = false; this.success = 'Lembrete salvo como rascunho.'; this.clear(); this.refresh(); },
+    request.subscribe({ next: () => { this.loading = false; this.success = 'Lembrete salvo como rascunho.'; this.clear(); this.showForm = false; this.refresh(); },
       error: e => { this.loading = false; this.fail(e); } });
   }
   toggle(rule: Rule) {
