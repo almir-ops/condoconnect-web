@@ -13,7 +13,8 @@
 .company-table th:nth-child(5), .company-table td:nth-child(5) { min-width: 190px; }
 .company-table th:nth-child(6), .company-table td:nth-child(6) { min-width: 90px; }
 // A célula fixa precisa de fundo próprio (o das linhas listradas vem de .cc-table no styles global).
-.company-table th:last-child, .company-table td:last-child { position: sticky; right: 0; min-width: 300px; box-shadow: -8px 0 12px -12px #24433c55; }
+// Ações: o estilo global corta células em 20rem (max-width + overflow hidden); com 4 botões (Editar, Trocar condomínio, Ativar/Desativar, Excluir) o último sumia.
+.company-table th:last-child, .company-table td:last-child { position: sticky; right: 0; min-width: 470px; max-width: none; overflow: visible; box-shadow: -8px 0 12px -12px #24433c55; }
 .company-table th:last-child { background: var(--cc-primary); }
 .cc-actions-nowrap { flex-wrap: nowrap; }
 .table-swipe-hint { display: none; color: #64776d; font-size: 12px; margin: 0 0 8px; }
