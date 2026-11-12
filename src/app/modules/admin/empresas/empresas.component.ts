@@ -190,21 +190,22 @@ export class EmpresasComponent {
     });
   }
 
-  // Exclui de vez (usado para limpar empresas de teste ou repetidas). Se tiver assinatura, a API recusa e explica.
+  // Exclusão lógica (a API só marca deleted_at): some do app e do painel, mas fica guardada no banco e dá para recuperar.
+  // Se tiver assinatura, a API recusa e explica.
   excluirEmpresa = (empresa: any) => {
     const nome = String(empresa?.nome ?? '').trim() || `código ${empresa?.id}`;
     const ok = confirm(
       `Excluir a empresa "${nome}"?
 
-Isso apaga a empresa e os vínculos dela com condomínios e categorias. Não dá para desfazer.
-Se só quiser tirar do aplicativo, use "Desativar".`,
+Ela some do aplicativo e do painel. Os dados ficam guardados no banco e podem ser recuperados pela equipe técnica.
+Se só quiser tirar do aplicativo por um tempo, use "Desativar".`,
     );
     if (!ok) return;
 
     this.empresaService.delete(empresa.id).subscribe({
       next: () => {
         this.data = this.data.filter((item) => item.id !== empresa.id);
-        this.alertService.presentAlert('Pronto', `Empresa "${nome}" excluída.`);
+        this.alertService.presentAlert('Pronto', `Empresa "${nome}" excluída (fica guardada no banco).`);
       },
       error: (err: any) => {
         console.error('Erro ao excluir empresa:', err);
