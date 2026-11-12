@@ -185,10 +185,38 @@ export class EmpresasComponent {
       },
       error: (err) => {
         console.error('Erro ao alterar status da empresa:', err);
-        alert('Erro ao alterar status da empresa.');
+        alert(err?.error?.message ?? 'Erro ao alterar status da empresa.');
       },
     });
   }
+
+  // Exclui de vez (usado para limpar empresas de teste ou repetidas). Se tiver assinatura, a API recusa e explica.
+  excluirEmpresa = (empresa: any) => {
+    const nome = String(empresa?.nome ?? '').trim() || `código ${empresa?.id}`;
+    const ok = confirm(
+      `Excluir a empresa "${nome}"?
+
+Isso apaga a empresa e os vínculos dela com condomínios e categorias. Não dá para desfazer.
+Se só quiser tirar do aplicativo, use "Desativar".`,
+    );
+    if (!ok) return;
+
+    this.empresaService.delete(empresa.id).subscribe({
+      next: () => {
+        this.data = this.data.filter((item) => item.id !== empresa.id);
+        this.alertService.presentAlert('Pronto', `Empresa "${nome}" excluída.`);
+      },
+      error: (err: any) => {
+        console.error('Erro ao excluir empresa:', err);
+        this.alertService.presentAlert(
+          'Atenção',
+          err?.error?.message ?? 'Não foi possível excluir a empresa. Tente novamente.',
+          undefined,
+          9000,
+        );
+      },
+    });
+  };
 
   getStatusLabel(ativo: boolean): string {
     return ativo ? 'Ativa' : 'Inativa';
