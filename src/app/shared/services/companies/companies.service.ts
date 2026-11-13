@@ -44,10 +44,11 @@ export class CompaniesService {
   }
 
   // Método para excluir uma empresa
-  delete(id: number): Observable<void> {
+  delete(id: number, cancelarAssinaturas = false): Observable<void> {
     // A rota de exclusão exige administrador; o painel não coloca o token sozinho nas chamadas (como Lembretes/Avisos, mandamos aqui).
     const token = localStorage.getItem('auth_token') || '';
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+    const query = cancelarAssinaturas ? '?cancelarAssinaturas=true' : '';
+    return this.http.delete<void>(`${this.apiUrl}/${id}${query}`, {
       headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
     });
   }

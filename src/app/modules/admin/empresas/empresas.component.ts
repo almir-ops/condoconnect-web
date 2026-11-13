@@ -191,7 +191,7 @@ export class EmpresasComponent {
   }
 
   // Exclusão lógica (a API só marca deleted_at): some do app e do painel, mas fica guardada no banco e dá para recuperar.
-  // Se tiver assinatura, a API recusa e explica.
+  // Se tiver assinatura ativa, a API pede confirmação e, confirmado, cancela a assinatura antes de excluir.
   excluirEmpresa = (empresa: any) => {
     const nome = String(empresa?.nome ?? '').trim() || `código ${empresa?.id}`;
     const ok = confirm(
@@ -201,13 +201,35 @@ Ela some do aplicativo e do painel. Os dados ficam guardados no banco e podem se
 Se só quiser tirar do aplicativo por um tempo, use "Desativar".`,
     );
     if (!ok) return;
+    this.executarExclusao(empresa, nome, false);
+  };
 
-    this.empresaService.delete(empresa.id).subscribe({
+  // Se a empresa tem assinatura ativa a API recusa (ASSINATURA_ATIVA) e aqui avisamos antes de cancelar de verdade.
+  private executarExclusao(empresa: any, nome: string, cancelarAssinaturas: boolean): void {
+    this.empresaService.delete(empresa.id, cancelarAssinaturas).subscribe({
       next: () => {
         this.data = this.data.filter((item) => item.id !== empresa.id);
-        this.alertService.presentAlert('Pronto', `Empresa "${nome}" excluída (fica guardada no banco).`);
+        this.alertService.presentAlert(
+          'Pronto',
+          cancelarAssinaturas
+            ? `Assinatura cancelada e empresa "${nome}" excluída (fica guardada no banco).`
+            : `Empresa "${nome}" excluída (fica guardada no banco).`,
+        );
       },
       error: (err: any) => {
+        if (err?.status === 409 && err?.error?.code === 'ASSINATURA_ATIVA' && !cancelarAssinaturas) {
+          const qtd = err.error.assinaturas_ativas ?? 1;
+          const seguir = confirm(
+            `ATENÇÃO: "${nome}" tem ${qtd} assinatura(s) ativa(s).
+
+Se continuar, a assinatura será CANCELADA (as próximas cobranças deixam de ser geradas) e a empresa será excluída.
+O cancelamento da assinatura não é desfeito pela recuperação da empresa.
+
+Deseja cancelar a assinatura e excluir a empresa?`,
+          );
+          if (seguir) this.executarExclusao(empresa, nome, true);
+          return;
+        }
         console.error('Erro ao excluir empresa:', err);
         this.alertService.presentAlert(
           'Atenção',
@@ -217,7 +239,7 @@ Se só quiser tirar do aplicativo por um tempo, use "Desativar".`,
         );
       },
     });
-  };
+  }
 
   getStatusLabel(ativo: boolean): string {
     return ativo ? 'Ativa' : 'Inativa';
