@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -45,7 +45,11 @@ export class CompaniesService {
 
   // Método para excluir uma empresa
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    // A rota de exclusão exige administrador; o painel não coloca o token sozinho nas chamadas (como Lembretes/Avisos, mandamos aqui).
+    const token = localStorage.getItem('auth_token') || '';
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+    });
   }
 
   trocarCondominioEmpresa(
